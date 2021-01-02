@@ -49,7 +49,7 @@ func checkFile(fileName string) bool {
 }
 
 // 解析配置文件
-func ParseAllConfigYaml() error {
+func LoadAllConfigYaml() error {
 	dir, err := os.Open(ConfigEnvPath)
 	if err != nil {
 		log.Fatal(err.Error())
@@ -72,13 +72,51 @@ func ParseAllConfigYaml() error {
 			v.SetConfigType(yaml)
 			// 读取配置
 			_ = v.ReadConfig(bytes.NewBuffer(bytesArr))
-			name := strings.Split(file.Name(), ".")[0]
+			// 上下文的 key 全部都是小写的
+			name := strings.ToLower(strings.Split(file.Name(), ".")[0])
 			// 如果没有初始化则进行初始化操作
 			if ConfigContextHolder == nil {
 				ConfigContextHolder = make(map[string]*viper.Viper)
 			}
 			ConfigContextHolder[name] = v
 		}
+	}
+	return nil
+}
+
+// 检查接口类型是否为空
+// 如果哪个为空则返回哪个为空的下标
+func CheckNil(inters ...*interface{}) int {
+	res, index := true, -1
+	// 只有都不为空则返回true
+	for i, inter := range inters {
+		res = res && (inter != nil)
+		if res == false {
+			return i
+		}
+	}
+	return index
+}
+
+// 看是否需要加载这个模块
+func CheckModuleInArray(modules []string, module string) bool {
+	for _, s := range modules {
+		if s == module {
+			return true
+		}
+	}
+	return false
+}
+
+// 解析配置文件到实体类中去
+func ParseConfig(key string, config interface{}) error {
+	v := ConfigContextHolder[key]
+	if v == nil {
+		return fmt.Errorf("检查配置文件是否存在,或者配置文件名称是否正确")
+	}
+	err := v.Unmarshal(config)
+	if err != nil {
+		return err
 	}
 	return nil
 }
