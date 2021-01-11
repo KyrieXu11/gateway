@@ -1,6 +1,7 @@
 package config
 
 type Application struct {
+	Port int `mapstructure:"server.port"`
 }
 
 type MySQLConfig struct {
@@ -13,8 +14,8 @@ type MySQLConfig struct {
 }
 
 type RedisConfig struct {
-	Address  string `mapstructure:"address"`
-	NetWork  string `mapstructure:"network"`
-	UserName string `mapstructure:"username"`
-	Auth     string `mapstructure:"auth"`
+	Address     string `mapstructure:"address"`
+	ConnectType string `mapstructure:"connect_type"`
+	UserName    string `mapstructure:"username"`
+	Auth        string `mapstructure:"auth"`
 }

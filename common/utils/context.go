@@ -10,6 +10,7 @@ import (
 // viper 可以存放 k-v 数据
 // 这个上下文存放的是 fileName -> viper 的映射
 // 在访问的时候的使用方法是 ConfigContextHolder[ConfigFileName].Get(key) 就可以访问文件当中的属性了
+// 当然也可以创建一个实体使用 Unmarshal() 的方法来将实体赋值
 var ConfigContextHolder map[string]*viper.Viper
 
 // 数据库的全局对象

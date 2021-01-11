@@ -69,7 +69,7 @@ func getConnectStringf() (string, error) {
 	if err := utils.ParseConfig(dbType, s); err != nil {
 		return "", err
 	}
-	// 如果配置了这个的话，则有限使用这个
+	// 如果配置了这个属性的话，则优先使用这个属性
 	if s.ConnectString != "" {
 		return s.ConnectString, nil
 	} else {
@@ -107,7 +107,7 @@ func check(username, dbName, host, password string, port int) error {
 
 // 初始化 Gorm
 func InitGorm() error {
-	connectString, err := getConnectString()
+	connectString, err := getConnectStringf()
 	if err != nil {
 		log.Println(err.Error())
 		return err

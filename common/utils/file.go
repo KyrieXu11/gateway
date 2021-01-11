@@ -11,13 +11,18 @@ import (
 	"strings"
 )
 
-var ConfigEnv string     // 配置文件的环境，比如传进来的路径是conf/dev/a.json则环境为dev
-var ConfigEnvPath string // 配置文件的路径传进来的文件路径是上面的话，这个变量则为conf/dev
+var (
+	ConfigEnv     string // 配置文件的环境，比如传进来的路径是conf/dev则环境为dev
+	ConfigEnvPath string // 配置文件的路径传进来的文件路径是上面的话，这个变量则为conf/dev
+)
 
 // 检查配置文件的路径是否为正确的
 // 正确的就进行解析，不正确的就返回error
 // 正确的就继续执行
 func ParseConfigPath(config string) error {
+	if strings.LastIndex(config, "/") != len(config)-1 {
+		config = config + "/"
+	}
 	paths := strings.Split(config, "/")
 	length := len(paths)
 	// 检查路径的有效性
@@ -25,10 +30,11 @@ func ParseConfigPath(config string) error {
 		return fmt.Errorf("请检查文件路径的有效性")
 	}
 	// 检查文件的有效性
-	if !checkFile(paths[length-1]) {
-		return fmt.Errorf("请检查文件名称的有效性")
-	}
+	// if !checkFile(paths[length-1]) {
+	// 	return fmt.Errorf("请检查文件名称的有效性")
+	// }
 	ConfigEnv = paths[length-2]
+	log.Println("application environment is :" + ConfigEnv)
 	ConfigEnvPath = strings.Join(paths[:length-1], "/")
 	return nil
 }

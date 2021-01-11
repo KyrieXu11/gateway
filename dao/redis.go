@@ -19,8 +19,8 @@ func initRedis() error {
 	if err := utils.ParseConfig(dbKey, r); err != nil {
 		return err
 	}
-	if r.NetWork != "" {
-		network = r.NetWork
+	if r.ConnectType != "" {
+		network = r.ConnectType
 	}
 	if r.Address != "" {
 		address = r.Address

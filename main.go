@@ -2,15 +2,15 @@ package main
 
 import (
 	"flag"
-	"gateway/common/utils"
-	"gateway/start"
 )
 
 var (
 	// 命令行的参数
-	// 使用的方法就是 go run main.go -endpoint xxx -config xxx
-	endpoint = flag.String("endpoint", "", "input endpoint dashboard or server")
-	conf     = flag.String("config", "", "input config file like ./conf/dev/")
+	// 使用的方法就是 go run main.go -endpoint xxx -config ./xxx/xxx/
+	endpoint = flag.String("endpoint", "dashboard",
+		"input endpoint dashboard or server")
+	conf     = flag.String("config", "conf/dev", "input config file like ." +
+		"/conf/dev/")
 )
 
 func main() {
@@ -25,7 +25,7 @@ func main() {
 	// 	os.Exit(1)
 	// }
 	// if *endpoint == "dashboard" {
-	// 	err := config.InitModules(*conf)
+	// 	err := start.InitModules(*conf)
 	// 	// 不用打印日志了，在底层已经打印过日志了
 	// 	if err != nil {
 	// 		return
@@ -33,8 +33,16 @@ func main() {
 	// } else {
 	//
 	// }
-	_ = start.InitModules("./conf/dev/mysql.yml")
+	// _ = start.InitModules("./conf/dev/")
+	//
+	// defer utils.Close()
 
-	defer utils.Close()
-
+	// a := [5]int{}
+	// defer func() {
+	// 	if err := recover(); err != nil {
+	// 		fmt.Println(err)
+	// 	}
+	// }()
+	// i := len(a)
+	// a[i]=10
 }
