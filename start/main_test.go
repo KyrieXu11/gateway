@@ -14,7 +14,7 @@ func TestInitModule(t *testing.T) {
 	)
 	err := initModules(in0)
 	m := &config.MySQLConfig{}
-	err = utils.ParseConfig("mysql", m)
+	err = utils.Unmarshal("mysql", m)
 	fmt.Println(m.ConnectString == "", m.DBName, m.Port)
 	assertions := require.New(t)
 	assertions.Nil(err)

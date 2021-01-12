@@ -1,10 +1,10 @@
-package dao
+package module
 
 import (
 	"gateway/common/config"
+	"gateway/common/log"
 	"gateway/common/utils"
 	"github.com/gomodule/redigo/redis"
-	"log"
 )
 
 var (
@@ -16,7 +16,7 @@ var (
 func initRedis() error {
 	r := &config.RedisConfig{}
 	// 进行反序列化
-	if err := utils.ParseConfig(dbKey, r); err != nil {
+	if err := utils.Unmarshal(dbKey, r); err != nil {
 		return err
 	}
 	if r.ConnectType != "" {
@@ -57,9 +57,9 @@ func initRedis() error {
 func InitRedis() error {
 	err := initRedis()
 	if err != nil {
-		log.Println(err.Error())
+		log.Error(err.Error())
 		return err
 	}
-	log.Println("Redis successfully initialized!")
+	log.Info("Redis successfully initialized!")
 	return nil
 }

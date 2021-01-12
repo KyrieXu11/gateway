@@ -2,3 +2,6 @@ server:
   port: 8080
 
 log_level: debug
+
+gin:
+  mode: debug

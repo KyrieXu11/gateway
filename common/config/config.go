@@ -1,7 +1,14 @@
 package config
 
 type Application struct {
-	Port int `mapstructure:"server.port"`
+	// viper 使用 unmarshal 的时候解决多级嵌套的时候需要定义结构体...
+	Server struct {
+		Port int
+	}
+	Gin      struct {
+		Mode string
+	}
+	LogLevel string
 }
 
 type MySQLConfig struct {

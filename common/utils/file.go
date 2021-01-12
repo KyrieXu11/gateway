@@ -3,17 +3,12 @@ package utils
 import (
 	"bytes"
 	"fmt"
+	"gateway/common/log"
 	"github.com/spf13/viper"
 	"io/ioutil"
-	"log"
 	"os"
 	"regexp"
 	"strings"
-)
-
-var (
-	ConfigEnv     string // 配置文件的环境，比如传进来的路径是conf/dev则环境为dev
-	ConfigEnvPath string // 配置文件的路径传进来的文件路径是上面的话，这个变量则为conf/dev
 )
 
 // 检查配置文件的路径是否为正确的
@@ -29,12 +24,8 @@ func ParseConfigPath(config string) error {
 	if !checkPath(paths[:length-1]) {
 		return fmt.Errorf("请检查文件路径的有效性")
 	}
-	// 检查文件的有效性
-	// if !checkFile(paths[length-1]) {
-	// 	return fmt.Errorf("请检查文件名称的有效性")
-	// }
 	ConfigEnv = paths[length-2]
-	log.Println("application environment is :" + ConfigEnv)
+	log.Info("application environment is: " + ConfigEnv)
 	ConfigEnvPath = strings.Join(paths[:length-1], "/")
 	return nil
 }
@@ -49,7 +40,7 @@ func checkPath(path []string) bool {
 func checkFile(fileName string) bool {
 	res, err := regexp.Match(fileNameRegex, []byte(fileName))
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Error(err.Error())
 	}
 	return res
 }
@@ -58,12 +49,12 @@ func checkFile(fileName string) bool {
 func LoadAllConfigYaml() error {
 	dir, err := os.Open(ConfigEnvPath)
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Error(err.Error())
 		return err
 	}
 	dirs, err := dir.Readdir(maxFileInfoNum)
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Error(err.Error())
 		return err
 	}
 	for _, file := range dirs {
@@ -71,7 +62,7 @@ func LoadAllConfigYaml() error {
 		if !file.IsDir() {
 			bytesArr, err := ioutil.ReadFile(ConfigEnvPath + "/" + file.Name())
 			if err != nil {
-				log.Fatal(err.Error())
+				log.Error(err.Error())
 			}
 			v := viper.New()
 			// 设置配置的类型
@@ -112,17 +103,4 @@ func CheckModuleInArray(modules []string, module string) bool {
 		}
 	}
 	return false
-}
-
-// 解析配置文件到实体类中去
-func ParseConfig(key string, config interface{}) error {
-	v := ConfigContextHolder[key]
-	if v == nil {
-		return fmt.Errorf("检查配置文件是否存在,或者配置文件名称是否正确")
-	}
-	err := v.Unmarshal(config)
-	if err != nil {
-		return err
-	}
-	return nil
 }

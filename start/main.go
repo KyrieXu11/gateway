@@ -1,13 +1,11 @@
 package start
 
 import (
-	"gateway/common/config"
 	"gateway/common/utils"
-	"gateway/dao"
-	"log"
+	"gateway/module"
 )
 
-var modules = []string{"application","mysql"}
+var modules = []string{"application", "mysql"}
 
 // 初始化模块
 func InitModules(configPath string) error {
@@ -25,18 +23,15 @@ func initModules(configPath string) error {
 		return err
 	}
 	// TODO: 设置一些基本的参数
-	a := &config.Application{}
-	if err := utils.ConfigContextHolder["application"].Unmarshal(a);err != nil{
-		log.Fatal(err)
+	if err := initModule(module.InitApplication, "application"); err != nil {
+		return err
 	}
-
-	log.Println(a.Port)
 	// 加载 mysql 连接
-	if err := initModule(dao.InitGorm, "mysql"); err != nil {
+	if err := initModule(module.InitGorm, "mysql"); err != nil {
 		return err
 	}
 	// 加载 redis 连接
-	if err := initModule(dao.InitRedis, "redis"); err != nil {
+	if err := initModule(module.InitRedis, "redis"); err != nil {
 		return err
 	}
 	return nil

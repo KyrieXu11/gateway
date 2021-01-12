@@ -2,6 +2,8 @@ package main
 
 import (
 	"flag"
+	"gateway/common/utils"
+	"gateway/start"
 )
 
 var (
@@ -33,9 +35,9 @@ func main() {
 	// } else {
 	//
 	// }
-	// _ = start.InitModules("./conf/dev/")
-	//
-	// defer utils.Close()
+	_ = start.InitModules("./conf/dev/")
+
+	defer utils.Close()
 
 	// a := [5]int{}
 	// defer func() {

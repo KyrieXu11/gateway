@@ -1,13 +1,13 @@
-package dao
+package module
 
 import (
 	"encoding/base64"
 	"fmt"
 	"gateway/common/config"
+	"gateway/common/log"
 	"gateway/common/utils"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"log"
 	"unsafe"
 )
 
@@ -66,7 +66,8 @@ func getConnectString() (string, error) {
 // 获取连接字符串
 func getConnectStringf() (string, error) {
 	s := &config.MySQLConfig{}
-	if err := utils.ParseConfig(dbType, s); err != nil {
+	if err := utils.Unmarshal(dbType, s); err != nil {
+		// 返回打印
 		return "", err
 	}
 	// 如果配置了这个属性的话，则优先使用这个属性
@@ -109,17 +110,17 @@ func check(username, dbName, host, password string, port int) error {
 func InitGorm() error {
 	connectString, err := getConnectStringf()
 	if err != nil {
-		log.Println(err.Error())
+		log.Error(err.Error())
 		return err
 	}
 	db, err := gorm.Open(dbType, connectString)
 	if err != nil {
-		log.Println(err.Error())
+		log.Error(err.Error())
 		return err
 	}
 	if utils.DB == nil {
 		utils.DB = db
 	}
-	log.Println("Gorm successfully initialized!")
+	log.Info("Gorm successfully initialized!")
 	return nil
 }

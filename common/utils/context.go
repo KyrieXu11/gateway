@@ -6,6 +6,10 @@ import (
 	"github.com/spf13/viper"
 	"io"
 )
+var(
+	ConfigEnv     string // 配置文件的环境，比如传进来的路径是conf/dev则环境为dev
+	ConfigEnvPath string // 配置文件的路径传进来的文件路径是上面的话，这个变量则为conf/dev
+)
 
 // viper 可以存放 k-v 数据
 // 这个上下文存放的是 fileName -> viper 的映射
