@@ -24,9 +24,10 @@ const (
 var levelStrings = []string{LevelDebugString, LevelInfoString, LevelWarningString, LevelErrorString, LevelFatalString}
 
 type logger struct {
-	level     int   // 日志的等级
-	callDepth int   // 日志的打印的层级，默认设置了4层
-	levelList []int // 日志的等级列表，代码中有什么等级
+	level     int    // 日志的等级
+	callDepth int    // 日志的打印的层级，默认设置了4层
+	levelList []int  // 日志的等级列表，代码中有什么等级
+	logFile   string // 日志输出的文件
 }
 
 func NewLogger(level int) *logger {
@@ -34,6 +35,7 @@ func NewLogger(level int) *logger {
 		level:     level,
 		callDepth: 4,
 		levelList: make([]int, len(levelStrings)),
+		logFile:   "./logs/gateway.log",
 	}
 }
 
@@ -73,27 +75,41 @@ func (p *logger) print(level int, v ...interface{}) {
 		if p.levelList[LevelError] == 1 {
 			_ = log.Output(p.callDepth, fmt.Sprintln(v...))
 		}
-		fallthrough
+		break
 	case LevelWarning:
 		if p.levelList[LevelWarning] == 1 {
 			_ = log.Output(p.callDepth, fmt.Sprintln(v...))
 		}
-		fallthrough
+		break
 	case LevelInfo:
 		if p.levelList[LevelInfo] == 1 {
 			_ = log.Output(p.callDepth, fmt.Sprintln(v...))
 		}
-		fallthrough
+		break
 	case LevelDebug:
 		if p.levelList[LevelDebug] == 1 {
 			_ = log.Output(p.callDepth, fmt.Sprintln(v...))
 		}
-		fallthrough
+		break
 	default:
 		if level == LevelFatal {
 			os.Exit(1)
 		}
 	}
+}
+
+func (p *logger) SetOutPutPath(path string) {
+	p.logFile = path
+	log.SetOutput(p)
+}
+
+func (p *logger) Write(bs []byte) (int, error) {
+	f, err := os.OpenFile(p.logFile, os.O_CREATE|os.O_APPEND, 0x666)
+	defer f.Close()
+	if err != nil {
+		return -1, err
+	}
+	return f.Write(bs)
 }
 
 func (p *logger) SetLevel(level int) {

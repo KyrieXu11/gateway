@@ -5,10 +5,14 @@ type Application struct {
 	Server struct {
 		Port int
 	}
-	Gin      struct {
+	Gin struct {
 		Mode string
 	}
-	LogLevel string
+	Log struct {
+		Level     string
+		OutPut    string
+		CallDepth int
+	}
 }
 
 type MySQLConfig struct {

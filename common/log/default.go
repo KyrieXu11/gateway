@@ -28,6 +28,10 @@ func SetLoggerLevel(level interface{}) {
 	defaultLogger.SetLevel(l)
 }
 
+func SetOutPut(path string) {
+	defaultLogger.SetOutPutPath(path)
+}
+
 func SetLoggerCallDepth(depth int) {
 	defaultLogger.SetCallDepth(depth)
 }

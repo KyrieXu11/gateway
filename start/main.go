@@ -5,7 +5,8 @@ import (
 	"gateway/module"
 )
 
-var modules = []string{"application", "mysql"}
+// 需要加载的模块
+var modules = []string{utils.ModuleApplication, utils.ModuleMySQL}
 
 // 初始化模块
 func InitModules(configPath string) error {
@@ -14,6 +15,10 @@ func InitModules(configPath string) error {
 
 // 初始化模块
 func initModules(configPath string) error {
+	// 日志在执行 ParseConfigPath() 这个函数的时候只能 info 级别的才能输出
+	// 因为默认的级别是 info
+	// 因为配置文件还没有加载所以只能使用默认的配置
+	// 如果想要改的话可以在 log/default#init() 改变传进去的默认的loglevel
 	// 首先进行路径的解析
 	if err := utils.ParseConfigPath(configPath); err != nil {
 		return err
@@ -23,15 +28,15 @@ func initModules(configPath string) error {
 		return err
 	}
 	// TODO: 设置一些基本的参数
-	if err := initModule(module.InitApplication, "application"); err != nil {
+	if err := initModule(module.InitApplication, utils.ModuleApplication); err != nil {
 		return err
 	}
 	// 加载 mysql 连接
-	if err := initModule(module.InitGorm, "mysql"); err != nil {
+	if err := initModule(module.InitGorm, utils.ModuleMySQL); err != nil {
 		return err
 	}
 	// 加载 redis 连接
-	if err := initModule(module.InitRedis, "redis"); err != nil {
+	if err := initModule(module.InitRedis, utils.ModuleRedis); err != nil {
 		return err
 	}
 	return nil

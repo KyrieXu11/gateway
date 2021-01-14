@@ -1,7 +1,8 @@
 server:
   port: 8080
 
-log_level: debug
+log:
+  level: info
 
 gin:
   mode: debug

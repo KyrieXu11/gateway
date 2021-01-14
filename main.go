@@ -2,8 +2,12 @@ package main
 
 import (
 	"flag"
+	"gateway/common/log"
 	"gateway/common/utils"
 	"gateway/start"
+	"os"
+	"os/signal"
+	"syscall"
 )
 
 var (
@@ -11,7 +15,7 @@ var (
 	// 使用的方法就是 go run main.go -endpoint xxx -config ./xxx/xxx/
 	endpoint = flag.String("endpoint", "dashboard",
 		"input endpoint dashboard or server")
-	conf     = flag.String("config", "conf/dev", "input config file like ." +
+	conf = flag.String("config", "conf/dev", "input config file like ."+
 		"/conf/dev/")
 )
 
@@ -36,7 +40,12 @@ func main() {
 	//
 	// }
 	_ = start.InitModules("./conf/dev/")
+	log.Debug("application start!")
 
+	// 程序退出处理
+	quit()
+
+	// 防止panic导致连接未关闭与资源未释放
 	defer utils.Close()
 
 	// a := [5]int{}
@@ -47,4 +56,10 @@ func main() {
 	// }()
 	// i := len(a)
 	// a[i]=10
+}
+
+func quit() {
+	quit := make(chan os.Signal)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGQUIT)
+	<-quit
 }
