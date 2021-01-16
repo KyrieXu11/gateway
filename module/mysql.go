@@ -1,6 +1,7 @@
 package module
 
 import (
+	"database/sql"
 	"encoding/base64"
 	"fmt"
 	"gateway/common/config"
@@ -106,6 +107,13 @@ func check(username, dbName, host, password string, port int) error {
 	return nil
 }
 
+func setConnectPool(db *sql.DB) {
+	maxIdle := utils.GetIntConf(utils.ModuleMySQL, "idle")
+	maxConn := utils.GetIntConf(utils.ModuleMySQL, "max_conn")
+	db.SetMaxIdleConns(maxIdle)
+	db.SetMaxOpenConns(maxConn)
+}
+
 // 初始化 Gorm
 func InitGorm() error {
 	connectString, err := getConnectStringf()
@@ -118,6 +126,7 @@ func InitGorm() error {
 		log.Error(err.Error())
 		return err
 	}
+	setConnectPool(db.DB())
 	if utils.DB == nil {
 		utils.DB = db
 	}

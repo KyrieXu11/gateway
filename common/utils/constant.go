@@ -8,4 +8,20 @@ const (
 	ModuleApplication = "application" // 应用的基础设置
 	ModuleMySQL       = "mysql"
 	ModuleRedis       = "redis"
+
+	// 通用的 error_code 如果不指明错误类型
+	// 则默认是这个类型的code
+	COMMON_ERROR_CODE = 400
+	NOT_FOUND_ERROR   = 404
+	SERVER_ERROR      = 500
+	SUCCESS_CODE      = 200
+
+	ValidatorKey        = "ValidatorKey"
+	TranslatorKey       = "TranslatorKey"
 )
+
+var ERROR_CODE = []int{
+	COMMON_ERROR_CODE,
+	NOT_FOUND_ERROR,
+	SERVER_ERROR,
+}

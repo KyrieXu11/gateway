@@ -3,3 +3,5 @@ password: cXExODcxNzEyODQ5OQ==
 port: 3306
 dbName: gateway
 host: 127.0.0.1
+max_idle: 10
+max_conn: 10

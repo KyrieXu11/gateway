@@ -3,6 +3,7 @@ package start
 import (
 	"gateway/common/utils"
 	"gateway/module"
+	"gateway/router"
 )
 
 // 需要加载的模块
@@ -50,4 +51,10 @@ func initModule(f func() error, module string) error {
 		return f()
 	}
 	return nil
+}
+
+// 启动 gin
+func ListenAndServe(){
+	r := router.InitRouter()
+	router.ListenAndServe(r)
 }

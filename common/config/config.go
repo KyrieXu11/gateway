@@ -22,11 +22,13 @@ type MySQLConfig struct {
 	Host          string `mapstructure:"host"`
 	DBName        string `mapstructure:"dbName"`
 	ConnectString string `mapstructure:"url"`
+	Idle          int    `mapstructure:"max_idle"`
+	ConnNums      int    `mapstructure:"max_conn"`
 }
 
 type RedisConfig struct {
 	Address     string `mapstructure:"address"`
 	ConnectType string `mapstructure:"connect_type"`
-	UserName    string `mapstructure:"username"`
 	Auth        string `mapstructure:"auth"`
+	Idle        int    `mapstructure:"max_idle"`
 }

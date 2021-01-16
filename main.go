@@ -15,12 +15,12 @@ var (
 	// 使用的方法就是 go run main.go -endpoint xxx -config ./xxx/xxx/
 	endpoint = flag.String("endpoint", "dashboard",
 		"input endpoint dashboard or server")
-	conf = flag.String("config", "conf/dev", "input config file like ."+
-		"/conf/dev/")
+	conf = flag.String("config", "conf/dev",
+		"input config file like ./conf/dev/")
 )
 
 func main() {
-	// flag.Parse()
+	flag.Parse()
 	// // 如果输入的参数不对的话，输出使用方法并且退出程序
 	// if *endpoint == "" {
 	// 	flag.Usage()
@@ -39,8 +39,9 @@ func main() {
 	// } else {
 	//
 	// }
-	_ = start.InitModules("./conf/dev/")
-	log.Debug("application start!")
+	_ = start.InitModules(*conf)
+	start.ListenAndServe()
+	log.Info("application start!")
 
 	// 程序退出处理
 	quit()
@@ -61,5 +62,6 @@ func main() {
 func quit() {
 	quit := make(chan os.Signal)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGQUIT)
-	<-quit
+	s := <-quit
+	log.Infof("Catch the exit signal: %s", s.String())
 }

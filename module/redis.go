@@ -4,6 +4,7 @@ import (
 	"gateway/common/config"
 	"gateway/common/log"
 	"gateway/common/utils"
+	"gateway/middleware"
 	"github.com/gomodule/redigo/redis"
 )
 
@@ -29,10 +30,9 @@ func initRedis() error {
 	// 如果配置文件当中配置了用户名和密码
 	// 则使用用户名密码进行连接
 	// 如果没有就不用用户名和密码
-	if r.UserName != "" && r.Auth != "" {
+	if r.Auth != "" {
 		conn, err := redis.Dial(
 			network, address,
-			redis.DialUsername(r.UserName),
 			redis.DialPassword(r.Auth),
 		)
 		if err != nil {
@@ -50,13 +50,22 @@ func initRedis() error {
 	if utils.Conn == nil {
 		utils.Conn = c
 	}
+	// 设置 session 中间件的配置
+	if err := middleware.SetSessionConf(
+		r.Idle,
+		r.ConnectType,
+		r.Address,
+		r.Auth,
+		"session",
+	); err != nil {
+		return err
+	}
 	return nil
 }
 
 // 初始化 redis
 func InitRedis() error {
-	err := initRedis()
-	if err != nil {
+	if err := initRedis(); err != nil {
 		log.Error(err.Error())
 		return err
 	}
