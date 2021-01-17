@@ -6,3 +6,6 @@ log:
 
 gin:
   mode: debug
+
+session:
+  max_age: 20

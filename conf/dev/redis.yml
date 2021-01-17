@@ -1,3 +1,4 @@
 address: 127.0.0.1:6379
 connect_type: tcp
 max_idle: 10
+auth: 123

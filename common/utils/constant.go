@@ -16,8 +16,12 @@ const (
 	SERVER_ERROR      = 500
 	SUCCESS_CODE      = 200
 
-	ValidatorKey        = "ValidatorKey"
-	TranslatorKey       = "TranslatorKey"
+	Second = 1
+	Minute = 60 * Second
+
+	ValidatorKey   = "ValidatorKey"
+	TranslatorKey  = "TranslatorKey"
+	SessionKeyUser = "user"
 )
 
 var ERROR_CODE = []int{

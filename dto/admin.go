@@ -5,8 +5,8 @@ import (
 )
 
 type AdminDto struct {
-	Username string `json:"username" form:"username" comment:"用户名" binding:"required"`
-	Password string `json:"password" form:"password" comment:"密码" binding:"required"`
+	Username string `json:"username" form:"username" comment:"用户名" binding:"required" example:"admin"`
+	Password string `json:"password" form:"password" comment:"密码" binding:"required" example:"123456"`
 }
 
 func (p *AdminDto) ValidateAndBindParam(c *gin.Context) error {

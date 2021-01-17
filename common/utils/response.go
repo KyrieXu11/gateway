@@ -1,6 +1,8 @@
 package utils
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+)
 
 type Response struct {
 	Code int         // 状态码

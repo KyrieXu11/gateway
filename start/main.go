@@ -3,11 +3,11 @@ package start
 import (
 	"gateway/common/utils"
 	"gateway/module"
-	"gateway/router"
+	"gateway/start/router"
 )
 
 // 需要加载的模块
-var modules = []string{utils.ModuleApplication, utils.ModuleMySQL}
+var modules = []string{utils.ModuleApplication, utils.ModuleMySQL, utils.ModuleRedis}
 
 // 初始化模块
 func InitModules(configPath string) error {
@@ -28,7 +28,6 @@ func initModules(configPath string) error {
 	if err := utils.LoadAllConfigYaml(); err != nil {
 		return err
 	}
-	// TODO: 设置一些基本的参数
 	if err := initModule(module.InitApplication, utils.ModuleApplication); err != nil {
 		return err
 	}
@@ -37,6 +36,7 @@ func initModules(configPath string) error {
 		return err
 	}
 	// 加载 redis 连接
+	// 同时也做了session的配置
 	if err := initModule(module.InitRedis, utils.ModuleRedis); err != nil {
 		return err
 	}
@@ -54,7 +54,7 @@ func initModule(f func() error, module string) error {
 }
 
 // 启动 gin
-func ListenAndServe(){
+func ListenAndServe() {
 	r := router.InitRouter()
 	router.ListenAndServe(r)
 }

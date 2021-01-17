@@ -7,19 +7,25 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var sessionStore gin.HandlerFunc
+var sessionFunc gin.HandlerFunc
 
 func GetSessionStore() gin.HandlerFunc {
-	return sessionStore
+	return sessionFunc
 }
 
-// 设置 redis session 配置
-func SetSessionConf(maxIdle int, network, addr, auth, sessionName string, keyPairs ...[]byte) error {
+// 初始化 session 中间件
+func InitSessionConf(maxIdle int,
+	network, addr, auth, sessionName string,
+	options *sessions.Options,
+	keyPairs ...[]byte) error {
 	store, err := redis.NewStore(maxIdle, network, addr, auth, keyPairs...)
 	if err != nil {
-		log.Error(err.Error())
 		return err
 	}
-	sessionStore = sessions.Sessions(sessionName, store)
+	if options != nil {
+		log.Info("use custom redis session option")
+		store.Options(*options)
+	}
+	sessionFunc = sessions.Sessions(sessionName, store)
 	return nil
 }

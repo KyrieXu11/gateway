@@ -64,7 +64,7 @@ func (p *logger) print(level int, v ...interface{}) {
 		v[i] = v[i-1]
 	}
 	// 把日志的级别放进去
-	v[0] = levelStrings[level]
+	v[0] = fmt.Sprintf("[%s]", levelStrings[level])
 	// fallthrough 的用法
 	// 从第一个case开始判断是否为true，如果为true则继续往下执行不会判断后面的case值
 	// 直到没有fallthrough进行正常判断case值

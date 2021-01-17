@@ -16,6 +16,7 @@ func RegisterAdminController(group *gin.RouterGroup) {
 	p := &AdminRegistrator{}
 	group.GET("/hello", p.Hello)
 	group.POST("/login", p.Login)
+	group.GET("/session/hello", p.SessionHello)
 }
 
 // 分组的测试接口
@@ -37,8 +38,23 @@ func (p *AdminRegistrator) Login(c *gin.Context) {
 		utils.ResponseErrorM(c, err.Error())
 		return
 	}
-	if res := service.CheckPassword(adminDto.Password, admin); res {
-		utils.ResponseSuccessObj(c, "登陆成功！", adminDto)
+	if res := service.CheckPassword(adminDto.Password, admin); !res {
+		utils.ResponseErrorM(c, "登陆失败")
+		return
 	}
-	utils.ResponseErrorM(c, "登陆失败")
+	adminDto.Password = ""
+	if err = utils.SetSession(c, utils.SessionKeyUser, adminDto); err != nil {
+		log.Error(err.Error())
+	}
+	utils.ResponseSuccessObj(c, "登陆成功！", adminDto)
+}
+
+func (p *AdminRegistrator) SessionHello(c *gin.Context) {
+	a := &dto.AdminDto{}
+	if err := utils.GetSessionVal(c, utils.SessionKeyUser, a); err != nil {
+		log.Error(err.Error())
+		return
+	}
+	utils.ResponseSuccessObj(c, "", a)
+	return
 }

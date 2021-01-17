@@ -5,6 +5,7 @@ import (
 	"gateway/common/log"
 	"gateway/common/utils"
 	"gateway/middleware"
+	"github.com/gin-contrib/sessions"
 	"github.com/gomodule/redigo/redis"
 )
 
@@ -51,16 +52,29 @@ func initRedis() error {
 		utils.Conn = c
 	}
 	// 设置 session 中间件的配置
-	if err := middleware.SetSessionConf(
-		r.Idle,
-		r.ConnectType,
-		r.Address,
-		r.Auth,
-		"session",
-	); err != nil {
+	if err := initRedisSessionStore(r); err != nil {
 		return err
 	}
 	return nil
+}
+
+// 初始化 redis session 中间件
+func initRedisSessionStore(conf *config.RedisConfig) error {
+	sessionName := "session"
+	maxAge := utils.GetIntConf(utils.ModuleApplication, "session.max_age")
+	maxAge = maxAge * utils.Minute
+	var opt = &sessions.Options{
+		// 给的是秒...转换成分钟
+		MaxAge: maxAge,
+	}
+	return middleware.InitSessionConf(
+		conf.Idle,
+		conf.ConnectType,
+		conf.Address,
+		conf.Auth,
+		sessionName,
+		opt,
+		[]byte("secret"))
 }
 
 // 初始化 redis
