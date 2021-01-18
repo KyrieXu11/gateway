@@ -3,9 +3,12 @@ package utils
 import (
 	"crypto/sha256"
 	"fmt"
+	"gateway/common/log"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	jsoniter "github.com/json-iterator/go"
+	"os/exec"
+	"strconv"
 )
 
 // salt 是数据库中的盐值
@@ -42,4 +45,23 @@ func GetSessionVal(c *gin.Context, key string, res interface{}) error {
 		return err
 	}
 	return nil
+}
+
+// 执行指令
+func ExecCommand(name string, args ...string) (string, error) {
+	cmd := exec.Command(name, args...)
+	output, err := cmd.Output()
+	if err != nil {
+		return "", err
+	}
+	return string(output), nil
+}
+
+func StringToBool(s string) bool {
+	res, err := strconv.ParseBool(s)
+	if err != nil {
+		log.Error(err.Error())
+		return false
+	}
+	return res
 }

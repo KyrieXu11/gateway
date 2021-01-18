@@ -27,12 +27,13 @@ func CheckLogin() gin.HandlerFunc {
 
 // 检查是否为登录请求的函数
 func CheckLoginRequest(r *http.Request) bool {
-	// TODO: 做登陆路径的校验
-	// 介于golang里面没有类似spring中的 AntPathMatcher
-	// 考虑下面两种做法
-	// 1. 自己照着spring的源码写一个
-	// 2. 做一个 rpc 调用
+	// 说明见 README.md
+	var pattern = "/**/login"
 	realPath := r.URL.Path
-	log.Info(realPath)
-	return false
+	command, err := utils.ExecCommand("java", "./build/AntPathMatcher.jar", pattern, realPath)
+	if err != nil {
+		log.Error(err.Error())
+		return false
+	}
+	return utils.StringToBool(command)
 }
