@@ -23,7 +23,7 @@ func InitSessionConf(maxIdle int,
 		return err
 	}
 	if options != nil {
-		log.Info("use custom redis session option")
+		log.Info("Use custom redis session option")
 		store.Options(*options)
 	}
 	sessionFunc = sessions.Sessions(sessionName, store)

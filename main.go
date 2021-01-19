@@ -41,7 +41,7 @@ func main() {
 	// }
 	_ = start.InitModules(*conf)
 	start.ListenAndServe()
-	log.Info("application start!")
+	log.Info("Application Start!")
 
 	// 程序退出处理
 	quit()

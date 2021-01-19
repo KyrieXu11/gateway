@@ -38,3 +38,7 @@ func FindAdminByUserName(username string) *Admin {
 	}
 	return res
 }
+
+func RegisterAdmin(username, password string) bool {
+	return false
+}

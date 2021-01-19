@@ -58,3 +58,13 @@ func (p *AdminRegistrator) SessionHello(c *gin.Context) {
 	utils.ResponseSuccessObj(c, "", a)
 	return
 }
+
+func (p *AdminRegistrator) Register(c *gin.Context) {
+	adminDto := &dto.AdminDto{}
+	if err := adminDto.ValidateAndBindParam(c); err != nil {
+		log.Error(err.Error())
+		utils.ResponseErrorM(c, "检查参数是否填写正确")
+		return
+	}
+	service.RegisterAdmin(adminDto)
+}

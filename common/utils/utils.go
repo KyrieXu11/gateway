@@ -7,8 +7,10 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	jsoniter "github.com/json-iterator/go"
+	"math/rand"
 	"os/exec"
 	"strconv"
+	"time"
 )
 
 // salt 是数据库中的盐值
@@ -64,4 +66,22 @@ func StringToBool(s string) bool {
 		return false
 	}
 	return res
+}
+
+// 随机生成密码盐
+func GenerateSalt(length int) string {
+	i := time.Now().Unix() % 100
+	res := ""
+	t := strconv.FormatInt(i, 10)
+	for i := 0; i < length; i++ {
+		// 小写
+		base := 97
+		if rand.Float32() < 0.5 {
+			// 大写
+			base = 65
+		}
+		i := rune(rand.Int()%26 + base)
+		res += string(i)
+	}
+	return res + t
 }
