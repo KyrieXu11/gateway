@@ -1,12 +1,15 @@
 package utils
 
 import (
+	"gateway/common/rpc"
 	"github.com/gomodule/redigo/redis"
 	"github.com/jinzhu/gorm"
 	"github.com/spf13/viper"
+	"google.golang.org/grpc"
 	"io"
 )
-var(
+
+var (
 	ConfigEnv     string // 配置文件的环境，比如传进来的路径是conf/dev则环境为dev
 	ConfigEnvPath string // 配置文件的路径传进来的文件路径是上面的话，这个变量则为conf/dev
 )
@@ -23,12 +26,17 @@ var DB *gorm.DB
 // redis 的连接客户端
 var Conn redis.Conn
 
+var MatcherClient rpc.AntPathMatcherClient
+
+var RpcConn *grpc.ClientConn
+
 // 关闭全局连接的函数
 func Close() {
 	if DB != nil {
 		_ = DB.Close()
 	}
 	realClose(Conn)
+	RpcConn.Close()
 }
 
 // 真正执行的关闭方法

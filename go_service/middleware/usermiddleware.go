@@ -2,6 +2,8 @@ package middleware
 
 import (
 	"gateway/common/log"
+	"gateway/common/rpc"
+	"gateway/common/rpc_client"
 	"gateway/common/utils"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -32,16 +34,19 @@ func CheckLoginRequest(r *http.Request) bool {
 	var whitList = []string{
 		"/**/login",
 		"/**/register",
+		"/**.js",
+		"/**.css",
+		"/**.html",
 	}
 	match, isLogin := false, false
 	realPath := r.URL.Path
-
-	matcher := &utils.AntPathMatcher{
-		PathSeparator: "/",
-	}
-
+	rpc_client.NewMatcherClient()
 	for i, s := range whitList {
-		match = matcher.Match(s, realPath)
+		paths := &rpc.Paths{
+			Pattern:  s,
+			RealPath: realPath,
+		}
+		match = rpc_client.Match(utils.MatcherClient, paths)
 		if match {
 			if i == 0 {
 				isLogin = true

@@ -9,3 +9,7 @@ gin:
 
 session:
   max_age: 20
+
+rpc:
+  matcher:
+    server_addr: "localhost:9000"

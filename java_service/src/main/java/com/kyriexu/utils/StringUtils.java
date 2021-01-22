@@ -1,4 +1,4 @@
-package com.kyriexu;
+package com.kyriexu.utils;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.Charset;
