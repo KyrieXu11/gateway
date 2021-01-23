@@ -35,7 +35,7 @@ func NewLogger(level int) *logger {
 		level:     level,
 		callDepth: 4,
 		levelList: make([]int, len(levelStrings)),
-		logFile:   "./logs/gateway.log",
+		logFile:   "logs/test.log",
 	}
 }
 

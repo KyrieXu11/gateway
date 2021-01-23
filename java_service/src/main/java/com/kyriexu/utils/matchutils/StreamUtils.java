@@ -1,4 +1,4 @@
-package com.kyriexu.utils;
+package com.kyriexu.utils.matchutils;
 
 import java.io.*;
 import java.nio.charset.Charset;

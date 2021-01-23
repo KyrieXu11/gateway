@@ -30,27 +30,35 @@ func CheckLogin() gin.HandlerFunc {
 
 // 检查是否为登录请求的函数
 func CheckLoginRequest(r *http.Request) bool {
-	// 说明见 README.md
-	var whitList = []string{
-		"/**/login",
-		"/**/register",
-		"/**.js",
-		"/**.css",
-		"/**.html",
+	res := false
+	switch utils.ConfigEnv {
+	// 开发环境下就不调用了，直接都返回true
+	// case "dev":
+	// 	return true
+	default:
+		res = checkLoginRequest(r)
 	}
+	return res
+}
+
+func checkLoginRequest(r *http.Request) bool {
+	// 说明见 README.md
+	var whitList = utils.GetStringSliceConf(utils.ModuleApplication, "whitelist")
 	match, isLogin := false, false
 	realPath := r.URL.Path
+	// 先判断一下请求的路径里面有没有登陆
+	// 如果有则暂时标记为登陆
+	if strings.Contains(realPath, "login") {
+		isLogin = true
+	}
 	rpc_client.NewMatcherClient()
-	for i, s := range whitList {
+	for _, s := range whitList {
 		paths := &rpc.Paths{
 			Pattern:  s,
 			RealPath: realPath,
 		}
-		match = rpc_client.Match(utils.MatcherClient, paths)
+		match = rpc_client.Match(utils.GetMatcherClient(), paths)
 		if match {
-			if i == 0 {
-				isLogin = true
-			}
 			break
 		}
 	}

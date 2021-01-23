@@ -1,4 +1,4 @@
-package com.kyriexu.utils;
+package com.kyriexu.utils.matchutils;
 
 import java.lang.reflect.Array;
 import java.util.*;

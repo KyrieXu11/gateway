@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"
 	"io"
+	"sync"
 )
 
 var (
@@ -20,23 +21,75 @@ var (
 // 当然也可以创建一个实体使用 Unmarshal() 的方法来将实体赋值
 var ConfigContextHolder map[string]*viper.Viper
 
+var lock sync.Mutex
+
 // 数据库的全局对象
-var DB *gorm.DB
+var db *gorm.DB
 
 // redis 的连接客户端
-var Conn redis.Conn
+var conn redis.Conn
 
-var MatcherClient rpc.AntPathMatcherClient
+var matcherClient rpc.AntPathMatcherClient
 
-var RpcConn *grpc.ClientConn
+var rpcConn *grpc.ClientConn
+
+func SetDB(Db *gorm.DB) {
+	lock.Lock()
+	defer lock.Unlock()
+	if db == nil {
+		db = Db
+	}
+}
+
+func GetDB() *gorm.DB {
+	return db
+}
+
+func SetRedisConn(c redis.Conn) {
+	lock.Lock()
+	defer lock.Unlock()
+	if conn == nil {
+		conn = c
+	}
+}
+
+func GetRedisConn() redis.Conn {
+	return conn
+}
+
+func SetGRpcConn(clientConn *grpc.ClientConn) {
+	lock.Lock()
+	defer lock.Unlock()
+	if rpcConn == nil {
+		rpcConn = clientConn
+	}
+	client := rpc.NewAntPathMatcherClient(rpcConn)
+	if matcherClient == nil {
+		matcherClient = client
+	}
+}
+
+func GetGRpcConn() *grpc.ClientConn {
+	return rpcConn
+}
+
+func GetMatcherClient() rpc.AntPathMatcherClient {
+	return matcherClient
+}
 
 // 关闭全局连接的函数
 func Close() {
-	if DB != nil {
-		_ = DB.Close()
+	// 首先先检查redis种的session的key清除了没
+
+
+
+	if db != nil {
+		_ = db.Close()
 	}
-	realClose(Conn)
-	RpcConn.Close()
+	realClose(conn)
+	if rpcConn != nil {
+		_ = rpcConn.Close()
+	}
 }
 
 // 真正执行的关闭方法

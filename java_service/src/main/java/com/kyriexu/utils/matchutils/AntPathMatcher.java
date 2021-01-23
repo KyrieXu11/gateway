@@ -1,4 +1,4 @@
-package com.kyriexu.utils;
+package com.kyriexu.utils.matchutils;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

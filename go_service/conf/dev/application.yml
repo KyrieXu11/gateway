@@ -3,6 +3,7 @@ server:
 
 log:
   level: info
+  path: logs/test.log
 
 gin:
   mode: debug
@@ -13,3 +14,10 @@ session:
 rpc:
   matcher:
     server_addr: "localhost:9000"
+
+whitelist:
+  - "/**/login"
+  - "/**/register"
+  - "/**.js"
+  - "/**.css"
+  - "/**.html"

@@ -11,7 +11,7 @@ type Admin struct {
 	Username string
 	Password string
 	Salt     string
-	Deleted  byte `gorm:"column:is_deleted"`
+	Deleted  byte `gorm:"column:is_delete"`
 	CreateAt time.Time
 	UpdateAt time.Time
 }
@@ -31,14 +31,27 @@ func (p *Admin) CheckPassword(password string) bool {
 
 // 根据用户名查找管理员帐户
 func FindAdminByUserName(username string) *Admin {
+	db := utils.GetDB()
 	var res = &Admin{}
-	if err := utils.DB.Where("user_name = ?", username).First(res).Error; err != nil {
+	if err := db.Where("username = ?", username).First(res).Error; err != nil {
 		log.Error(err.Error())
 		return nil
 	}
 	return res
 }
 
-func RegisterAdmin(username, password string) bool {
-	return false
+func RegisterAdmin(username, password, salt string) bool {
+	db := utils.GetDB()
+	a := Admin{
+		Username: username,
+		Password: password,
+		Salt:     salt,
+		Deleted:  0,
+		CreateAt: time.Now(),
+		UpdateAt: time.Now(),
+	}
+	res := db.NewRecord(a)
+	db.Create(&a)
+	log.Info("注册结果:", res)
+	return res
 }

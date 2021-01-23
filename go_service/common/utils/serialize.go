@@ -34,3 +34,10 @@ func GetBoolConf(file string, key string) bool {
 	}
 	return false
 }
+
+func GetStringSliceConf(file string, key string) []string {
+	if v, ok := ConfigContextHolder[file]; ok {
+		return v.GetStringSlice(key)
+	}
+	return nil
+}

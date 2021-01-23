@@ -17,9 +17,6 @@ func InitApplication() error {
 	if app.Log.Level != "" {
 		log.SetLoggerLevel(app.Log.Level)
 	}
-	if app.Log.OutPut != "" {
-		log.SetOutPut(app.Log.OutPut)
-	}
 
 	// 设置gin的模式
 	gin.SetMode(app.Gin.Mode)

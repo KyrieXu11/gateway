@@ -1,6 +1,7 @@
 package dto
 
 import (
+	"gateway/common/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -10,8 +11,5 @@ type AdminDto struct {
 }
 
 func (p *AdminDto) ValidateAndBindParam(c *gin.Context) error {
-	if err := c.ShouldBindJSON(p); err != nil {
-		return err
-	}
-	return nil
+	return utils.ValidateAndBindParam(c, p)
 }

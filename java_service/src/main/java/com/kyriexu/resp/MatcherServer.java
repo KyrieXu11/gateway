@@ -1,9 +1,9 @@
 package com.kyriexu.resp;
 
-import com.kyriexu.rpc.AntPathMatcherGrpc;
-import com.kyriexu.rpc.Paths;
-import com.kyriexu.rpc.Result;
-import com.kyriexu.utils.AntPathMatcher;
+import com.kyriexu.rpc.matchrpc.AntPathMatcherGrpc;
+import com.kyriexu.rpc.matchrpc.Paths;
+import com.kyriexu.rpc.matchrpc.Result;
+import com.kyriexu.utils.matchutils.AntPathMatcher;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
@@ -18,11 +18,10 @@ import java.util.concurrent.TimeUnit;
  * @since 2021/1/21 0:17
  **/
 public class MatcherServer {
-    public static final Logger logger = LoggerFactory.getLogger(MatcherServer.class);
+    public static final Logger LOGGER = LoggerFactory.getLogger(MatcherServer.class);
 
     private final int port;
     private final Server server;
-
 
     public MatcherServer(int port) {
         this.port = port;
@@ -40,16 +39,16 @@ public class MatcherServer {
 
     public void start() throws IOException {
         server.start();
-        logger.info("Server run on port:{}", port);
+        LOGGER.info("Server run on port:{}", port);
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             // Use stderr here since the logger may have been reset by its JVM shutdown hook.
-            logger.error("*** shutting down gRPC server since JVM is shutting down");
+            LOGGER.info("*** shutting down gRPC server since JVM is shutting down");
             try {
                 MatcherServer.this.stop();
             } catch (InterruptedException e) {
                 e.printStackTrace(System.err);
             }
-            logger.error("*** server shut down");
+            LOGGER.info("*** server shut down");
         }));
     }
 
@@ -78,18 +77,19 @@ public class MatcherServer {
                     String realPath = point.getRealPath();
                     AntPathMatcher matcher = new AntPathMatcher();
                     this.res = matcher.match(pattern, realPath);
+                    LOGGER.info("pattern是 {} 请求路径是 {} 结果是：{}", pattern, realPath, res);
                 }
 
                 @Override
                 public void onError(Throwable throwable) {
-                    logger.error("出错了");
+                    LOGGER.error("出错了");
                 }
 
                 @Override
                 public void onCompleted() {
                     responseObserver.onNext(Result.newBuilder().setRes(res).build());
                     responseObserver.onCompleted();
-                    logger.info("成功调用，结果是：{}", res);
+                    LOGGER.info("成功调用");
                 }
             };
         }

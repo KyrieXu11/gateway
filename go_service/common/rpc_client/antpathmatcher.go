@@ -12,7 +12,7 @@ import (
 
 var once sync.Once
 
-func newMatcherClient(){
+func newMatcherClient() {
 	var opts []grpc.DialOption
 
 	opts = append(opts, grpc.WithBlock())
@@ -22,10 +22,7 @@ func newMatcherClient(){
 	if err != nil {
 		log.Errorf("fail to dial: %v", err)
 	}
-	if utils.MatcherClient == nil {
-		utils.RpcConn = conn
-		utils.MatcherClient = rpc.NewAntPathMatcherClient(conn)
-	}
+	utils.SetGRpcConn(conn)
 }
 
 func NewMatcherClient() {
@@ -45,7 +42,6 @@ func Match(client rpc.AntPathMatcherClient, paths *rpc.Paths) bool {
 		log.Error(err.Error())
 		return false
 	}
-
 	resp, err := stream.CloseAndRecv()
 	if err != nil {
 		log.Error(err.Error())

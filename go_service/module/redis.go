@@ -48,9 +48,7 @@ func initRedis() error {
 		c = conn
 	}
 	// 初始化 redis 上下文
-	if utils.Conn == nil {
-		utils.Conn = c
-	}
+	utils.SetRedisConn(c)
 	// 设置 session 中间件的配置
 	if err := initRedisSessionStore(r); err != nil {
 		return err

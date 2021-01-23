@@ -85,3 +85,10 @@ func GenerateSalt(length int) string {
 	}
 	return res + t
 }
+
+func ValidateAndBindParam(c *gin.Context,p interface{}) error {
+	if err := c.ShouldBindJSON(p); err != nil {
+		return err
+	}
+	return nil
+}

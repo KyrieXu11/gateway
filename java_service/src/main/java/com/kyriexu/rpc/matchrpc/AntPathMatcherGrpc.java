@@ -1,4 +1,4 @@
-package com.kyriexu.rpc;
+package com.kyriexu.rpc.matchrpc;
 
 import static io.grpc.MethodDescriptor.generateFullMethodName;
 

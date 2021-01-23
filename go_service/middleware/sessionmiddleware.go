@@ -14,10 +14,12 @@ func GetSessionStore() gin.HandlerFunc {
 }
 
 // 初始化 session 中间件
-func InitSessionConf(maxIdle int,
+func InitSessionConf(
+	maxIdle int,
 	network, addr, auth, sessionName string,
 	options *sessions.Options,
 	keyPairs ...[]byte) error {
+
 	store, err := redis.NewStore(maxIdle, network, addr, auth, keyPairs...)
 	if err != nil {
 		return err

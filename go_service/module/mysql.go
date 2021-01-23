@@ -127,9 +127,7 @@ func InitGorm() error {
 		return err
 	}
 	setConnectPool(db.DB())
-	if utils.DB == nil {
-		utils.DB = db
-	}
+	utils.SetDB(db)
 	log.Info("Gorm successfully initialized!")
 	return nil
 }
