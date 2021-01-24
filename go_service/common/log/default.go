@@ -4,6 +4,10 @@ var defaultLogger *logger
 
 func init() {
 	defaultLogger = NewLogger(LevelInfo)
+	// err := SetOutPut(defaultLogger.logFile)
+	// if err != nil {
+	// 	Error(err.Error())
+	// }
 }
 
 // 设置日志等级
@@ -28,8 +32,8 @@ func SetLoggerLevel(level interface{}) {
 	defaultLogger.SetLevel(l)
 }
 
-func SetOutPut(path string) {
-	defaultLogger.SetOutPutPath(path)
+func SetOutPut(path string) error {
+	return defaultLogger.SetOutPut(path)
 }
 
 func SetLoggerCallDepth(depth int) {

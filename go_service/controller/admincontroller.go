@@ -22,7 +22,8 @@ func RegisterAdminController(g *gin.RouterGroup) {
 	g.POST("/login", p.Login)
 	g.GET("/session/hello", p.SessionHello)
 	g.GET("/logout", p.Logout)
-	g.PUT("/register", p.Register)
+	g.POST("/register", p.Register)
+	g.PUT("/changepass", p.ChangePassword)
 }
 
 // 分组的测试接口
@@ -91,7 +92,7 @@ func (p *AdminRegistrator) SessionHello(c *gin.Context) {
 	return
 }
 
-func ChangePassword(c *gin.Context) {
+func (p *AdminRegistrator) ChangePassword(c *gin.Context) {
 	passwordDto := &dto.PasswordDto{}
 	if err := passwordDto.ValidateAndBindParam(c); err != nil {
 		log.Error(err.Error())

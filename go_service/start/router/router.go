@@ -17,7 +17,8 @@ func InitRouter(middleware ...gin.HandlerFunc) *gin.Engine {
 
 // 注册控制器
 func registerRouter(router *gin.Engine) {
-	router.Use(middleware.GetSessionStore(),
+	router.Use(middleware.Cors(),
+		middleware.GetSessionStore(),
 		middleware.CheckLogin())
 	// pingcontroller.go
 	{
@@ -30,6 +31,12 @@ func registerRouter(router *gin.Engine) {
 	{
 		group := router.Group("/admin")
 		controller.RegisterAdminController(group)
+	}
+
+	// service_info_controller.go
+	{
+		group := router.Group("/service")
+		controller.RegisterServiceListController(group)
 	}
 	router.Static("/static", "./dist")
 }

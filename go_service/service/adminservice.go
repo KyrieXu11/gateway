@@ -18,8 +18,10 @@ type AdminService interface {
 type AdminServiceImpl struct {
 }
 
+var adminDao dao.AdminDao
+
 func (p *AdminServiceImpl) GetAdminByUsername(username string) (*dao.Admin, error) {
-	admin := dao.FindAdminByUserName(username)
+	admin := adminDao.FindAdminByUserName(username)
 	if admin == nil {
 		return nil, fmt.Errorf("未找到用户")
 	}
@@ -37,17 +39,21 @@ func (p *AdminServiceImpl) RegisterAdmin(adminDto *dto.AdminDto) bool {
 	salt := utils.GenerateSalt(5)
 	password = utils.GetSaltyPassword(salt, password)
 	log.Infof("username: %s   password: %s   salt: %s", username, password, salt)
-	return dao.RegisterAdmin(username, password, salt)
+	return adminDao.RegisterAdmin(username, password, salt)
 }
 
+// 修改密码
 func (p *AdminServiceImpl) ChangePassword(passwordDto *dto.PasswordDto) (bool, error) {
-	a := &dao.Admin{
-		Username: passwordDto.Username,
+	a := adminDao.FindAdminByUserName(passwordDto.Username)
+	if a == nil {
+		return false, fmt.Errorf("没有登陆呀，先去登陆再来吧")
 	}
 	res := a.CheckPassword(passwordDto.OldPass)
 	if !res {
 		return false, fmt.Errorf("原来的密码不对呀,再检查一下吧")
 	}
-
-	return res, nil
+	// 需要用盐加密密码
+	newPass := utils.GetSaltyPassword(a.Salt, passwordDto.NewPass)
+	rows := adminDao.ChangePassword(passwordDto.Username, newPass)
+	return rows != 0, nil
 }

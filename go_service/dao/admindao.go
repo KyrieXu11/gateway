@@ -11,13 +11,25 @@ type Admin struct {
 	Username string
 	Password string
 	Salt     string
-	Deleted  byte `gorm:"column:is_delete"`
-	CreateAt time.Time
-	UpdateAt time.Time
+	Deleted  byte      `gorm:"column:is_delete"`
+	CreateAt time.Time `gorm:"create_at"`
+	UpdateAt time.Time `gorm:"update_at"`
 }
 
 func (p *Admin) TableName() string {
 	return "gateway_admin"
+}
+
+type AdminDao struct {
+}
+
+// 修改密码
+func (p *AdminDao) ChangePassword(username, newPass string) int64 {
+	db := utils.GetDB()
+	var admin Admin
+	updateTime := time.Now()
+	affected := db.Model(&admin).Where("username = ?", username).Updates(Admin{Password: newPass, UpdateAt: updateTime}).RowsAffected
+	return affected
 }
 
 func (p *Admin) CheckPassword(password string) bool {
@@ -30,17 +42,17 @@ func (p *Admin) CheckPassword(password string) bool {
 }
 
 // 根据用户名查找管理员帐户
-func FindAdminByUserName(username string) *Admin {
+func (p *AdminDao) FindAdminByUserName(username string) *Admin {
 	db := utils.GetDB()
-	var res = &Admin{}
-	if err := db.Where("username = ?", username).First(res).Error; err != nil {
+	var res Admin
+	if err := db.Where("username = ?", username).First(&res).Error; err != nil {
 		log.Error(err.Error())
 		return nil
 	}
-	return res
+	return &res
 }
 
-func RegisterAdmin(username, password, salt string) bool {
+func (p *AdminDao) RegisterAdmin(username, password, salt string) bool {
 	db := utils.GetDB()
 	a := Admin{
 		Username: username,

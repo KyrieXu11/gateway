@@ -98,18 +98,16 @@ func (p *logger) print(level int, v ...interface{}) {
 	}
 }
 
-func (p *logger) SetOutPutPath(path string) {
+func (p *logger) SetOutPut(path string) error {
 	p.logFile = path
-	log.SetOutput(p)
-}
-
-func (p *logger) Write(bs []byte) (int, error) {
-	f, err := os.OpenFile(p.logFile, os.O_CREATE|os.O_APPEND, 0x666)
-	defer f.Close()
+	_, err := os.Stat(path)
+	file, err := os.OpenFile(path, os.O_CREATE|os.O_RDWR|os.O_APPEND, 0666)
 	if err != nil {
-		return -1, err
+		return err
 	}
-	return f.Write(bs)
+	defer file.Close()
+	log.SetOutput(file)
+	return nil
 }
 
 func (p *logger) SetLevel(level int) {

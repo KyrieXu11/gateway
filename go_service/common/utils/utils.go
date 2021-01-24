@@ -10,6 +10,7 @@ import (
 	"math/rand"
 	"os/exec"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -86,9 +87,18 @@ func GenerateSalt(length int) string {
 	return res + t
 }
 
-func ValidateAndBindParam(c *gin.Context,p interface{}) error {
-	if err := c.ShouldBindJSON(p); err != nil {
-		return err
+func ValidateAndBindParam(c *gin.Context, p interface{}) error {
+	method := strings.ToLower(c.Request.Method)
+	switch method {
+	case "get":
+
+		break
+	case "post":
+	case "put":
+		if err := c.ShouldBindJSON(p); err != nil {
+			return err
+		}
+		break
 	}
 	return nil
 }
