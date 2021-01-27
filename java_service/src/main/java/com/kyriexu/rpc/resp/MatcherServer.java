@@ -1,14 +1,17 @@
-package com.kyriexu.resp;
+package com.kyriexu.rpc.resp;
 
 import com.kyriexu.rpc.matchrpc.AntPathMatcherGrpc;
 import com.kyriexu.rpc.matchrpc.Paths;
 import com.kyriexu.rpc.matchrpc.Result;
-import com.kyriexu.utils.matchutils.AntPathMatcher;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.util.PathMatcher;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -17,26 +20,37 @@ import java.util.concurrent.TimeUnit;
  * @author KyrieXu
  * @since 2021/1/21 0:17
  **/
+@Component
 public class MatcherServer {
+    /**
+     * logger
+     */
     public static final Logger LOGGER = LoggerFactory.getLogger(MatcherServer.class);
 
-    private final int port;
+    /**
+     * gRpc Server
+     */
     private final Server server;
 
-    public MatcherServer(int port) {
-        this.port = port;
+    @Value("${grpc.port}")
+    private int port;
+
+    /**
+     * non-arg constructor
+     * no need to pass any parameter
+     */
+    public MatcherServer() {
         this.server = ServerBuilder
                 .forPort(port)
                 .addService(new MatcherService())
                 .build();
     }
 
-    public static void main(String[] args) throws Exception {
-        MatcherServer server = new MatcherServer(9000);
-        server.start();
-        server.blockUntilShutdown();
-    }
-
+    /**
+     * start gRpc Server
+     *
+     * @throws IOException ioExcept
+     */
     public void start() throws IOException {
         server.start();
         LOGGER.info("Server run on port:{}", port);
@@ -52,6 +66,11 @@ public class MatcherServer {
         }));
     }
 
+    /**
+     * stop gRpc Server
+     *
+     * @throws InterruptedException n
+     */
     public void stop() throws InterruptedException {
         if (server != null) {
             server.shutdown().awaitTermination(30, TimeUnit.SECONDS);
@@ -69,13 +88,16 @@ public class MatcherServer {
         @Override
         public StreamObserver<Paths> match(StreamObserver<Result> responseObserver) {
             return new StreamObserver<Paths>() {
+                /**
+                 * response result
+                 */
                 boolean res = false;
 
                 @Override
                 public void onNext(Paths point) {
                     String pattern = point.getPattern();
                     String realPath = point.getRealPath();
-                    AntPathMatcher matcher = new AntPathMatcher();
+                    PathMatcher matcher = new AntPathMatcher();
                     this.res = matcher.match(pattern, realPath);
                     LOGGER.info("pattern是 {} 请求路径是 {} 结果是：{}", pattern, realPath, res);
                 }
