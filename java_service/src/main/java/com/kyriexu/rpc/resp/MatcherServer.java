@@ -83,6 +83,11 @@ public class MatcherServer {
         }
     }
 
+    /**
+     * Matcher Service
+     * <p>
+     * this class provide real match() method
+     */
     private static class MatcherService extends AntPathMatcherGrpc.AntPathMatcherImplBase {
 
         @Override

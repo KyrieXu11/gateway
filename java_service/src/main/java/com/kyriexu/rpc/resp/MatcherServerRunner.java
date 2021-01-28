@@ -1,5 +1,7 @@
 package com.kyriexu.rpc.resp;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -38,7 +40,7 @@ public class MatcherServerRunner implements ApplicationRunner {
 
     /**
      * this method will be called automatically after spring container is initialized
-     * so i can call rpc server in this method
+     * so i can run rpc server in this method
      * besides this method you can implements CommandLineRunner to get the same effect
      *
      * @param args args of main method see {@link com.kyriexu.MainApplication}
