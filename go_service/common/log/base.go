@@ -1,182 +1,131 @@
 package log
 
 import (
-	"fmt"
-	"log"
-	"os"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
+	"runtime"
 	"strings"
 )
 
 const (
-	LevelDebug int = iota
+	LevelDebug zapcore.Level = iota - 1
 	LevelInfo
 	LevelWarning
 	LevelError
 	LevelFatal
 
-	LevelDebugString   = "DEBUG"
-	LevelInfoString    = "INFO"
-	LevelWarningString = "WARNING"
-	LevelErrorString   = "ERROR"
-	LevelFatalString   = "FATAL"
+	LevelDebugString   = "debug"
+	LevelInfoString    = "info"
+	LevelWarningString = "warning"
+	LevelErrorString   = "error"
+	LevelFatalString   = "fatal"
+
+	StdOut   = "stdout"
+	StdError = "stderr"
 )
 
-var levelStrings = []string{LevelDebugString, LevelInfoString, LevelWarningString, LevelErrorString, LevelFatalString}
+var levelMap = map[string]zapcore.Level{
+	LevelDebugString:   LevelDebug,
+	LevelInfoString:    LevelInfo,
+	LevelWarningString: LevelWarning,
+	LevelErrorString:   LevelError,
+	LevelFatalString:   LevelFatal,
+}
 
 type logger struct {
-	level     int    // 日志的等级
-	callDepth int    // 日志的打印的层级，默认设置了4层
-	levelList []int  // 日志的等级列表，代码中有什么等级
-	logFile   string // 日志输出的文件
+	conf zap.Config
+	log  *zap.Logger
 }
 
-func NewLogger(level int) *logger {
-	return &logger{
-		level:     level,
-		callDepth: 4,
-		levelList: make([]int, len(levelStrings)),
-		logFile:   "logs/test.log",
+func newLogger() *logger {
+	ecfg := zapcore.EncoderConfig{
+		TimeKey:       "time",
+		LevelKey:      "level",
+		NameKey:       "logger",
+		CallerKey:     "caller",
+		MessageKey:    "msg",
+		StacktraceKey: "stacktrace",
+		LineEnding:    zapcore.DefaultLineEnding,
+		EncodeLevel:   zapcore.CapitalColorLevelEncoder,
+		EncodeTime:    zapcore.TimeEncoderOfLayout("2006-01-02 15:04:05"),
+		EncodeCaller:  callerFunc,
 	}
-}
 
-// level 字符串转化成等级
-func levelStringToLevel(levelString string) (int, error) {
-	var level int
-	length := len(levelStrings)
-	for ; level < length; level++ {
-		if strings.ToLower(levelString) == strings.ToLower(levelStrings[level]) {
-			break
-		}
+	l := zap.NewAtomicLevelAt(levelMap[LevelDebugString])
+	config := zap.Config{
+		Level:            l,
+		Development:      true,
+		Encoding:         "console",
+		OutputPaths:      []string{StdOut, "logs/gateway.log"},
+		ErrorOutputPaths: []string{StdError, "logs/gateway.error.log"},
+		EncoderConfig:    ecfg,
 	}
-	if level >= length {
-		return 0, fmt.Errorf("检查传进来的日志级别是否正确")
-	}
-	return level, nil
-}
-
-func (p *logger) print(level int, v ...interface{}) {
-	// 小于设置的等级则不打印
-	if level < p.level {
-		return
-	}
-	v = append(v, "")
-	for i := len(v) - 1; i >= 1; i-- {
-		v[i] = v[i-1]
-	}
-	// 把日志的级别放进去
-	v[0] = fmt.Sprintf("[%s]", levelStrings[level])
-	// fallthrough 的用法
-	// 从第一个case开始判断是否为true，如果为true则继续往下执行不会判断后面的case值
-	// 直到没有fallthrough进行正常判断case值
-	switch level {
-	case LevelFatal:
-		fallthrough
-	case LevelError:
-		if p.levelList[LevelError] == 1 {
-			_ = log.Output(p.callDepth, fmt.Sprintln(v...))
-		}
-		break
-	case LevelWarning:
-		if p.levelList[LevelWarning] == 1 {
-			_ = log.Output(p.callDepth, fmt.Sprintln(v...))
-		}
-		break
-	case LevelInfo:
-		if p.levelList[LevelInfo] == 1 {
-			_ = log.Output(p.callDepth, fmt.Sprintln(v...))
-		}
-		break
-	case LevelDebug:
-		if p.levelList[LevelDebug] == 1 {
-			_ = log.Output(p.callDepth, fmt.Sprintln(v...))
-		}
-		break
-	default:
-		if level == LevelFatal {
-			os.Exit(1)
-		}
-	}
-}
-
-func (p *logger) SetOutPut(path string) error {
-	p.logFile = path
-	_, err := os.Stat(path)
-	file, err := os.OpenFile(path, os.O_CREATE|os.O_RDWR|os.O_APPEND, 0666)
+	log, err := config.Build()
 	if err != nil {
-		return err
+		panic("can't init zap logger")
 	}
-	defer file.Close()
-	log.SetOutput(file)
-	return nil
-}
-
-func (p *logger) SetLevel(level int) {
-	p.level = level
-}
-
-func (p *logger) SetCallDepth(callDepth int) {
-	p.callDepth = callDepth
-}
-
-func (p *logger) Info(v ...interface{}) {
-	p.levelList[LevelInfo] = 1
-	if LevelInfo >= p.level {
-		p.print(LevelInfo, v...)
+	return &logger{
+		conf: config,
+		log:  log,
 	}
 }
 
-func (p *logger) Infof(format string, v ...interface{}) {
-	p.levelList[LevelInfo] = 1
-	if LevelInfo >= p.level {
-		p.print(LevelInfo, fmt.Sprintf(format, v...))
+func (p *logger) SetLevel(levelString string) {
+	levelString = strings.ToLower(levelString)
+	level, ok := levelMap[levelString]
+	if !ok {
+		panic("check your code,log level is unknown")
 	}
+	p.conf.Level = zap.NewAtomicLevelAt(level)
+	p.log, _ = p.conf.Build()
 }
 
-func (p *logger) Warning(v ...interface{}) {
-	p.levelList[LevelWarning] = 1
-	if LevelWarning >= p.level {
-		p.print(LevelWarning, v...)
-	}
+func (p *logger) SetPath(path string) {
+	p.conf.OutputPaths[1] = path
+	p.log, _ = p.conf.Build()
 }
 
-func (p *logger) Warningf(format string, v ...interface{}) {
-	p.levelList[LevelWarning] = 1
-	if LevelWarning >= p.level {
-		p.print(LevelWarning, fmt.Sprintf(format, v...))
-	}
+func (p *logger) info(msg string, field ...zap.Field) {
+	p.log.Info(msg, field...)
 }
 
-func (p *logger) Fatal(v ...interface{}) {
-	p.levelList[LevelFatal] = 1
-	if LevelFatal >= p.level {
-		p.print(LevelFatal, fmt.Sprint(v...))
-	}
+func (p *logger) error(msg string, field ...zap.Field) {
+	p.log.Error(msg, field...)
 }
 
-func (p *logger) Errorf(format string, v ...interface{}) {
-	p.levelList[LevelError] = 1
-	if LevelError >= p.level {
-		p.print(LevelError, fmt.Sprintf(format, v...))
-	}
+func (p *logger) debug(msg string, field ...zap.Field) {
+	p.log.Debug(msg, field...)
 }
 
-func (p *logger) Error(v ...interface{}) {
-	p.levelList[LevelError] = 1
-	if LevelError >= p.level {
-		p.print(LevelError, v...)
-	}
+func (p *logger) fatal(msg string, field ...zap.Field) {
+	p.log.Fatal(msg, field...)
+}
+func (p *logger) dPanic(msg string, field ...zap.Field) {
+	p.log.DPanic(msg, field...)
 }
 
-func (p *logger) Debug(v ...interface{}) {
-	p.levelList[LevelDebug] = 1
-	if LevelDebug >= p.level {
-		p.print(LevelDebug, v...)
-	}
+func (p *logger) warn(msg string, field ...zap.Field) {
+	p.log.Warn(msg, field...)
 }
 
-func (p *logger) Debugf(format string, v ...interface{}) {
-	p.levelList[LevelDebug] = 1
-	if LevelDebug >= p.level {
-		p.print(LevelDebug, fmt.Sprintf(format, v...))
+func (p *logger) sync() error {
+	return p.log.Sync()
+}
+
+func callerFunc(caller zapcore.EntryCaller, enc zapcore.PrimitiveArrayEncoder) {
+	call := NewEntryCaller()
+	enc.AppendString(call.TrimmedPath())
+}
+
+func NewEntryCaller() zapcore.EntryCaller {
+	caller, file, line, ok := runtime.Caller(8)
+	if !ok {
+		return zapcore.EntryCaller{}
+	}
+	return zapcore.EntryCaller{
+		Defined: true,
+		PC:      caller,
+		File:    file,
+		Line:    line,
 	}
 }

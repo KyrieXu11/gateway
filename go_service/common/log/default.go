@@ -1,65 +1,42 @@
 package log
 
+import "go.uber.org/zap"
+
 var defaultLogger *logger
 
 func init() {
-	defaultLogger = NewLogger(LevelInfo)
-	// err := SetOutPut(defaultLogger.logFile)
-	// if err != nil {
-	// 	Error(err.Error())
-	// }
+	defaultLogger = newLogger()
 }
 
 // 设置日志等级
-func SetLoggerLevel(level interface{}) {
-	var l int
-	switch level.(type) {
-	case string:
-		levelInt, err := levelStringToLevel(level.(string))
-		if err != nil {
-			Error(err.Error())
-			return
-		}
-		l = levelInt
-		break
-	case int:
-		// TODO: 做一下参数的校验
-		l = level.(int)
-		break
-	default:
-		l = level.(int)
-	}
-	defaultLogger.SetLevel(l)
+func SetLoggerLevel(level string) {
+	defaultLogger.SetLevel(level)
 }
 
-func SetOutPut(path string) error {
-	return defaultLogger.SetOutPut(path)
+func SetOutPut(path string) {
+	defaultLogger.SetPath(path)
 }
 
-func SetLoggerCallDepth(depth int) {
-	defaultLogger.SetCallDepth(depth)
+func Info(msg string, field ...zap.Field) {
+	defaultLogger.info(msg, field...)
 }
 
-func Info(v ...interface{}) {
-	defaultLogger.Info(v...)
+func Debug(msg string, field ...zap.Field) {
+	defaultLogger.debug(msg, field...)
 }
 
-func Infof(format string, v ...interface{}) {
-	defaultLogger.Infof(format, v...)
+func Error(msg string, field ...zap.Field) {
+	defaultLogger.error(msg, field...)
 }
 
-func Debug(v ...interface{}) {
-	defaultLogger.Debug(v...)
+func Fatal(msg string, field ...zap.Field) {
+	defaultLogger.fatal(msg, field...)
 }
 
-func Debugf(format string, v ...interface{}) {
-	defaultLogger.Debugf(format, v...)
+func Sync() error {
+	return defaultLogger.sync()
 }
 
-func Error(v ...interface{}) {
-	defaultLogger.Error(v...)
-}
-
-func Errorf(format string, v ...interface{}) {
-	defaultLogger.Errorf(format, v...)
+func Warn(msg string, field ...zap.Field) {
+	defaultLogger.warn(msg, field...)
 }

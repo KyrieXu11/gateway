@@ -5,6 +5,7 @@ import (
 	"gateway/common/log"
 	"gateway/common/utils"
 	"gateway/start"
+	"go.uber.org/zap"
 	"os"
 	"os/signal"
 	"syscall"
@@ -63,5 +64,5 @@ func quit() {
 	quit := make(chan os.Signal)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGQUIT)
 	s := <-quit
-	log.Infof("Catch the exit signal: %s", s.String())
+	log.Info("Catch the exit signal:", zap.String("signal", s.String()))
 }

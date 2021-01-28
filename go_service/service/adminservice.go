@@ -6,6 +6,7 @@ import (
 	"gateway/common/utils"
 	"gateway/dao"
 	"gateway/dto"
+	"go.uber.org/zap"
 )
 
 type AdminService interface {
@@ -38,7 +39,7 @@ func (p *AdminServiceImpl) RegisterAdmin(adminDto *dto.AdminDto) bool {
 	username := adminDto.Username
 	salt := utils.GenerateSalt(5)
 	password = utils.GetSaltyPassword(salt, password)
-	log.Infof("username: %s   password: %s   salt: %s", username, password, salt)
+	log.Info("", zap.String("username", username), zap.String("password", password), zap.String("salt", salt))
 	return adminDao.RegisterAdmin(username, password, salt)
 }
 

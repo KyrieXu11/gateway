@@ -41,7 +41,7 @@ func (p *AdminRegistrator) Login(c *gin.Context) {
 	}
 	admin, err := adminService.GetAdminByUsername(adminDto.Username)
 	if err != nil {
-		log.Error(err)
+		log.Error(err.Error())
 		utils.ResponseErrorM(c, err.Error())
 		return
 	}
@@ -106,7 +106,7 @@ func (p *AdminRegistrator) ChangePassword(c *gin.Context) {
 	passwordDto.Username = a.Username
 	res, err := adminService.ChangePassword(passwordDto)
 	if err != nil {
-		log.Errorf(err.Error())
+		log.Error(err.Error())
 		utils.ResponseErrorM(c, err.Error())
 		return
 	}

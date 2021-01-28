@@ -3,6 +3,7 @@ package dao
 import (
 	"gateway/common/log"
 	"gateway/common/utils"
+	"go.uber.org/zap"
 	"time"
 )
 
@@ -64,6 +65,6 @@ func (p *AdminDao) RegisterAdmin(username, password, salt string) bool {
 	}
 	res := db.NewRecord(a)
 	db.Create(&a)
-	log.Info("注册结果:", res)
+	log.Info("", zap.Bool("注册结果", res))
 	return res
 }

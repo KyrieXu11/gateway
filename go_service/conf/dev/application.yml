@@ -3,7 +3,6 @@ server:
 
 log:
   level: info
-  path: logs/test.log
 
 gin:
   mode: debug

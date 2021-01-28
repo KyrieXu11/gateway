@@ -5,6 +5,7 @@ import (
 	"gateway/common/log"
 	"gateway/common/rpc"
 	"gateway/common/utils"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"sync"
 	"time"
@@ -20,7 +21,7 @@ func newMatcherClient() {
 	serverAddr := utils.GetStringConf("application", "rpc.matcher.server_addr")
 	conn, err := grpc.Dial(serverAddr, opts...)
 	if err != nil {
-		log.Errorf("fail to dial: %v", err)
+		log.Error("fail to dial:", zap.String("error", err.Error()))
 	}
 	utils.SetGRpcConn(conn)
 }

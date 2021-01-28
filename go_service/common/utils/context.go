@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"gateway/common/log"
 	"gateway/common/rpc"
 	"github.com/gomodule/redigo/redis"
 	"github.com/jinzhu/gorm"
@@ -80,9 +81,6 @@ func GetMatcherClient() rpc.AntPathMatcherClient {
 // 关闭全局连接的函数
 func Close() {
 	// 首先先检查redis种的session的key清除了没
-
-
-
 	if db != nil {
 		_ = db.Close()
 	}
@@ -90,6 +88,7 @@ func Close() {
 	if rpcConn != nil {
 		_ = rpcConn.Close()
 	}
+	log.Sync()
 }
 
 // 真正执行的关闭方法
