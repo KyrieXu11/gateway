@@ -6,6 +6,7 @@ import (
 	"gateway/dto"
 	"gateway/service"
 	"github.com/gin-gonic/gin"
+	"strconv"
 )
 
 type ServiceListRegistrator struct {
@@ -20,20 +21,26 @@ func RegisterServiceListController(g *gin.RouterGroup) {
 
 // 获取所有的服务列表，通过分页的方式
 func (p *ServiceListRegistrator) GetServiceList(c *gin.Context) {
-	serviceInput := &dto.ServiceInput{}
-	if err := serviceInput.ValidateAndBindParam(c); err != nil {
+	page, err := strconv.Atoi(c.DefaultQuery("page", "0"))
+	if ok := utils.CheckErrorAndResponse(c, err); ok {
 		log.Error(err.Error())
-		utils.ResponseErrorM(c, "参数传递的有问题，检查一下参数吧")
 		return
 	}
-	list, err := serviceInfoService.GetServiceList(serviceInput)
+	size, err := strconv.Atoi(c.DefaultQuery("size", "10"))
+	if ok := utils.CheckErrorAndResponse(c, err); ok {
+		log.Error(err.Error())
+		return
+	}
+	serviceInput := &dto.ServiceInput{
+		PageNo:   page,
+		PageSize: size,
+	}
+
+	out, err := serviceInfoService.GetPageBean(serviceInput)
 	if err != nil {
 		log.Error(err.Error())
-		utils.ResponseErrorM(c,err.Error())
+		utils.ResponseErrorM(c, err.Error())
 		return
 	}
-	res := &dto.ServiceOutput{
-		Items: list,
-	}
-	utils.ResponseSuccessObj(c, "查询成功", res)
+	utils.ResponseSuccessObj(c, "查询成功", out)
 }

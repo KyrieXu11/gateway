@@ -33,10 +33,14 @@ func (p *ServiceInfoDao) GetServiceList(page, size int) []*ServiceInfo {
 	return res
 }
 
-func (p *ServiceInfoDao) GetTotal() int64 {
+func (p *ServiceInfoDao) GetTotalPages(size int) int64 {
 	db := utils.GetDB()
 	var count int64
 	var info ServiceInfo
 	db.Table(info.TableName()).Count(&count)
-	return count
+	s := int64(size)
+	if count%s != 0 {
+		return count/int64(size) + 1
+	}
+	return count / s
 }

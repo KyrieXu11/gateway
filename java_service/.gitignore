@@ -15,6 +15,8 @@ gen
 # Log file
 *.log
 
+src/main/proto/
+
 # BlueJ files
 *.ctxt
 

@@ -24,3 +24,19 @@ func (p *ServiceInfoServiceImpl) GetServiceList(input *dto.ServiceInput) ([]*dao
 	list := serviceDao.GetServiceList(page, size)
 	return list, nil
 }
+
+func (p *ServiceInfoServiceImpl) GetTotal(input *dto.ServiceInput) int64 {
+	return serviceDao.GetTotalPages(input.PageSize)
+}
+
+func (p *ServiceInfoServiceImpl) GetPageBean(input *dto.ServiceInput) (*dto.ServiceOutput, error) {
+	list, err := p.GetServiceList(input)
+	if err != nil {
+		return nil, err
+	}
+	return &dto.ServiceOutput{
+		Total:       p.GetTotal(input),
+		Items:       list,
+		CurrentPage: input.PageNo,
+	}, nil
+}

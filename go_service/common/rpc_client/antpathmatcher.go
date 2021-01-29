@@ -31,15 +31,15 @@ func NewMatcherClient() {
 }
 
 // Match 是 rpc 流式客户端的函数
-func Match(client rpc.AntPathMatcherClient, paths *rpc.Paths) bool {
+func Match(client rpc.AntPathMatcherClient, req *rpc.GoRequest) bool {
 	res := false
-	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	stream, err := client.Match(ctx)
 	if err != nil {
 		return false
 	}
-	if err := stream.Send(paths); err != nil {
+	if err := stream.Send(req); err != nil {
 		log.Error(err.Error())
 		return false
 	}

@@ -91,9 +91,9 @@ func ValidateAndBindParam(c *gin.Context, p interface{}) error {
 	method := strings.ToLower(c.Request.Method)
 	switch method {
 	case "get":
-
 		break
 	case "post":
+		fallthrough
 	case "put":
 		if err := c.ShouldBindJSON(p); err != nil {
 			return err

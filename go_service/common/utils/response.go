@@ -10,6 +10,14 @@ type Response struct {
 	Data interface{} // 返回给前端的数据
 }
 
+func CheckErrorAndResponse(c *gin.Context, err error) bool {
+	if err != nil {
+		ResponseErrorM(c, err.Error())
+		return true
+	}
+	return false
+}
+
 func ResponseErrorCM(c *gin.Context, code int, msg string) {
 	r := &Response{
 		Code: code,

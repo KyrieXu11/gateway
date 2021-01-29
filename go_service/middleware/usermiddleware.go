@@ -8,7 +8,6 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"strings"
 )
 
 // 检查是否登陆，如果没登陆的话就登录
@@ -43,27 +42,38 @@ func CheckLoginRequest(r *http.Request) bool {
 
 func checkLoginRequest(r *http.Request) bool {
 	// 说明见 README.md
-	var whitList = utils.GetStringSliceConf(utils.ModuleApplication, "whitelist")
-	match, isLogin := false, false
-	realPath := r.URL.Path
-	// 先判断一下请求的路径里面有没有登陆
-	// 如果有则暂时标记为登陆
-	if strings.Contains(realPath, "login") {
-		isLogin = true
-	}
+	// var whitList = utils.GetStringSliceConf(utils.ModuleApplication, "whitelist")
+	// match, isLogin := false, false
+	// realPath := r.URL.Path
+	// // 先判断一下请求的路径里面有没有登陆
+	// // 如果有则暂时标记为登陆
+	// if strings.Contains(realPath, "login") {
+	// 	isLogin = true
+	// }
+	// rpc_client.NewMatcherClient()
+	//
+	// if match && isLogin && strings.ToLower(r.Method) == "post" {
+	// 	return true
+	// }
+	// return match
+
+	req := buildRpcRequest(r)
 	rpc_client.NewMatcherClient()
-	for _, s := range whitList {
-		paths := &rpc.Paths{
-			Pattern:  s,
-			RealPath: realPath,
-		}
-		match = rpc_client.Match(utils.GetMatcherClient(), paths)
-		if match {
-			break
-		}
+	client := utils.GetMatcherClient()
+	return rpc_client.Match(client, req)
+}
+
+func buildRpcRequest(r *http.Request) *rpc.GoRequest {
+	// m := make(map[string]*rpc.Header)
+	// for k, v := range r.Header {
+	// 	m[k].HeaderValue = v
+	// }
+	req := &rpc.GoRequest{
+		RealPath:   r.RequestURI,
+		Method:     r.Method,
+		Proto:      r.Proto,
+		Header:     nil,
+		RemoteAddr: r.RemoteAddr,
 	}
-	if match && isLogin && strings.ToLower(r.Method) == "post" {
-		return true
-	}
-	return match
+	return req
 }

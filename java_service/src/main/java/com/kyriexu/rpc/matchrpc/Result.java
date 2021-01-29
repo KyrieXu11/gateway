@@ -9,7 +9,7 @@ package com.kyriexu.rpc.matchrpc;
 public final class Result extends
     com.google.protobuf.GeneratedMessageV3 implements
     // @@protoc_insertion_point(message_implements:rpc.Result)
-    ResultOrBuilder {
+        ResultOrBuilder {
 private static final long serialVersionUID = 0L;
   // Use Result.newBuilder() to construct.
   private Result(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
@@ -82,7 +82,7 @@ private static final long serialVersionUID = 0L;
       internalGetFieldAccessorTable() {
     return AntPathMatch.internal_static_rpc_Result_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            Result.class, Builder.class);
+            Result.class, Result.Builder.class);
   }
 
   public static final int RES_FIELD_NUMBER = 1;
@@ -258,7 +258,7 @@ private static final long serialVersionUID = 0L;
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
       // @@protoc_insertion_point(builder_implements:rpc.Result)
-      ResultOrBuilder {
+          ResultOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return AntPathMatch.internal_static_rpc_Result_descriptor;
@@ -269,10 +269,10 @@ private static final long serialVersionUID = 0L;
         internalGetFieldAccessorTable() {
       return AntPathMatch.internal_static_rpc_Result_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              Result.class, Builder.class);
+              Result.class, Result.Builder.class);
     }
 
-    // Construct using com.kyriexu.rpc.matchrpc.Result.newBuilder()
+    // Construct using com.kyriexu.rpc.Result.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }

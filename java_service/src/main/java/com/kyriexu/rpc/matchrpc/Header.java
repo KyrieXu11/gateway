@@ -4,27 +4,26 @@
 package com.kyriexu.rpc.matchrpc;
 
 /**
- * Protobuf type {@code rpc.Paths}
+ * Protobuf type {@code rpc.Header}
  */
-public final class Paths extends
+public final class Header extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:rpc.Paths)
-    PathsOrBuilder {
+    // @@protoc_insertion_point(message_implements:rpc.Header)
+        HeaderOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use Paths.newBuilder() to construct.
-  private Paths(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use Header.newBuilder() to construct.
+  private Header(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private Paths() {
-    pattern_ = "";
-    realPath_ = "";
+  private Header() {
+    headerValue_ = com.google.protobuf.LazyStringArrayList.EMPTY;
   }
 
   @Override
   @SuppressWarnings({"unused"})
   protected Object newInstance(
       UnusedPrivateParameter unused) {
-    return new Paths();
+    return new Header();
   }
 
   @Override
@@ -32,7 +31,7 @@ private static final long serialVersionUID = 0L;
   getUnknownFields() {
     return this.unknownFields;
   }
-  private Paths(
+  private Header(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
@@ -40,6 +39,7 @@ private static final long serialVersionUID = 0L;
     if (extensionRegistry == null) {
       throw new NullPointerException();
     }
+    int mutable_bitField0_ = 0;
     com.google.protobuf.UnknownFieldSet.Builder unknownFields =
         com.google.protobuf.UnknownFieldSet.newBuilder();
     try {
@@ -52,14 +52,11 @@ private static final long serialVersionUID = 0L;
             break;
           case 10: {
             String s = input.readStringRequireUtf8();
-
-            pattern_ = s;
-            break;
-          }
-          case 18: {
-            String s = input.readStringRequireUtf8();
-
-            realPath_ = s;
+            if (!((mutable_bitField0_ & 0x00000001) != 0)) {
+              headerValue_ = new com.google.protobuf.LazyStringArrayList();
+              mutable_bitField0_ |= 0x00000001;
+            }
+            headerValue_.add(s);
             break;
           }
           default: {
@@ -77,97 +74,59 @@ private static final long serialVersionUID = 0L;
       throw new com.google.protobuf.InvalidProtocolBufferException(
           e).setUnfinishedMessage(this);
     } finally {
+      if (((mutable_bitField0_ & 0x00000001) != 0)) {
+        headerValue_ = headerValue_.getUnmodifiableView();
+      }
       this.unknownFields = unknownFields.build();
       makeExtensionsImmutable();
     }
   }
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return AntPathMatch.internal_static_rpc_Paths_descriptor;
+    return AntPathMatch.internal_static_rpc_Header_descriptor;
   }
 
   @Override
   protected FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return AntPathMatch.internal_static_rpc_Paths_fieldAccessorTable
+    return AntPathMatch.internal_static_rpc_Header_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            Paths.class, Builder.class);
+            Header.class, Header.Builder.class);
   }
 
-  public static final int PATTERN_FIELD_NUMBER = 1;
-  private volatile Object pattern_;
+  public static final int HEADERVALUE_FIELD_NUMBER = 1;
+  private com.google.protobuf.LazyStringList headerValue_;
   /**
-   * <code>string pattern = 1;</code>
-   * @return The pattern.
+   * <code>repeated string HeaderValue = 1;</code>
+   * @return A list containing the headerValue.
    */
-  @Override
-  public String getPattern() {
-    Object ref = pattern_;
-    if (ref instanceof String) {
-      return (String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      String s = bs.toStringUtf8();
-      pattern_ = s;
-      return s;
-    }
+  public com.google.protobuf.ProtocolStringList
+      getHeaderValueList() {
+    return headerValue_;
   }
   /**
-   * <code>string pattern = 1;</code>
-   * @return The bytes for pattern.
+   * <code>repeated string HeaderValue = 1;</code>
+   * @return The count of headerValue.
    */
-  @Override
+  public int getHeaderValueCount() {
+    return headerValue_.size();
+  }
+  /**
+   * <code>repeated string HeaderValue = 1;</code>
+   * @param index The index of the element to return.
+   * @return The headerValue at the given index.
+   */
+  public String getHeaderValue(int index) {
+    return headerValue_.get(index);
+  }
+  /**
+   * <code>repeated string HeaderValue = 1;</code>
+   * @param index The index of the value to return.
+   * @return The bytes of the headerValue at the given index.
+   */
   public com.google.protobuf.ByteString
-      getPatternBytes() {
-    Object ref = pattern_;
-    if (ref instanceof String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (String) ref);
-      pattern_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
-  }
-
-  public static final int REALPATH_FIELD_NUMBER = 2;
-  private volatile Object realPath_;
-  /**
-   * <code>string realPath = 2;</code>
-   * @return The realPath.
-   */
-  @Override
-  public String getRealPath() {
-    Object ref = realPath_;
-    if (ref instanceof String) {
-      return (String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      String s = bs.toStringUtf8();
-      realPath_ = s;
-      return s;
-    }
-  }
-  /**
-   * <code>string realPath = 2;</code>
-   * @return The bytes for realPath.
-   */
-  @Override
-  public com.google.protobuf.ByteString
-      getRealPathBytes() {
-    Object ref = realPath_;
-    if (ref instanceof String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (String) ref);
-      realPath_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
+      getHeaderValueBytes(int index) {
+    return headerValue_.getByteString(index);
   }
 
   private byte memoizedIsInitialized = -1;
@@ -184,11 +143,8 @@ private static final long serialVersionUID = 0L;
   @Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (!getPatternBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, pattern_);
-    }
-    if (!getRealPathBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, realPath_);
+    for (int i = 0; i < headerValue_.size(); i++) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, headerValue_.getRaw(i));
     }
     unknownFields.writeTo(output);
   }
@@ -199,11 +155,13 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (!getPatternBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, pattern_);
-    }
-    if (!getRealPathBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, realPath_);
+    {
+      int dataSize = 0;
+      for (int i = 0; i < headerValue_.size(); i++) {
+        dataSize += computeStringSizeNoTag(headerValue_.getRaw(i));
+      }
+      size += dataSize;
+      size += 1 * getHeaderValueList().size();
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -215,15 +173,13 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof Paths)) {
+    if (!(obj instanceof Header)) {
       return super.equals(obj);
     }
-    Paths other = (Paths) obj;
+    Header other = (Header) obj;
 
-    if (!getPattern()
-        .equals(other.getPattern())) return false;
-    if (!getRealPath()
-        .equals(other.getRealPath())) return false;
+    if (!getHeaderValueList()
+        .equals(other.getHeaderValueList())) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -235,78 +191,78 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
-    hash = (37 * hash) + PATTERN_FIELD_NUMBER;
-    hash = (53 * hash) + getPattern().hashCode();
-    hash = (37 * hash) + REALPATH_FIELD_NUMBER;
-    hash = (53 * hash) + getRealPath().hashCode();
+    if (getHeaderValueCount() > 0) {
+      hash = (37 * hash) + HEADERVALUE_FIELD_NUMBER;
+      hash = (53 * hash) + getHeaderValueList().hashCode();
+    }
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static Paths parseFrom(
+  public static Header parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static Paths parseFrom(
+  public static Header parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static Paths parseFrom(
+  public static Header parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static Paths parseFrom(
+  public static Header parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static Paths parseFrom(byte[] data)
+  public static Header parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static Paths parseFrom(
+  public static Header parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static Paths parseFrom(java.io.InputStream input)
+  public static Header parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static Paths parseFrom(
+  public static Header parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
-  public static Paths parseDelimitedFrom(java.io.InputStream input)
+  public static Header parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
-  public static Paths parseDelimitedFrom(
+  public static Header parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static Paths parseFrom(
+  public static Header parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static Paths parseFrom(
+  public static Header parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -319,7 +275,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(Paths prototype) {
+  public static Builder newBuilder(Header prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @Override
@@ -335,26 +291,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code rpc.Paths}
+   * Protobuf type {@code rpc.Header}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:rpc.Paths)
-      PathsOrBuilder {
+      // @@protoc_insertion_point(builder_implements:rpc.Header)
+          HeaderOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return AntPathMatch.internal_static_rpc_Paths_descriptor;
+      return AntPathMatch.internal_static_rpc_Header_descriptor;
     }
 
     @Override
     protected FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return AntPathMatch.internal_static_rpc_Paths_fieldAccessorTable
+      return AntPathMatch.internal_static_rpc_Header_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              Paths.class, Builder.class);
+              Header.class, Header.Builder.class);
     }
 
-    // Construct using com.kyriexu.rpc.matchrpc.Paths.newBuilder()
+    // Construct using com.kyriexu.rpc.Header.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }
@@ -372,27 +328,25 @@ private static final long serialVersionUID = 0L;
     @Override
     public Builder clear() {
       super.clear();
-      pattern_ = "";
-
-      realPath_ = "";
-
+      headerValue_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      bitField0_ = (bitField0_ & ~0x00000001);
       return this;
     }
 
     @Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return AntPathMatch.internal_static_rpc_Paths_descriptor;
+      return AntPathMatch.internal_static_rpc_Header_descriptor;
     }
 
     @Override
-    public Paths getDefaultInstanceForType() {
-      return Paths.getDefaultInstance();
+    public Header getDefaultInstanceForType() {
+      return Header.getDefaultInstance();
     }
 
     @Override
-    public Paths build() {
-      Paths result = buildPartial();
+    public Header build() {
+      Header result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -400,10 +354,14 @@ private static final long serialVersionUID = 0L;
     }
 
     @Override
-    public Paths buildPartial() {
-      Paths result = new Paths(this);
-      result.pattern_ = pattern_;
-      result.realPath_ = realPath_;
+    public Header buildPartial() {
+      Header result = new Header(this);
+      int from_bitField0_ = bitField0_;
+      if (((bitField0_ & 0x00000001) != 0)) {
+        headerValue_ = headerValue_.getUnmodifiableView();
+        bitField0_ = (bitField0_ & ~0x00000001);
+      }
+      result.headerValue_ = headerValue_;
       onBuilt();
       return result;
     }
@@ -442,22 +400,24 @@ private static final long serialVersionUID = 0L;
     }
     @Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof Paths) {
-        return mergeFrom((Paths)other);
+      if (other instanceof Header) {
+        return mergeFrom((Header)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(Paths other) {
-      if (other == Paths.getDefaultInstance()) return this;
-      if (!other.getPattern().isEmpty()) {
-        pattern_ = other.pattern_;
-        onChanged();
-      }
-      if (!other.getRealPath().isEmpty()) {
-        realPath_ = other.realPath_;
+    public Builder mergeFrom(Header other) {
+      if (other == Header.getDefaultInstance()) return this;
+      if (!other.headerValue_.isEmpty()) {
+        if (headerValue_.isEmpty()) {
+          headerValue_ = other.headerValue_;
+          bitField0_ = (bitField0_ & ~0x00000001);
+        } else {
+          ensureHeaderValueIsMutable();
+          headerValue_.addAll(other.headerValue_);
+        }
         onChanged();
       }
       this.mergeUnknownFields(other.unknownFields);
@@ -475,11 +435,11 @@ private static final long serialVersionUID = 0L;
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      Paths parsedMessage = null;
+      Header parsedMessage = null;
       try {
         parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (Paths) e.getUnfinishedMessage();
+        parsedMessage = (Header) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
         if (parsedMessage != null) {
@@ -488,155 +448,114 @@ private static final long serialVersionUID = 0L;
       }
       return this;
     }
+    private int bitField0_;
 
-    private Object pattern_ = "";
-    /**
-     * <code>string pattern = 1;</code>
-     * @return The pattern.
-     */
-    public String getPattern() {
-      Object ref = pattern_;
-      if (!(ref instanceof String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        pattern_ = s;
-        return s;
-      } else {
-        return (String) ref;
-      }
+    private com.google.protobuf.LazyStringList headerValue_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+    private void ensureHeaderValueIsMutable() {
+      if (!((bitField0_ & 0x00000001) != 0)) {
+        headerValue_ = new com.google.protobuf.LazyStringArrayList(headerValue_);
+        bitField0_ |= 0x00000001;
+       }
     }
     /**
-     * <code>string pattern = 1;</code>
-     * @return The bytes for pattern.
+     * <code>repeated string HeaderValue = 1;</code>
+     * @return A list containing the headerValue.
+     */
+    public com.google.protobuf.ProtocolStringList
+        getHeaderValueList() {
+      return headerValue_.getUnmodifiableView();
+    }
+    /**
+     * <code>repeated string HeaderValue = 1;</code>
+     * @return The count of headerValue.
+     */
+    public int getHeaderValueCount() {
+      return headerValue_.size();
+    }
+    /**
+     * <code>repeated string HeaderValue = 1;</code>
+     * @param index The index of the element to return.
+     * @return The headerValue at the given index.
+     */
+    public String getHeaderValue(int index) {
+      return headerValue_.get(index);
+    }
+    /**
+     * <code>repeated string HeaderValue = 1;</code>
+     * @param index The index of the value to return.
+     * @return The bytes of the headerValue at the given index.
      */
     public com.google.protobuf.ByteString
-        getPatternBytes() {
-      Object ref = pattern_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
-        pattern_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+        getHeaderValueBytes(int index) {
+      return headerValue_.getByteString(index);
     }
     /**
-     * <code>string pattern = 1;</code>
-     * @param value The pattern to set.
+     * <code>repeated string HeaderValue = 1;</code>
+     * @param index The index to set the value at.
+     * @param value The headerValue to set.
      * @return This builder for chaining.
      */
-    public Builder setPattern(
+    public Builder setHeaderValue(
+        int index, String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureHeaderValueIsMutable();
+      headerValue_.set(index, value);
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>repeated string HeaderValue = 1;</code>
+     * @param value The headerValue to add.
+     * @return This builder for chaining.
+     */
+    public Builder addHeaderValue(
         String value) {
       if (value == null) {
     throw new NullPointerException();
   }
-  
-      pattern_ = value;
+  ensureHeaderValueIsMutable();
+      headerValue_.add(value);
       onChanged();
       return this;
     }
     /**
-     * <code>string pattern = 1;</code>
+     * <code>repeated string HeaderValue = 1;</code>
+     * @param values The headerValue to add.
      * @return This builder for chaining.
      */
-    public Builder clearPattern() {
-      
-      pattern_ = getDefaultInstance().getPattern();
+    public Builder addAllHeaderValue(
+        Iterable<String> values) {
+      ensureHeaderValueIsMutable();
+      com.google.protobuf.AbstractMessageLite.Builder.addAll(
+          values, headerValue_);
       onChanged();
       return this;
     }
     /**
-     * <code>string pattern = 1;</code>
-     * @param value The bytes for pattern to set.
+     * <code>repeated string HeaderValue = 1;</code>
      * @return This builder for chaining.
      */
-    public Builder setPatternBytes(
+    public Builder clearHeaderValue() {
+      headerValue_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      bitField0_ = (bitField0_ & ~0x00000001);
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>repeated string HeaderValue = 1;</code>
+     * @param value The bytes of the headerValue to add.
+     * @return This builder for chaining.
+     */
+    public Builder addHeaderValueBytes(
         com.google.protobuf.ByteString value) {
       if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
-      
-      pattern_ = value;
-      onChanged();
-      return this;
-    }
-
-    private Object realPath_ = "";
-    /**
-     * <code>string realPath = 2;</code>
-     * @return The realPath.
-     */
-    public String getRealPath() {
-      Object ref = realPath_;
-      if (!(ref instanceof String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        realPath_ = s;
-        return s;
-      } else {
-        return (String) ref;
-      }
-    }
-    /**
-     * <code>string realPath = 2;</code>
-     * @return The bytes for realPath.
-     */
-    public com.google.protobuf.ByteString
-        getRealPathBytes() {
-      Object ref = realPath_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
-        realPath_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <code>string realPath = 2;</code>
-     * @param value The realPath to set.
-     * @return This builder for chaining.
-     */
-    public Builder setRealPath(
-        String value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  
-      realPath_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>string realPath = 2;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearRealPath() {
-      
-      realPath_ = getDefaultInstance().getRealPath();
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>string realPath = 2;</code>
-     * @param value The bytes for realPath to set.
-     * @return This builder for chaining.
-     */
-    public Builder setRealPathBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
-      realPath_ = value;
+      ensureHeaderValueIsMutable();
+      headerValue_.add(value);
       onChanged();
       return this;
     }
@@ -653,41 +572,41 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:rpc.Paths)
+    // @@protoc_insertion_point(builder_scope:rpc.Header)
   }
 
-  // @@protoc_insertion_point(class_scope:rpc.Paths)
-  private static final Paths DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:rpc.Header)
+  private static final Header DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new Paths();
+    DEFAULT_INSTANCE = new Header();
   }
 
-  public static Paths getDefaultInstance() {
+  public static Header getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<Paths>
-      PARSER = new com.google.protobuf.AbstractParser<Paths>() {
+  private static final com.google.protobuf.Parser<Header>
+      PARSER = new com.google.protobuf.AbstractParser<Header>() {
     @Override
-    public Paths parsePartialFrom(
+    public Header parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return new Paths(input, extensionRegistry);
+      return new Header(input, extensionRegistry);
     }
   };
 
-  public static com.google.protobuf.Parser<Paths> parser() {
+  public static com.google.protobuf.Parser<Header> parser() {
     return PARSER;
   }
 
   @Override
-  public com.google.protobuf.Parser<Paths> getParserForType() {
+  public com.google.protobuf.Parser<Header> getParserForType() {
     return PARSER;
   }
 
   @Override
-  public Paths getDefaultInstanceForType() {
+  public Header getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

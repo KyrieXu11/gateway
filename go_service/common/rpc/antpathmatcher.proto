@@ -8,12 +8,19 @@ package rpc;
 
 
 service AntPathMatcher{
-    rpc match(stream Paths) returns (Result) {}
+    rpc match(stream GoRequest) returns (Result) {}
 }
 
-message Paths {
-  string pattern = 1;
-  string realPath = 2;
+message GoRequest {
+  string realPath = 1;
+  string method = 2;
+  string remoteAddr = 3;
+  string proto = 4;
+  map<string,Header> header = 5;
+}
+
+message Header{
+  repeated string HeaderValue = 1;
 }
 
 message Result{

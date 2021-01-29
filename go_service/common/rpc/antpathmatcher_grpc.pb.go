@@ -39,7 +39,7 @@ func (c *antPathMatcherClient) Match(ctx context.Context, opts ...grpc.CallOptio
 }
 
 type AntPathMatcher_MatchClient interface {
-	Send(*Paths) error
+	Send(*GoRequest) error
 	CloseAndRecv() (*Result, error)
 	grpc.ClientStream
 }
@@ -48,7 +48,7 @@ type antPathMatcherMatchClient struct {
 	grpc.ClientStream
 }
 
-func (x *antPathMatcherMatchClient) Send(m *Paths) error {
+func (x *antPathMatcherMatchClient) Send(m *GoRequest) error {
 	return x.ClientStream.SendMsg(m)
 }
 
@@ -97,7 +97,7 @@ func _AntPathMatcher_Match_Handler(srv interface{}, stream grpc.ServerStream) er
 
 type AntPathMatcher_MatchServer interface {
 	SendAndClose(*Result) error
-	Recv() (*Paths, error)
+	Recv() (*GoRequest, error)
 	grpc.ServerStream
 }
 
@@ -109,8 +109,8 @@ func (x *antPathMatcherMatchServer) SendAndClose(m *Result) error {
 	return x.ServerStream.SendMsg(m)
 }
 
-func (x *antPathMatcherMatchServer) Recv() (*Paths, error) {
-	m := new(Paths)
+func (x *antPathMatcherMatchServer) Recv() (*GoRequest, error) {
+	m := new(GoRequest)
 	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
 	}

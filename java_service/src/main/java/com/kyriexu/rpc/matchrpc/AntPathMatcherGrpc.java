@@ -1,5 +1,9 @@
 package com.kyriexu.rpc.matchrpc;
 
+import com.kyriexu.rpc.AntPathMatch;
+import com.kyriexu.rpc.GoRequest;
+import com.kyriexu.rpc.Result;
+
 import static io.grpc.MethodDescriptor.generateFullMethodName;
 
 /**
@@ -14,29 +18,29 @@ public final class AntPathMatcherGrpc {
   public static final String SERVICE_NAME = "rpc.AntPathMatcher";
 
   // Static method descriptors that strictly reflect the proto.
-  private static volatile io.grpc.MethodDescriptor<Paths,
-      Result> getMatchMethod;
+  private static volatile io.grpc.MethodDescriptor<com.kyriexu.rpc.GoRequest,
+          com.kyriexu.rpc.Result> getMatchMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "match",
-      requestType = Paths.class,
-      responseType = Result.class,
+      requestType = com.kyriexu.rpc.GoRequest.class,
+      responseType = com.kyriexu.rpc.Result.class,
       methodType = io.grpc.MethodDescriptor.MethodType.CLIENT_STREAMING)
-  public static io.grpc.MethodDescriptor<Paths,
-      Result> getMatchMethod() {
-    io.grpc.MethodDescriptor<Paths, Result> getMatchMethod;
+  public static io.grpc.MethodDescriptor<com.kyriexu.rpc.GoRequest,
+          com.kyriexu.rpc.Result> getMatchMethod() {
+    io.grpc.MethodDescriptor<com.kyriexu.rpc.GoRequest, com.kyriexu.rpc.Result> getMatchMethod;
     if ((getMatchMethod = AntPathMatcherGrpc.getMatchMethod) == null) {
       synchronized (AntPathMatcherGrpc.class) {
         if ((getMatchMethod = AntPathMatcherGrpc.getMatchMethod) == null) {
           AntPathMatcherGrpc.getMatchMethod = getMatchMethod =
-              io.grpc.MethodDescriptor.<Paths, Result>newBuilder()
+              io.grpc.MethodDescriptor.<com.kyriexu.rpc.GoRequest, com.kyriexu.rpc.Result>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.CLIENT_STREAMING)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "match"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  Paths.getDefaultInstance()))
+                  com.kyriexu.rpc.GoRequest.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  Result.getDefaultInstance()))
+                  com.kyriexu.rpc.Result.getDefaultInstance()))
               .setSchemaDescriptor(new AntPathMatcherMethodDescriptorSupplier("match"))
               .build();
         }
@@ -95,8 +99,8 @@ public final class AntPathMatcherGrpc {
 
     /**
      */
-    public io.grpc.stub.StreamObserver<Paths> match(
-        io.grpc.stub.StreamObserver<Result> responseObserver) {
+    public io.grpc.stub.StreamObserver<com.kyriexu.rpc.GoRequest> match(
+        io.grpc.stub.StreamObserver<com.kyriexu.rpc.Result> responseObserver) {
       return io.grpc.stub.ServerCalls.asyncUnimplementedStreamingCall(getMatchMethod(), responseObserver);
     }
 
@@ -106,8 +110,8 @@ public final class AntPathMatcherGrpc {
             getMatchMethod(),
             io.grpc.stub.ServerCalls.asyncClientStreamingCall(
               new MethodHandlers<
-                Paths,
-                Result>(
+                      com.kyriexu.rpc.GoRequest,
+                      com.kyriexu.rpc.Result>(
                   this, METHODID_MATCH)))
           .build();
     }
@@ -129,8 +133,8 @@ public final class AntPathMatcherGrpc {
 
     /**
      */
-    public io.grpc.stub.StreamObserver<Paths> match(
-        io.grpc.stub.StreamObserver<Result> responseObserver) {
+    public io.grpc.stub.StreamObserver<GoRequest> match(
+        io.grpc.stub.StreamObserver<com.kyriexu.rpc.Result> responseObserver) {
       return io.grpc.stub.ClientCalls.asyncClientStreamingCall(
           getChannel().newCall(getMatchMethod(), getCallOptions()), responseObserver);
     }

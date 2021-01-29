@@ -18,7 +18,7 @@ func (p *ServiceInput) ValidateAndBindParam(c *gin.Context) error {
 
 // 返回给前端的对象
 type ServiceOutput struct {
-	Total       int64            `json:"total" form:"total" comment:"服务总数" binding:"required"`
-	CurrentPage int64            `json:"current_page" form:"current_page" comment:"当前在第几页" binding:"required"`
+	Total       int64              `json:"total" form:"total" comment:"服务总数" binding:"required"`
+	CurrentPage int                `json:"current_page" form:"current_page" comment:"当前在第几页" binding:"required"`
 	Items       []*dao.ServiceInfo `json:"items" form:"items" comment:"服务的信息" binding:"required"`
 }

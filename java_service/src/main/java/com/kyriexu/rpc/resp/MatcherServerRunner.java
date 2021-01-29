@@ -1,7 +1,7 @@
 package com.kyriexu.rpc.resp;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.kyriexu.component.WhiteListConfig;
+import com.kyriexu.service.MatcherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -13,6 +13,9 @@ import org.springframework.stereotype.Component;
  **/
 @Component
 public class MatcherServerRunner implements ApplicationRunner {
+
+    @Autowired
+    private WhiteListConfig whiteListConfig;
 
     /**
      * gRpc 服务器
@@ -48,6 +51,8 @@ public class MatcherServerRunner implements ApplicationRunner {
      */
     @Override
     public void run(ApplicationArguments args) throws Exception {
+        // 主线程执行就好了
         server.start();
+        server.blockUntilShutdown();
     }
 }
