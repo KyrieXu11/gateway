@@ -1,22 +1,15 @@
 package com.kyriexu.service;
 
-import com.kyriexu.component.WhiteListConfig;
-import com.kyriexu.rpc.GoRequest;
-import com.kyriexu.rpc.Result;
+
 import com.kyriexu.rpc.matchrpc.AntPathMatcherGrpc;
-import com.kyriexu.rpc.resp.MatcherServer;
+import com.kyriexu.rpc.matchrpc.GoRequest;
+import com.kyriexu.rpc.matchrpc.Result;
 import io.grpc.stub.StreamObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import org.springframework.util.AntPathMatcher;
-import org.springframework.util.PathMatcher;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author KyrieXu
@@ -28,17 +21,69 @@ public class MatcherService extends AntPathMatcherGrpc.AntPathMatcherImplBase {
      */
     public static final Logger LOGGER = LoggerFactory.getLogger(MatcherService.class);
 
+    /**
+     * white list map.
+     * because this class is not marked as component
+     * so we can get autowired attribute in the way of setting this attribute
+     */
     private Map<String, List<String>> whiteList;
 
+    /**
+     * auth service
+     */
+    private AuthService authService;
+
+    /**
+     * one param constructor,set authservice
+     *
+     * @param authService authservice
+     */
+    public MatcherService(AuthService authService) {
+        this.authService = authService;
+        LOGGER.info("initialized matcher service");
+    }
+
+    /**
+     * one param constructor,set whitelist
+     *
+     * @param whiteList white list map
+     */
+    @Deprecated
     public MatcherService(Map<String, List<String>> whiteList) {
         this.whiteList = whiteList;
         LOGGER.info("initialized matcher service");
     }
 
+    /**
+     * authservice getter
+     *
+     * @return authservice
+     */
+    public AuthService getAuthService() {
+        return authService;
+    }
+
+    /**
+     * authservice setter
+     *
+     * @param authService authservice
+     */
+    public void setAuthService(AuthService authService) {
+        this.authService = authService;
+    }
+
+    /**
+     * @return white list map
+     */
     public Map<String, List<String>> getWhiteList() {
         return whiteList;
     }
 
+    /**
+     * set method
+     *
+     * @param whiteList white list
+     */
     public void setWhiteList(Map<String, List<String>> whiteList) {
         this.whiteList = whiteList;
     }
@@ -60,38 +105,21 @@ public class MatcherService extends AntPathMatcherGrpc.AntPathMatcherImplBase {
 
             @Override
             public void onNext(GoRequest req) {
-                PathMatcher matcher = new AntPathMatcher();
-
-                String method = req.getMethod().toLowerCase();
-                String addr = req.getRemoteAddr();
-                String path = req.getRealPath();
-
-                // 由于使用了并发 map 所以为了保证线程安全，使用原子类
-                AtomicInteger cnt = new AtomicInteger(0);
-                whiteList.forEach((type, urls) -> {
-                    if (type.equals(method)) {
-                        urls.forEach((url) -> {
-                            if (matcher.match(url, addr)) {
-                                res = true;
-                            }
-                        });
-                    }
-                    if (cnt.get() == 4)
-                        return;
-                    cnt.getAndIncrement();
-                });
+                res = authService.checkAuth(req);
             }
 
             @Override
             public void onError(Throwable t) {
-
+                LOGGER.error("err cause {}", t.toString());
             }
 
             @Override
             public void onCompleted() {
                 responseObserver.onNext(Result.newBuilder().setRes(res).build());
                 responseObserver.onCompleted();
+                LOGGER.info("match method completed");
             }
         };
     }
+
 }

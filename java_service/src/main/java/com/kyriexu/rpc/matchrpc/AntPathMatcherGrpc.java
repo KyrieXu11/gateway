@@ -1,4 +1,4 @@
-package com.kyriexu.rpc;
+package com.kyriexu.rpc.matchrpc;
 
 import static io.grpc.MethodDescriptor.generateFullMethodName;
 
@@ -14,29 +14,29 @@ public final class AntPathMatcherGrpc {
   public static final String SERVICE_NAME = "rpc.AntPathMatcher";
 
   // Static method descriptors that strictly reflect the proto.
-  private static volatile io.grpc.MethodDescriptor<com.kyriexu.rpc.GoRequest,
-      com.kyriexu.rpc.Result> getMatchMethod;
+  private static volatile io.grpc.MethodDescriptor<GoRequest,
+      Result> getMatchMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "match",
-      requestType = com.kyriexu.rpc.GoRequest.class,
-      responseType = com.kyriexu.rpc.Result.class,
+      requestType = GoRequest.class,
+      responseType = Result.class,
       methodType = io.grpc.MethodDescriptor.MethodType.CLIENT_STREAMING)
-  public static io.grpc.MethodDescriptor<com.kyriexu.rpc.GoRequest,
-      com.kyriexu.rpc.Result> getMatchMethod() {
-    io.grpc.MethodDescriptor<com.kyriexu.rpc.GoRequest, com.kyriexu.rpc.Result> getMatchMethod;
+  public static io.grpc.MethodDescriptor<GoRequest,
+      Result> getMatchMethod() {
+    io.grpc.MethodDescriptor<GoRequest, Result> getMatchMethod;
     if ((getMatchMethod = AntPathMatcherGrpc.getMatchMethod) == null) {
       synchronized (AntPathMatcherGrpc.class) {
         if ((getMatchMethod = AntPathMatcherGrpc.getMatchMethod) == null) {
           AntPathMatcherGrpc.getMatchMethod = getMatchMethod =
-              io.grpc.MethodDescriptor.<com.kyriexu.rpc.GoRequest, com.kyriexu.rpc.Result>newBuilder()
+              io.grpc.MethodDescriptor.<GoRequest, Result>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.CLIENT_STREAMING)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "match"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  com.kyriexu.rpc.GoRequest.getDefaultInstance()))
+                  GoRequest.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  com.kyriexu.rpc.Result.getDefaultInstance()))
+                  Result.getDefaultInstance()))
               .setSchemaDescriptor(new AntPathMatcherMethodDescriptorSupplier("match"))
               .build();
         }
@@ -51,7 +51,7 @@ public final class AntPathMatcherGrpc {
   public static AntPathMatcherStub newStub(io.grpc.Channel channel) {
     io.grpc.stub.AbstractStub.StubFactory<AntPathMatcherStub> factory =
       new io.grpc.stub.AbstractStub.StubFactory<AntPathMatcherStub>() {
-        @java.lang.Override
+        @Override
         public AntPathMatcherStub newStub(io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
           return new AntPathMatcherStub(channel, callOptions);
         }
@@ -66,7 +66,7 @@ public final class AntPathMatcherGrpc {
       io.grpc.Channel channel) {
     io.grpc.stub.AbstractStub.StubFactory<AntPathMatcherBlockingStub> factory =
       new io.grpc.stub.AbstractStub.StubFactory<AntPathMatcherBlockingStub>() {
-        @java.lang.Override
+        @Override
         public AntPathMatcherBlockingStub newStub(io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
           return new AntPathMatcherBlockingStub(channel, callOptions);
         }
@@ -81,7 +81,7 @@ public final class AntPathMatcherGrpc {
       io.grpc.Channel channel) {
     io.grpc.stub.AbstractStub.StubFactory<AntPathMatcherFutureStub> factory =
       new io.grpc.stub.AbstractStub.StubFactory<AntPathMatcherFutureStub>() {
-        @java.lang.Override
+        @Override
         public AntPathMatcherFutureStub newStub(io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
           return new AntPathMatcherFutureStub(channel, callOptions);
         }
@@ -95,19 +95,19 @@ public final class AntPathMatcherGrpc {
 
     /**
      */
-    public io.grpc.stub.StreamObserver<com.kyriexu.rpc.GoRequest> match(
-        io.grpc.stub.StreamObserver<com.kyriexu.rpc.Result> responseObserver) {
+    public io.grpc.stub.StreamObserver<GoRequest> match(
+        io.grpc.stub.StreamObserver<Result> responseObserver) {
       return io.grpc.stub.ServerCalls.asyncUnimplementedStreamingCall(getMatchMethod(), responseObserver);
     }
 
-    @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
+    @Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
             getMatchMethod(),
             io.grpc.stub.ServerCalls.asyncClientStreamingCall(
               new MethodHandlers<
-                com.kyriexu.rpc.GoRequest,
-                com.kyriexu.rpc.Result>(
+                GoRequest,
+                Result>(
                   this, METHODID_MATCH)))
           .build();
     }
@@ -121,7 +121,7 @@ public final class AntPathMatcherGrpc {
       super(channel, callOptions);
     }
 
-    @java.lang.Override
+    @Override
     protected AntPathMatcherStub build(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       return new AntPathMatcherStub(channel, callOptions);
@@ -129,8 +129,8 @@ public final class AntPathMatcherGrpc {
 
     /**
      */
-    public io.grpc.stub.StreamObserver<com.kyriexu.rpc.GoRequest> match(
-        io.grpc.stub.StreamObserver<com.kyriexu.rpc.Result> responseObserver) {
+    public io.grpc.stub.StreamObserver<GoRequest> match(
+        io.grpc.stub.StreamObserver<Result> responseObserver) {
       return io.grpc.stub.ClientCalls.asyncClientStreamingCall(
           getChannel().newCall(getMatchMethod(), getCallOptions()), responseObserver);
     }
@@ -144,7 +144,7 @@ public final class AntPathMatcherGrpc {
       super(channel, callOptions);
     }
 
-    @java.lang.Override
+    @Override
     protected AntPathMatcherBlockingStub build(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       return new AntPathMatcherBlockingStub(channel, callOptions);
@@ -159,7 +159,7 @@ public final class AntPathMatcherGrpc {
       super(channel, callOptions);
     }
 
-    @java.lang.Override
+    @Override
     protected AntPathMatcherFutureStub build(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       return new AntPathMatcherFutureStub(channel, callOptions);
@@ -181,8 +181,8 @@ public final class AntPathMatcherGrpc {
       this.methodId = methodId;
     }
 
-    @java.lang.Override
-    @java.lang.SuppressWarnings("unchecked")
+    @Override
+    @SuppressWarnings("unchecked")
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
         default:
@@ -190,14 +190,14 @@ public final class AntPathMatcherGrpc {
       }
     }
 
-    @java.lang.Override
-    @java.lang.SuppressWarnings("unchecked")
+    @Override
+    @SuppressWarnings("unchecked")
     public io.grpc.stub.StreamObserver<Req> invoke(
         io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
         case METHODID_MATCH:
           return (io.grpc.stub.StreamObserver<Req>) serviceImpl.match(
-              (io.grpc.stub.StreamObserver<com.kyriexu.rpc.Result>) responseObserver);
+              (io.grpc.stub.StreamObserver<Result>) responseObserver);
         default:
           throw new AssertionError();
       }
@@ -208,12 +208,12 @@ public final class AntPathMatcherGrpc {
       implements io.grpc.protobuf.ProtoFileDescriptorSupplier, io.grpc.protobuf.ProtoServiceDescriptorSupplier {
     AntPathMatcherBaseDescriptorSupplier() {}
 
-    @java.lang.Override
+    @Override
     public com.google.protobuf.Descriptors.FileDescriptor getFileDescriptor() {
-      return com.kyriexu.rpc.AntPathMatch.getDescriptor();
+      return AntPathMatch.getDescriptor();
     }
 
-    @java.lang.Override
+    @Override
     public com.google.protobuf.Descriptors.ServiceDescriptor getServiceDescriptor() {
       return getFileDescriptor().findServiceByName("AntPathMatcher");
     }
@@ -233,7 +233,7 @@ public final class AntPathMatcherGrpc {
       this.methodName = methodName;
     }
 
-    @java.lang.Override
+    @Override
     public com.google.protobuf.Descriptors.MethodDescriptor getMethodDescriptor() {
       return getServiceDescriptor().findMethodByName(methodName);
     }

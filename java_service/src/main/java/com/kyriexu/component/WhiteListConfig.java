@@ -3,9 +3,9 @@ package com.kyriexu.component;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -16,11 +16,15 @@ import java.util.concurrent.ConcurrentHashMap;
 @ConfigurationProperties(prefix = "admin")
 public class WhiteListConfig {
     /**
-     * 请求方式为 get 的白名单
-     * key 是 请求的方式
-     * value 则是 白名单的 url
+     * key is request method
+     * value is whitelist uri
+     * <p>
+     * use hashmap instead of ConcurrentHashMap.
+     * there is some reason following:
+     * 1. all of thread don't change map's key or value,they just read kv from map.
+     * 2. gRpc use multi-thread to touch request.
      */
-    private Map<String, List<String>> urls = new ConcurrentHashMap<>();
+    private Map<String, List<String>> urls = new HashMap<>();
 
     public Map<String, List<String>> getUrls() {
         return urls;

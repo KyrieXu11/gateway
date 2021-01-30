@@ -1,4 +1,4 @@
-package com.kyriexu.rpc.resp;
+package com.kyriexu.rpc.server;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
