@@ -1,6 +1,6 @@
 package com.kyriexu.rpc.resp;
 
-import com.kyriexu.component.WhiteListConfig;
+import com.kyriexu.service.AuthService;
 import com.kyriexu.service.MatcherService;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
@@ -34,19 +34,17 @@ public class MatcherServer {
      */
     @Value("${grpc.port}")
     private int port;
-    /**
-     * white list config bean
-     */
+
     @Autowired
-    private WhiteListConfig whiteListConfig;
+    private AuthService authServiceImpl;
 
     /**
-     * non-arg constructor
-     * no need to pass any parameter
+     * this method will be invoked automatically after spring container initialized
      */
     @PostConstruct
-    public void init() {
-        MatcherService service = new MatcherService(whiteListConfig.getUrls());
+    public void initGRpcServer() {
+        // 因为不能自动注入，所以采用了这种方式来设置新服务
+        MatcherService service = new MatcherService(authServiceImpl);
         this.server = ServerBuilder
                 .forPort(port)
                 .addService(service)

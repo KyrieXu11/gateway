@@ -1,7 +1,5 @@
 package com.kyriexu.rpc.resp;
 
-import com.kyriexu.component.WhiteListConfig;
-import com.kyriexu.service.MatcherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -13,9 +11,6 @@ import org.springframework.stereotype.Component;
  **/
 @Component
 public class MatcherServerRunner implements ApplicationRunner {
-
-    @Autowired
-    private WhiteListConfig whiteListConfig;
 
     /**
      * gRpc 服务器

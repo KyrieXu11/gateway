@@ -64,15 +64,16 @@ func checkLoginRequest(r *http.Request) bool {
 }
 
 func buildRpcRequest(r *http.Request) *rpc.GoRequest {
-	// m := make(map[string]*rpc.Header)
-	// for k, v := range r.Header {
-	// 	m[k].HeaderValue = v
-	// }
+	m := make(map[string]*rpc.Header)
+	for k, v := range r.Header {
+		m[k] = new(rpc.Header)
+		m[k].HeaderValue = v
+	}
 	req := &rpc.GoRequest{
 		RealPath:   r.RequestURI,
 		Method:     r.Method,
 		Proto:      r.Proto,
-		Header:     nil,
+		Header:     m,
 		RemoteAddr: r.RemoteAddr,
 	}
 	return req
