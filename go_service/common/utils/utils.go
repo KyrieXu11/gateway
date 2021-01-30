@@ -26,7 +26,7 @@ func GetSaltyPassword(salt, password string) string {
 }
 
 // 设置 session
-func SetSession(c *gin.Context, key string, inter interface{}) error {
+func SetSessionVal(c *gin.Context, key string, inter interface{}) error {
 	session := sessions.Default(c)
 	marshal, err := jsoniter.Marshal(inter)
 	if err != nil {

@@ -22,3 +22,9 @@ type ServiceOutput struct {
 	CurrentPage int                `json:"current_page" form:"current_page" comment:"当前在第几页" binding:"required"`
 	Items       []*dao.ServiceInfo `json:"items" form:"items" comment:"服务的信息" binding:"required"`
 }
+
+type ServiceDetail struct {
+	ServiceType string
+	ServiceId   int
+	ServiceItem interface{}
+}

@@ -50,7 +50,9 @@ func (p *AdminRegistrator) Login(c *gin.Context) {
 		return
 	}
 	adminDto.Password = ""
-	if err = utils.SetSession(c, utils.SessionKeyUser, adminDto); err != nil {
+	// 设置 session
+	utils.SetSession(c)
+	if err = utils.SetSessionVal(c, utils.SessionKeyUser, adminDto); err != nil {
 		log.Error(err.Error())
 	}
 	utils.ResponseSuccessObj(c, "登陆成功！", adminDto)

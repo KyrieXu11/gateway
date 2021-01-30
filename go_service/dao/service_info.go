@@ -26,7 +26,7 @@ type ServiceInfoDao struct {
 func (p *ServiceInfoDao) GetServiceList(page, size int) []*ServiceInfo {
 	db := utils.GetDB()
 	var res []*ServiceInfo
-	if err := db.Offset(page).Limit(size).Find(&res).Error; err != nil {
+	if err := db.Offset(page).Limit(size).Where("is_delete != 1").Find(&res).Error; err != nil {
 		log.Error(err.Error())
 		return nil
 	}

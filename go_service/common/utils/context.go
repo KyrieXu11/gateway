@@ -3,6 +3,8 @@ package utils
 import (
 	"gateway/common/log"
 	"gateway/common/rpc"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-gonic/gin"
 	"github.com/gomodule/redigo/redis"
 	"github.com/jinzhu/gorm"
 	"github.com/spf13/viper"
@@ -33,6 +35,19 @@ var conn redis.Conn
 var matcherClient rpc.AntPathMatcherClient
 
 var rpcConn *grpc.ClientConn
+
+var clientSessions map[string]sessions.Session
+
+func init() {
+	clientSessions = make(map[string]sessions.Session)
+}
+
+func SetSession(c *gin.Context) {
+	lock.Lock()
+	defer lock.Unlock()
+	ip := c.ClientIP()
+	clientSessions[ip] = sessions.Default(c)
+}
 
 func SetDB(Db *gorm.DB) {
 	lock.Lock()
@@ -81,6 +96,9 @@ func GetMatcherClient() rpc.AntPathMatcherClient {
 // 关闭全局连接的函数
 func Close() {
 	// 首先先检查redis种的session的key清除了没
+	if ConfigEnv != "dev" {
+		clearAllSession()
+	}
 	if db != nil {
 		_ = db.Close()
 	}
@@ -88,6 +106,7 @@ func Close() {
 	if rpcConn != nil {
 		_ = rpcConn.Close()
 	}
+	// 写入log文件当中
 	log.Sync()
 }
 
@@ -97,5 +116,34 @@ func Close() {
 func realClose(inter io.Closer) {
 	if inter != nil {
 		_ = inter.Close()
+	}
+}
+
+func clearAllSession() {
+	lock.Lock()
+	defer lock.Unlock()
+	for _, session := range clientSessions {
+		clearSession(&session)
+	}
+}
+
+func clearSession(session *sessions.Session) {
+	times := 0
+	s := *session
+	for true {
+		// 在删除 session 的时候还要清除 session 种的kv
+		// 给爷整吐了,草
+		s.Clear()
+		s.Options(sessions.Options{
+			MaxAge: -1,
+		})
+		err := s.Save()
+		if err == nil {
+			break
+		}
+		if times == 5 {
+			break
+		}
+		times++
 	}
 }
