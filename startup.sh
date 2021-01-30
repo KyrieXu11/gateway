@@ -1,4 +1,5 @@
 #!/bin/bash
+# 必须先起 java 服务才能起 go 服务，因为Go服务调用了java服务，否则会报错
 cd java_service
 mvn package clean -Dmaven.test.skip=true
 mvn package -Dmaven.test.skip=true
