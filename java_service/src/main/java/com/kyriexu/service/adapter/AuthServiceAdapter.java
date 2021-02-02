@@ -13,11 +13,11 @@ public abstract class AuthServiceAdapter implements AuthService {
 
     @Override
     public boolean checkAuth(GoRequest req) {
-        return false;
+        return true;
     }
 
     @Override
     public boolean checkAuth(HttpServletRequest request) {
-        return false;
+        return true;
     }
 }

@@ -1,6 +1,6 @@
 package com.kyriexu.service.impl;
 
-import com.kyriexu.component.WhiteListConfig;
+import com.kyriexu.component.config.WhiteListConfig;
 import com.kyriexu.rpc.matchrpc.GoRequest;
 import com.kyriexu.service.adapter.AuthServiceAdapter;
 import org.slf4j.Logger;
@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 
@@ -70,5 +72,22 @@ public class AuthServiceImpl extends AuthServiceAdapter {
         LOGGER.info("end time -> :{}", end);
         LOGGER.info("use time -> {}", end - l);
         return res;
+    }
+
+    /**
+     * see {@link com.kyriexu.service.AuthService#checkAuth(HttpServletRequest)}
+     *
+     * @param request servlet request
+     * @return auth result
+     */
+    @Override
+    public boolean checkAuth(HttpServletRequest request) {
+        Enumeration<String> names = request.getHeaderNames();
+        while (names.hasMoreElements()) {
+            String name = names.nextElement();
+            String header = request.getHeader(name);
+            LOGGER.info("{} is {}", name, header);
+        }
+        return super.checkAuth(request);
     }
 }
