@@ -2,8 +2,10 @@ package service
 
 import (
 	"fmt"
+	"gateway/common/utils"
 	"gateway/dao"
 	"gateway/dto"
+	"strings"
 )
 
 type ServiceInfoService interface {
@@ -13,6 +15,8 @@ type ServiceInfoServiceImpl struct {
 }
 
 var serviceDao dao.ServiceInfoDao
+
+var httpDao dao.ServiceHttpDao
 
 func (p *ServiceInfoServiceImpl) GetServiceList(input *dto.ServiceInput) ([]*dao.ServiceInfo, error) {
 	page := input.PageNo
@@ -39,4 +43,21 @@ func (p *ServiceInfoServiceImpl) GetPageBean(input *dto.ServiceInput) (*dto.Serv
 		Items:       list,
 		CurrentPage: input.PageNo,
 	}, nil
+}
+
+func (p *ServiceInfoServiceImpl) GetServiceDetail(detail *dto.ServiceDetail) error {
+	detail.ServiceType = strings.ToLower(detail.ServiceType)
+	typeList := []string{"http", "tcp", "grpc"}
+	if contains := utils.SliceContains(typeList, detail.ServiceType); !contains {
+		return fmt.Errorf("检查服务类型是否正确")
+	}
+	switch detail.ServiceType {
+	case "http":
+		httpService := httpDao.GetServiceDetailByServiceId(detail.ServiceId)
+		detail.ServiceItem = httpService
+		break
+	case "tcp":
+		break
+	}
+	return nil
 }

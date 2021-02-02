@@ -14,9 +14,6 @@ rpc:
   matcher:
     server_addr: "127.0.0.1:9000"
 
-whitelist:
-  - "/**/login"
-  - "/**/register"
-  - "/**.js"
-  - "/**.css"
-  - "/**.html"
+# 决定 user 中间件是否开启
+admin:
+  filter: false

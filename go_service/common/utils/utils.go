@@ -7,6 +7,8 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	jsoniter "github.com/json-iterator/go"
+	"github.com/robfig/cron/v3"
+	"go.uber.org/zap"
 	"math/rand"
 	"os/exec"
 	"strconv"
@@ -101,4 +103,22 @@ func ValidateAndBindParam(c *gin.Context, p interface{}) error {
 		break
 	}
 	return nil
+}
+
+func SliceContains(list []string, s string) bool {
+	for _, l := range list {
+		if s == l {
+			return true
+		}
+	}
+	return false
+}
+
+func NewCron() *cron.Cron {
+	location, err := time.LoadLocation("Asia/Shanghai")
+	if err != nil {
+		log.Error("", zap.String("error", err.Error()))
+	}
+	c := cron.New(cron.WithLocation(location))
+	return c
 }

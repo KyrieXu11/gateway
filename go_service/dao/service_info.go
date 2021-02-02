@@ -7,7 +7,7 @@ import (
 )
 
 type ServiceInfo struct {
-	Id          int
+	Id          int64
 	LoadType    byte      `gorm:"column:load_type"`
 	ServiceName string    `gorm:"column:service_name"`
 	ServiceDesc string    `gorm:"column:service_desc"`

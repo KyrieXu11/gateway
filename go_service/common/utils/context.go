@@ -22,6 +22,8 @@ var (
 // 这个上下文存放的是 fileName -> viper 的映射
 // 在访问的时候的使用方法是 ConfigContextHolder[ConfigFileName].Get(key) 就可以访问文件当中的属性了
 // 当然也可以创建一个实体使用 Unmarshal() 的方法来将实体赋值
+// 设置属性是不用设置线程安全的，因为这个属性在程序启动的时候就初始化完成了
+// 各个协程没有改变这个属性的值的操作
 var ConfigContextHolder map[string]*viper.Viper
 
 var lock sync.Mutex
@@ -50,8 +52,6 @@ func SetSession(c *gin.Context) {
 }
 
 func SetDB(Db *gorm.DB) {
-	lock.Lock()
-	defer lock.Unlock()
 	if db == nil {
 		db = Db
 	}
@@ -62,8 +62,6 @@ func GetDB() *gorm.DB {
 }
 
 func SetRedisConn(c redis.Conn) {
-	lock.Lock()
-	defer lock.Unlock()
 	if conn == nil {
 		conn = c
 	}

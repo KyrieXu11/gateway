@@ -24,7 +24,8 @@ type ServiceOutput struct {
 }
 
 type ServiceDetail struct {
-	ServiceType string
-	ServiceId   int
-	ServiceItem interface{}
+	ServiceType string      `json:"service_type" form:"service_type" binding:"required"`
+	ServiceId   int64       `json:"service_id" form:"service_id" binding:"required"`
+	ServiceItem interface{} `json:"service_item"`
 }
+
