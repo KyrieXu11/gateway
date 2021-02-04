@@ -18,6 +18,8 @@ var serviceDao dao.ServiceInfoDao
 
 var httpDao dao.ServiceHttpDao
 
+var serviceDetailDao dao.ServiceDetailDao
+
 func (p *ServiceInfoServiceImpl) GetServiceList(input *dto.ServiceInput) ([]*dao.ServiceInfo, error) {
 	page := input.PageNo
 	size := input.PageSize
@@ -53,10 +55,16 @@ func (p *ServiceInfoServiceImpl) GetServiceDetail(detail *dto.ServiceDetail) err
 	}
 	switch detail.ServiceType {
 	case "http":
-		httpService := httpDao.GetServiceDetailByServiceId(detail.ServiceId)
+		var httpService = dao.ServiceHttp{}
+		tmp := serviceDetailDao.GetServiceDetailByServiceId(detail.ServiceId, httpService).(dao.ServiceHttp)
+		httpService = tmp
 		detail.ServiceItem = httpService
 		break
 	case "tcp":
+		var tcpService dao.ServiceTcp
+		tmp := serviceDetailDao.GetServiceDetailByServiceId(detail.ServiceId, tcpService).(dao.ServiceTcp)
+		tcpService = tmp
+		detail.ServiceItem = tcpService
 		break
 	}
 	return nil

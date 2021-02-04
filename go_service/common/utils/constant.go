@@ -22,6 +22,12 @@ const (
 	ValidatorKey   = "ValidatorKey"
 	TranslatorKey  = "TranslatorKey"
 	SessionKeyUser = "user"
+
+	NUMBASE10 = 10
+	NUMBASE2  = 2
+
+	INTEGER_BIT_SIZE64 = 64
+	INTEGER_BIT_SIZE32 = 32
 )
 
 var ERROR_CODE = []int{

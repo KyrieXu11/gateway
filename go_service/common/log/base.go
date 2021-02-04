@@ -57,7 +57,7 @@ func newLogger() *logger {
 		Development:      true,
 		Encoding:         "console",
 		OutputPaths:      []string{StdOut, "logs/gateway.log"},
-		ErrorOutputPaths: []string{StdError, "logs/gateway.error.log"},
+		ErrorOutputPaths: []string{StdOut, "logs/gateway.error.log"},
 		EncoderConfig:    ecfg,
 	}
 	log, err := config.Build()
