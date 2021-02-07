@@ -1,7 +1,7 @@
 package dao
 
 import (
-	"gateway/common/log"
+	"fmt"
 	"gateway/common/utils"
 )
 
@@ -30,21 +30,26 @@ func (s ServiceTcp) TableName() string {
 	return "gateway_service_tcp_rule"
 }
 
-type ServiceDetailDao struct {
-}
-
 type ServiceHttpDao struct {
 }
 
 type ServiceTcpDao struct {
 }
 
-// TODO: gorm not allowed to use interface in sql,must slice or struct
-func (p *ServiceDetailDao) GetServiceDetailByServiceId(serviceId int64, inter Tabler) Tabler {
+func (p *ServiceHttpDao) GetHttpDetail(service_id int64) (*ServiceHttp, error) {
+	var service_http ServiceHttp
 	db := utils.GetDB()
-	if err := db.Where("service_id = ?", serviceId).First(&inter).Error; err != nil {
-		log.Error(err.Error())
-		return nil
+	if err := db.Where("service_id = ?", service_id).First(&service_http).Error; err != nil {
+		return nil, fmt.Errorf("服务类型为[http]找不到service_id为%d的记录", service_id)
 	}
-	return inter
+	return &service_http, nil
+}
+
+func (p *ServiceTcpDao) GetTcpDetail(service_id int64) (*ServiceTcp, error) {
+	var service_tcp ServiceTcp
+	db := utils.GetDB()
+	if err := db.Where("service_id = ?", service_id).First(&service_tcp).Error; err != nil {
+		return nil, fmt.Errorf("服务类型为[tcp]找不到service_id为%d的记录", service_id)
+	}
+	return &service_tcp, nil
 }

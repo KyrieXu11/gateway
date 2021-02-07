@@ -58,7 +58,6 @@ func (p *ServiceListRegistrator) GetServiceDetail(c *gin.Context) {
 		ServiceId:   serviceId,
 	}
 	if err := serviceInfoService.GetServiceDetail(detail); err != nil {
-		log.Error(err.Error())
 		utils.ResponseErrorM(c, err.Error())
 		return
 	}

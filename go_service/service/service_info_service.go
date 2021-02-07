@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"gateway/common/log"
 	"gateway/common/utils"
 	"gateway/dao"
 	"gateway/dto"
@@ -18,7 +19,7 @@ var serviceDao dao.ServiceInfoDao
 
 var httpDao dao.ServiceHttpDao
 
-var serviceDetailDao dao.ServiceDetailDao
+var tcpDap dao.ServiceTcpDao
 
 func (p *ServiceInfoServiceImpl) GetServiceList(input *dto.ServiceInput) ([]*dao.ServiceInfo, error) {
 	page := input.PageNo
@@ -55,15 +56,19 @@ func (p *ServiceInfoServiceImpl) GetServiceDetail(detail *dto.ServiceDetail) err
 	}
 	switch detail.ServiceType {
 	case "http":
-		var httpService = dao.ServiceHttp{}
-		tmp := serviceDetailDao.GetServiceDetailByServiceId(detail.ServiceId, httpService).(dao.ServiceHttp)
-		httpService = tmp
+		httpService, err := httpDao.GetHttpDetail(detail.ServiceId)
+		if err != nil {
+			log.Error(err.Error())
+			return err
+		}
 		detail.ServiceItem = httpService
 		break
 	case "tcp":
-		var tcpService dao.ServiceTcp
-		tmp := serviceDetailDao.GetServiceDetailByServiceId(detail.ServiceId, tcpService).(dao.ServiceTcp)
-		tcpService = tmp
+		tcpService, err := tcpDap.GetTcpDetail(detail.ServiceId)
+		if err != nil {
+			log.Error(err.Error())
+			return err
+		}
 		detail.ServiceItem = tcpService
 		break
 	}
