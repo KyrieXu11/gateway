@@ -36,20 +36,20 @@ type ServiceHttpDao struct {
 type ServiceTcpDao struct {
 }
 
-func (p *ServiceHttpDao) GetHttpDetail(service_id int64) (*ServiceHttp, error) {
+func (p *ServiceHttpDao) GetHttpDetail(serviceId int64) (*ServiceHttp, error) {
 	var service_http ServiceHttp
 	db := utils.GetDB()
-	if err := db.Where("service_id = ?", service_id).First(&service_http).Error; err != nil {
-		return nil, fmt.Errorf("服务类型为[http]找不到service_id为%d的记录", service_id)
+	if err := db.Where("service_id = ?", serviceId).First(&service_http).Error; err != nil {
+		return nil, fmt.Errorf("服务类型为[http]找不到service_id为%d的记录", serviceId)
 	}
 	return &service_http, nil
 }
 
-func (p *ServiceTcpDao) GetTcpDetail(service_id int64) (*ServiceTcp, error) {
+func (p *ServiceTcpDao) GetTcpDetail(serviceId int64) (*ServiceTcp, error) {
 	var service_tcp ServiceTcp
 	db := utils.GetDB()
-	if err := db.Where("service_id = ?", service_id).First(&service_tcp).Error; err != nil {
-		return nil, fmt.Errorf("服务类型为[tcp]找不到service_id为%d的记录", service_id)
+	if err := db.Where("service_id = ?", serviceId).First(&service_tcp).Error; err != nil {
+		return nil, fmt.Errorf("服务类型为[tcp]找不到service_id为%d的记录", serviceId)
 	}
 	return &service_tcp, nil
 }

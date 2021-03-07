@@ -81,7 +81,7 @@ func (UnimplementedAntPathMatcherServer) Match(AntPathMatcher_MatchServer) error
 func (UnimplementedAntPathMatcherServer) mustEmbedUnimplementedAntPathMatcherServer() {}
 
 // UnsafeAntPathMatcherServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to AntPathMatcherServer will
+// Use of this inter is not recommended, as added methods to AntPathMatcherServer will
 // result in compilation errors.
 type UnsafeAntPathMatcherServer interface {
 	mustEmbedUnimplementedAntPathMatcherServer()

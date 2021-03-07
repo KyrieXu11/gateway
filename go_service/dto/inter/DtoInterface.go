@@ -1,4 +1,4 @@
-package _interface
+package inter
 
 import "github.com/gin-gonic/gin"
 

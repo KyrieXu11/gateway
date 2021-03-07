@@ -65,7 +65,7 @@ public class AuthServiceImpl extends AuthServiceAdapter {
                 break;
             }
             // 匹配成功则不会输出，只输出匹配失败的 url
-            LOGGER.info("pattern -> {} realpath -> {} res -> {}", url, path, res);
+            LOGGER.info("pattern -> {} realpath -> {}", url, path);
         }
 
         long end = System.currentTimeMillis();
