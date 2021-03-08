@@ -22,6 +22,7 @@ func CheckLogin() gin.HandlerFunc {
 			log.Info("用户未登陆")
 			utils.ResponseErrorM(c, "用户未登陆")
 			c.Abort()
+			return
 		}
 		c.Next()
 	}

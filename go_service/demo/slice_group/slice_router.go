@@ -1,10 +1,12 @@
-package main
+package slice_group
 
 import (
-	"log"
+	"math"
 	"net/http"
 	"sync"
 )
+
+const abortIndex int8 = math.MaxInt8 / 2
 
 type HandlerFunc func(c *Context)
 
@@ -15,6 +17,7 @@ type RouterGroup struct {
 	engine   *Engine
 }
 
+// implement http.Handler
 type Engine struct {
 	tree map[string]HandlerChain
 	RouterGroup
@@ -28,6 +31,7 @@ type Context struct {
 	index    int8
 }
 
+// get a new engine(http.Handler)
 func NewEngine() *Engine {
 	engine := &Engine{
 		RouterGroup: RouterGroup{
@@ -44,10 +48,15 @@ func NewEngine() *Engine {
 
 func (c *Context) Next() {
 	c.index++
+	// 调用 c.Abort() 的时候不会往后执行
 	for c.index < int8(len(c.handlers)) {
 		c.handlers[c.index](c)
 		c.index++
 	}
+}
+
+func (c *Context) Abort() {
+	c.index = abortIndex
 }
 
 func (c *Context) Reset() {
@@ -99,41 +108,15 @@ func (engine *Engine) Use(middleware ...HandlerFunc) {
 
 // specific middleware
 func (group *RouterGroup) AddRoute(absolutePath string, handlers ...HandlerFunc) {
-	handlers = group.combineHandlers(handlers)
+	handlers = group.mergeHandlers(handlers)
 	group.engine.addRoute(absolutePath, handlers)
 }
 
 // merge specific and common middleware
-func (group *RouterGroup) combineHandlers(handlers HandlerChain) HandlerChain {
+func (group *RouterGroup) mergeHandlers(handlers HandlerChain) HandlerChain {
 	finalSize := len(group.Handlers) + len(handlers)
 	mergedHandlers := make(HandlerChain, finalSize)
 	copy(mergedHandlers, group.Handlers)
 	copy(mergedHandlers[len(group.Handlers):], handlers)
 	return mergedHandlers
-}
-
-func main() {
-	engine := NewEngine()
-	engine.Use(func(c *Context) {
-		c.Rw.Write([]byte("first middleware\n"))
-		c.Next()
-		log.Println("end first middleware")
-	})
-	engine.Use(func(c *Context) {
-		c.Rw.Write([]byte("second middleware\n"))
-		c.Next()
-		log.Println("end second middleware")
-	})
-	engine.Use(func(c *Context) {
-		c.Rw.Write([]byte("third middleware\n"))
-		c.Next()
-		log.Println("end third middleware")
-	})
-	engine.AddRoute("/v1/test", func(c *Context) {
-		s := "this is a specific middleware"
-		c.Rw.Write([]byte(s))
-		log.Println(s)
-		c.Next()
-	})
-	http.ListenAndServe(":8081", engine)
 }
