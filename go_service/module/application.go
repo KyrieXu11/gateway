@@ -5,6 +5,8 @@ import (
 	"gateway/common/log"
 	"gateway/common/rpc_client"
 	"gateway/common/utils"
+	"gateway/middleware"
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
@@ -28,6 +30,12 @@ func InitApplication() error {
 		rpc_client.NewMatcherClient()
 	}
 
+	maxAge := utils.GetIntConf(utils.ModuleApplication, "session.max_age")
+	options := &sessions.Options{
+		Path:   "/",
+		MaxAge: maxAge * utils.Minute,
+	}
+	middleware.InitCookieSessionConf("session", options, []byte("secret"))
 	log.Info("application initialized")
 	return nil
 }

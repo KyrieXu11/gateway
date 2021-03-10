@@ -49,10 +49,10 @@ func initRedis() error {
 	}
 	// 初始化 redis 上下文
 	utils.SetRedisConn(c)
-	// 设置 session 中间件的配置
-	if err := initRedisSessionStore(r); err != nil {
-		return err
-	}
+	// // 设置 session 中间件的配置
+	// if err := initRedisSessionStore(r); err != nil {
+	// 	return err
+	// }
 	return nil
 }
 
@@ -67,7 +67,7 @@ func initRedisSessionStore(conf *config.RedisConfig) error {
 		// 设置session有效的路径，没10年脑血栓整不出来这玩意的🙃
 		Path: "/",
 	}
-	return middleware.InitSessionConf(
+	return middleware.InitRedisSessionConf(
 		conf.Idle,
 		conf.ConnectType,
 		conf.Address,

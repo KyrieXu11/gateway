@@ -63,7 +63,7 @@ func ListenAndServe(endPoint string) {
 		log.Info("Dashboard Application Start!")
 	} else {
 		http_proxy.RunHttpServer()
-		http_proxy.RunHttpLtsServer()
+		http_proxy.RunHttpTlsServer()
 		log.Info("proxy service start!")
 	}
 }

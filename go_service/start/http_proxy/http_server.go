@@ -39,7 +39,7 @@ func RunHttpServer() {
 	}()
 }
 
-func RunHttpLtsServer() {
+func RunHttpTlsServer() {
 	r := InitRouter()
 	registerRouter(r)
 	addr := utils.GetStringConf(utils.ModuleApplication, "proxy.https.addr")
@@ -48,7 +48,7 @@ func RunHttpLtsServer() {
 	maxHeaderBytes := utils.GetIntConf(utils.ModuleApplication, "proxy.https.max_header_bytes")
 	server := getServer(addr, readTimeout, writeTimeout, maxHeaderBytes, r)
 	go func() {
-		log.Info("", zap.String("HttpProxy run on", addr))
+		log.Info("", zap.String("HttpTLSProxy run on", addr))
 		if err := server.ListenAndServeTLS("./cert_file/example.com+5.pem", "./cert_file/example.com+5-key.pem"); err != nil && err != http.ErrServerClosed {
 			log.Error(err.Error())
 			os.Exit(1)

@@ -62,13 +62,14 @@ func (p *AdminRegistrar) Logout(c *gin.Context) {
 	times := 0
 	for true {
 		// 在删除 session 的时候还要清除 session 种的kv
+		// 还要指定作用的路径，草
 		// 给爷整吐了,草
 		session.Clear()
 		session.Options(sessions.Options{
+			Path:   "/",
 			MaxAge: -1,
 		})
-		err := session.Save()
-		if err == nil {
+		if err := session.Save(); err == nil {
 			break
 		}
 		if times == 5 {

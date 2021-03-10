@@ -15,7 +15,6 @@ func CheckLogin() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
 		if name, ok := session.Get(utils.SessionKeyUser).(string); !ok || name == "" {
-			log.Info("123")
 			if CheckLoginRequest(c.Request) {
 				c.Next()
 				return

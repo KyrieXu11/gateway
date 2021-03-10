@@ -3,18 +3,32 @@ package middleware
 import (
 	"gateway/common/log"
 	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-contrib/sessions/redis"
 	"github.com/gin-gonic/gin"
 )
 
-var sessionFunc gin.HandlerFunc
+var (
+	redisSessionFunc  gin.HandlerFunc
+	cookieSessionFunc gin.HandlerFunc
+)
 
-func GetSessionStore() gin.HandlerFunc {
-	return sessionFunc
+func GetRedisSessionFunc() gin.HandlerFunc {
+	return redisSessionFunc
+}
+
+func GetCookieSessionFunc() gin.HandlerFunc {
+	return cookieSessionFunc
+}
+
+func InitCookieSessionConf(name string, options *sessions.Options, keyPairs ...[]byte) {
+	store := cookie.NewStore(keyPairs...)
+	store.Options(*options)
+	cookieSessionFunc = sessions.Sessions(name, store)
 }
 
 // 初始化 session 中间件
-func InitSessionConf(
+func InitRedisSessionConf(
 	maxIdle int,
 	network, addr, auth, sessionName string,
 	options *sessions.Options,
@@ -28,6 +42,6 @@ func InitSessionConf(
 		log.Info("Use custom redis session option")
 		store.Options(*options)
 	}
-	sessionFunc = sessions.Sessions(sessionName, store)
+	redisSessionFunc = sessions.Sessions(sessionName, store)
 	return nil
 }
