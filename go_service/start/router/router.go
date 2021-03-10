@@ -20,14 +20,14 @@ func registerRouter(router *gin.Engine) {
 	router.Use(middleware.Cors(),
 		middleware.GetSessionStore(),
 		middleware.CheckLogin())
-	// pingcontroller.go
+	// ping_controller.go
 	{
 		router.GET("/ping", controller.Ping)
 		// 设置 404
 		router.NoRoute(controller.PageNotFound)
 	}
 
-	// admincontroller.go
+	// admin_controller.go
 	{
 		group := router.Group("/admin")
 		controller.RegisterAdminController(group)

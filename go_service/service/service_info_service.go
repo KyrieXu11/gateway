@@ -9,25 +9,25 @@ import (
 	"strings"
 )
 
-type ServiceInfoService interface {
-}
+type ServiceInfoService interface{}
 
-type ServiceInfoServiceImpl struct {
-}
+type ServiceInfoServiceImpl struct{}
 
 var serviceDao dao.ServiceInfoDao
 
-var httpDao dao.ServiceHttpDao
+var httpDao dao.HttpRuleDao
 
-var tcpDap dao.ServiceTcpDao
+var tcpDao dao.TcpRuleDao
+
+var grpcDao dao.GrpcRuleDao
 
 func (p *ServiceInfoServiceImpl) GetServiceList(input *dto.ServiceInput) ([]*dao.ServiceInfo, error) {
 	page := input.PageNo
 	size := input.PageSize
-	if size > 50 {
-		return nil, fmt.Errorf("一页最多只能查询50条记录哦")
+	page, err := utils.GetPage(page, size)
+	if err != nil {
+		return nil, err
 	}
-	page = (page - 1) * size
 	list := serviceDao.GetServiceList(page, size)
 	return list, nil
 }
@@ -56,21 +56,28 @@ func (p *ServiceInfoServiceImpl) GetServiceDetail(detail *dto.ServiceDetail) err
 	}
 	switch detail.ServiceType {
 	case "http":
-		httpService, err := httpDao.GetHttpDetail(detail.ServiceId)
+		httpRule, err := httpDao.GetHttpDetail(detail.ServiceId)
 		if err != nil {
 			log.Error(err.Error())
 			return err
 		}
-		detail.ServiceItem = httpService
+		detail.ServiceItem = httpRule
 		break
 	case "tcp":
-		tcpService, err := tcpDap.GetTcpDetail(detail.ServiceId)
+		tcpRule, err := tcpDao.GetTcpDetail(detail.ServiceId)
 		if err != nil {
 			log.Error(err.Error())
 			return err
 		}
-		detail.ServiceItem = tcpService
+		detail.ServiceItem = tcpRule
 		break
+	case "grpc":
+		grpcRule, err := grpcDao.GetgRpcDetail(detail.ServiceId)
+		if err != nil {
+			log.Error(err.Error())
+			return err
+		}
+		detail.ServiceItem = grpcRule
 	}
 	return nil
 }

@@ -52,6 +52,11 @@ func GetSessionVal(c *gin.Context, key string, res interface{}) error {
 	return nil
 }
 
+func GetSessionValue(c *gin.Context, key string) interface{} {
+	session := sessions.Default(c)
+	return session.Get(key)
+}
+
 // 执行指令
 func ExecCommand(name string, args ...string) (string, error) {
 	cmd := exec.Command(name, args...)
@@ -121,4 +126,12 @@ func NewCron() *cron.Cron {
 	}
 	c := cron.New(cron.WithLocation(location))
 	return c
+}
+
+func GetPage(page int, size int) (int, error) {
+	if size > 50 {
+		return 0, fmt.Errorf("一页最多只能查询50条记录哦")
+	}
+	page = (page - 1) * size
+	return page, nil
 }

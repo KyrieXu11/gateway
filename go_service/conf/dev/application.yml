@@ -12,8 +12,20 @@ session:
 
 rpc:
   matcher:
-    server_addr: "127.0.0.1:9000"
+    server_addr: "192.168.127.128:9000"
 
 # 决定 user 中间件是否开启
 admin:
-  filter: false
+  filter: true
+
+proxy:
+  http:
+    addr: ":8089"
+    read_timeout: 10
+    write_timeout: 10
+    max_header_bytes: 20
+  https:
+    addr: ":8090"
+    read_timeout: 10
+    write_timeout: 10
+    max_header_bytes: 20

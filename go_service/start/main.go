@@ -1,8 +1,10 @@
 package start
 
 import (
+	"gateway/common/log"
 	"gateway/common/utils"
 	"gateway/module"
+	"gateway/start/http_proxy"
 	"gateway/start/router"
 )
 
@@ -54,7 +56,14 @@ func initModule(f func() error, module string) error {
 }
 
 // 启动 gin
-func ListenAndServe() {
-	r := router.InitRouter()
-	router.ListenAndServe(r)
+func ListenAndServe(endPoint string) {
+	if endPoint == "dashboard" {
+		r := router.InitRouter()
+		router.ListenAndServe(r)
+		log.Info("Dashboard Application Start!")
+	} else {
+		http_proxy.RunHttpServer()
+		http_proxy.RunHttpLtsServer()
+		log.Info("proxy service start!")
+	}
 }

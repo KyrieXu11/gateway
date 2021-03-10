@@ -20,8 +20,7 @@ func (p *ServiceInfo) TableName() string {
 	return "gateway_service_info"
 }
 
-type ServiceInfoDao struct {
-}
+type ServiceInfoDao struct{}
 
 func (p *ServiceInfoDao) GetServiceList(page, size int) []*ServiceInfo {
 	db := utils.GetDB()

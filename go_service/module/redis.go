@@ -64,6 +64,8 @@ func initRedisSessionStore(conf *config.RedisConfig) error {
 	var opt = &sessions.Options{
 		// 给的是秒...转换成分钟
 		MaxAge: maxAge,
+		// 设置session有效的路径，没10年脑血栓整不出来这玩意的🙃
+		Path: "/",
 	}
 	return middleware.InitSessionConf(
 		conf.Idle,

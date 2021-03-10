@@ -56,10 +56,3 @@ func GetTranslation(c *gin.Context) (ut.Translator, error) {
 	}
 	return translator, nil
 }
-
-func GetPageSize(page int, size int) (int, int) {
-	// 第2页 50个，在数据库体现是是第 1 页 50个
-	// 而 offset 的参数是跳过 page 条数据
-	page = (page - 1) * size
-	return page, size
-}

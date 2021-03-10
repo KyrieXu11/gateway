@@ -1,4 +1,4 @@
-address: 127.0.0.1:6379
+address: 192.168.127.128:6379
 connect_type: tcp
 max_idle: 10
 auth: 123

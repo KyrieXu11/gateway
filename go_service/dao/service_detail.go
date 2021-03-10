@@ -5,51 +5,72 @@ import (
 	"gateway/common/utils"
 )
 
-type ServiceHttp struct {
-	Id            int
-	ServiceId     int64
-	RuleType      byte
-	Rule          string
-	NeedHttps     byte
-	NeedStripUri  byte
-	NeedWebsocket byte
-	UrlRewrite    string
+type HttpRule struct {
+	Id             int
+	ServiceId      int64
+	RuleType       byte
+	Rule           string
+	NeedHttps      byte
+	NeedStripUri   byte
+	NeedWebsocket  byte
+	UrlRewrite     string
+	HeaderTransfor string
 }
 
-func (p ServiceHttp) TableName() string {
+func (p HttpRule) TableName() string {
 	return "gateway_service_http_rule"
 }
 
-type ServiceTcp struct {
+type TcpRule struct {
 	Id        int64
 	ServiceId int64
 	Port      int
 }
 
-func (s ServiceTcp) TableName() string {
+func (s TcpRule) TableName() string {
 	return "gateway_service_tcp_rule"
 }
 
-type ServiceHttpDao struct {
+type GrpcRule struct {
+	ID             int64  `json:"id" gorm:"primary_key"`
+	ServiceID      int64  `json:"service_id" gorm:"column:service_id" description:"服务id"`
+	Port           int    `json:"port" gorm:"column:port" description:"端口	"`
+	HeaderTransfor string `json:"header_transfor" gorm:"column:header_transfor" description:"header转换支持增加(add)、删除(del)、修改(edit) 格式: add headname headvalue"`
 }
 
-type ServiceTcpDao struct {
+func (t *GrpcRule) TableName() string {
+	return "gateway_service_grpc_rule"
 }
 
-func (p *ServiceHttpDao) GetHttpDetail(serviceId int64) (*ServiceHttp, error) {
-	var service_http ServiceHttp
+type HttpRuleDao struct{}
+
+type TcpRuleDao struct{}
+
+type GrpcRuleDao struct{}
+
+func (p *HttpRuleDao) GetHttpDetail(serviceId int64) (*HttpRule, error) {
+	var httpRule HttpRule
 	db := utils.GetDB()
-	if err := db.Where("service_id = ?", serviceId).First(&service_http).Error; err != nil {
+	if err := db.Where("service_id = ?", serviceId).First(&httpRule).Error; err != nil {
 		return nil, fmt.Errorf("服务类型为[http]找不到service_id为%d的记录", serviceId)
 	}
-	return &service_http, nil
+	return &httpRule, nil
 }
 
-func (p *ServiceTcpDao) GetTcpDetail(serviceId int64) (*ServiceTcp, error) {
-	var service_tcp ServiceTcp
+func (p *TcpRuleDao) GetTcpDetail(serviceId int64) (*TcpRule, error) {
+	var tcpRule TcpRule
 	db := utils.GetDB()
-	if err := db.Where("service_id = ?", serviceId).First(&service_tcp).Error; err != nil {
+	if err := db.Where("service_id = ?", serviceId).First(&tcpRule).Error; err != nil {
 		return nil, fmt.Errorf("服务类型为[tcp]找不到service_id为%d的记录", serviceId)
 	}
-	return &service_tcp, nil
+	return &tcpRule, nil
+}
+
+func (p *GrpcRuleDao) GetgRpcDetail(serviceId int64) (*GrpcRule, error) {
+	var gRpcRule GrpcRule
+	db := utils.GetDB()
+	if err := db.Where("service_id = ?", serviceId).First(&gRpcRule).Error; err != nil {
+		return nil, fmt.Errorf("服务类型为[grpc]找不到service_id为%d的记录", serviceId)
+	}
+	return &gRpcRule, nil
 }

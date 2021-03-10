@@ -7,17 +7,18 @@ import (
 	"gateway/service"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 // 定义空的结构体让不同的控制器的函数的名称可以一样
-type AdminRegistrator struct{}
+type AdminRegistrar struct{}
 
 // adminService 是admin service 层的对象
 var adminService service.AdminServiceImpl
 
 // 注册控制器
 func RegisterAdminController(g *gin.RouterGroup) {
-	p := &AdminRegistrator{}
+	p := &AdminRegistrar{}
 	g.GET("/hello", p.Hello)
 	g.POST("/login", p.Login)
 	g.GET("/session/hello", p.SessionHello)
@@ -27,12 +28,12 @@ func RegisterAdminController(g *gin.RouterGroup) {
 }
 
 // 分组的测试接口
-func (p *AdminRegistrator) Hello(c *gin.Context) {
+func (p *AdminRegistrar) Hello(c *gin.Context) {
 	utils.ResponseSuccessObj(c, "admin/hello", nil)
 }
 
 // 登录接口
-func (p *AdminRegistrator) Login(c *gin.Context) {
+func (p *AdminRegistrar) Login(c *gin.Context) {
 	adminDto := &dto.AdminDto{}
 	if err := adminDto.ValidateAndBindParam(c); err != nil {
 		log.Error(err.Error())
@@ -50,15 +51,13 @@ func (p *AdminRegistrator) Login(c *gin.Context) {
 		return
 	}
 	adminDto.Password = ""
-	// 设置 session
-	utils.SetSession(c)
 	if err = utils.SetSessionVal(c, utils.SessionKeyUser, adminDto); err != nil {
 		log.Error(err.Error())
 	}
 	utils.ResponseSuccessObj(c, "登陆成功！", adminDto)
 }
 
-func (p *AdminRegistrator) Logout(c *gin.Context) {
+func (p *AdminRegistrar) Logout(c *gin.Context) {
 	session := sessions.Default(c)
 	times := 0
 	for true {
@@ -84,17 +83,18 @@ func (p *AdminRegistrator) Logout(c *gin.Context) {
 	}
 }
 
-func (p *AdminRegistrator) SessionHello(c *gin.Context) {
+func (p *AdminRegistrar) SessionHello(c *gin.Context) {
 	a := &dto.AdminDto{}
 	if err := utils.GetSessionVal(c, utils.SessionKeyUser, a); err != nil {
 		log.Error(err.Error())
 		return
 	}
+	log.Info("", zap.Any("user info", a))
 	utils.ResponseSuccessObj(c, "", a)
 	return
 }
 
-func (p *AdminRegistrator) ChangePassword(c *gin.Context) {
+func (p *AdminRegistrar) ChangePassword(c *gin.Context) {
 	passwordDto := &dto.PasswordDto{}
 	if err := passwordDto.ValidateAndBindParam(c); err != nil {
 		log.Error(err.Error())
@@ -119,7 +119,7 @@ func (p *AdminRegistrator) ChangePassword(c *gin.Context) {
 	utils.ResponseErrorM(c, "修改失败了")
 }
 
-func (p *AdminRegistrator) Register(c *gin.Context) {
+func (p *AdminRegistrar) Register(c *gin.Context) {
 	adminDto := &dto.AdminDto{}
 	if err := adminDto.ValidateAndBindParam(c); err != nil {
 		log.Error(err.Error())

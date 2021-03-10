@@ -23,13 +23,8 @@ public class IpInterceptor implements HandlerInterceptor {
      */
     public static final Logger LOGGER = LoggerFactory.getLogger(IpInterceptor.class);
 
-
-    private AuthService authServiceImpl;
-
     @Autowired
-    public void setAuthServiceImpl(AuthService authServiceImpl) {
-        this.authServiceImpl = authServiceImpl;
-    }
+    private AuthService authServiceImpl;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

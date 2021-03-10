@@ -13,12 +13,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    private IpInterceptor ipInterceptor;
-
     @Autowired
-    public void setIpInterceptor(IpInterceptor ipInterceptor) {
-        this.ipInterceptor = ipInterceptor;
-    }
+    private IpInterceptor ipInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

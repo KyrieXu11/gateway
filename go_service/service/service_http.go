@@ -8,7 +8,7 @@ import (
 type HttpRuleService struct {
 }
 
-var httpservicedao dao.ServiceHttpDao
+var httpservicedao dao.HttpRuleDao
 
 func (p *HttpRuleService) GetServiceDetailByServiceId(serviceId int64) (*dto.ServiceDetail, error) {
 	// service := httpservicedao.GetServiceDetailByServiceId(serviceId)

@@ -9,19 +9,18 @@ import (
 	"strconv"
 )
 
-type ServiceListRegistrator struct {
-}
+type ServiceListRegistrar struct{}
 
 var serviceInfoService service.ServiceInfoServiceImpl
 
 func RegisterServiceListController(g *gin.RouterGroup) {
-	c := &ServiceListRegistrator{}
+	c := &ServiceListRegistrar{}
 	g.GET("/list", c.GetServiceList)
 	g.GET("/detail", c.GetServiceDetail)
 }
 
 // 获取所有的服务列表，通过分页的方式
-func (p *ServiceListRegistrator) GetServiceList(c *gin.Context) {
+func (p *ServiceListRegistrar) GetServiceList(c *gin.Context) {
 	page, err := strconv.Atoi(c.DefaultQuery("page", "0"))
 	if ok := utils.CheckErrorAndResponse(c, err); ok {
 		log.Error(err.Error())
@@ -46,7 +45,7 @@ func (p *ServiceListRegistrator) GetServiceList(c *gin.Context) {
 	utils.ResponseSuccessObj(c, "查询成功", out)
 }
 
-func (p *ServiceListRegistrator) GetServiceDetail(c *gin.Context) {
+func (p *ServiceListRegistrar) GetServiceDetail(c *gin.Context) {
 	serviceType := c.Query("service_type")
 	serviceId, err := strconv.ParseInt(c.Query("service_id"), utils.NUMBASE10, utils.INTEGER_BIT_SIZE64)
 	if err != nil {
