@@ -4,6 +4,7 @@ import (
 	"gateway/common/log"
 	"gateway/common/utils"
 	"gateway/module"
+	"gateway/service"
 	"gateway/start/http_proxy"
 	"gateway/start/router"
 )
@@ -62,6 +63,7 @@ func ListenAndServe(endPoint string) {
 		router.ListenAndServe(r)
 		log.Info("Dashboard Application Start!")
 	} else {
+		service.ServiceManagerHandler.LoadOnce()
 		http_proxy.RunHttpServer()
 		http_proxy.RunHttpTlsServer()
 		log.Info("proxy service start!")

@@ -11,10 +11,10 @@ const (
 
 	// 通用的 error_code 如果不指明错误类型
 	// 则默认是这个类型的code
-	COMMON_ERROR_CODE = 400
-	NOT_FOUND_ERROR   = 404
-	SERVER_ERROR      = 500
-	SUCCESS_CODE      = 200
+	CommonErrorCode = 400
+	NotFoundError   = 404
+	ServerError     = 500
+	SuccessCode     = 200
 
 	Second = 1
 	Minute = 60 * Second
@@ -23,15 +23,22 @@ const (
 	TranslatorKey  = "TranslatorKey"
 	SessionKeyUser = "user"
 
-	NUMBASE10 = 10
-	NUMBASE2  = 2
+	NumBase10 = 10
+	NumBase2  = 2
 
-	INTEGER_BIT_SIZE64 = 64
-	INTEGER_BIT_SIZE32 = 32
+	IntegerBitSize64 = 64
+	IntegerBitSize32 = 32
+
+	LoadTypeHTTP = 0
+	LoadTypeTCP  = 1
+	LoadTypeGRPC = 2
+
+	HTTPRuleTypePrefixURL = 0
+	HTTPRuleTypeDomain    = 1
 )
 
 var ERROR_CODE = []int{
-	COMMON_ERROR_CODE,
-	NOT_FOUND_ERROR,
-	SERVER_ERROR,
+	CommonErrorCode,
+	NotFoundError,
+	ServerError,
 }

@@ -23,9 +23,7 @@ type ServiceOutput struct {
 	Items       []*dao.ServiceInfo `json:"items" form:"items" comment:"服务的信息" binding:"required"`
 }
 
-type ServiceDetail struct {
-	ServiceType string      `json:"service_type" form:"service_type" binding:"required"`
-	ServiceId   int64       `json:"service_id" form:"service_id" binding:"required"`
-	ServiceItem interface{} `json:"service_item"`
+type ServiceSearch struct {
+	ServiceType string `json:"ServiceType" form:"service_type" binding:"required"`
+	ServiceId   int64  `json:"ServiceId" form:"service_id" binding:"required"`
 }
-

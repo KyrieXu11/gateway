@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"fmt"
 	"gateway/common/log"
 	"gateway/common/utils"
 	"time"
@@ -42,4 +43,13 @@ func (p *ServiceInfoDao) GetTotalPages(size int) int64 {
 		return count/int64(size) + 1
 	}
 	return count / s
+}
+
+func (p *ServiceInfoDao) FindServiceInfoById(serviceId int64) (*ServiceInfo, error) {
+	var serviceInfo ServiceInfo
+	db := utils.GetDB()
+	if err := db.Where("id = ?", serviceId).First(&serviceInfo).Error; err != nil {
+		return nil, fmt.Errorf("没找到服务id为%d的服务", serviceId)
+	}
+	return &serviceInfo, nil
 }

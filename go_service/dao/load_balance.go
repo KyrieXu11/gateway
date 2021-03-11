@@ -1,5 +1,11 @@
 package dao
 
+import (
+	"fmt"
+	"gateway/common/log"
+	"gateway/common/utils"
+)
+
 type LoadBalance struct {
 	ID            int64  `json:"id" gorm:"primary_key"`
 	ServiceID     int64  `json:"service_id" gorm:"column:service_id" description:"服务id	"`
@@ -19,4 +25,16 @@ type LoadBalance struct {
 
 func (t *LoadBalance) TableName() string {
 	return "gateway_service_load_balance"
+}
+
+type LoadBalanceDao struct{}
+
+func (p *LoadBalanceDao) FindByServiceId(serviceId int64) (*LoadBalance, error) {
+	var loadBalance LoadBalance
+	db := utils.GetDB()
+	if err := db.Where("service_id = ?", serviceId).First(&loadBalance).Error; err != nil {
+		log.Error(err.Error())
+		return nil, fmt.Errorf("找不到服务id为%d的负载均衡策略", serviceId)
+	}
+	return &loadBalance, nil
 }

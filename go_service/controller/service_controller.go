@@ -9,18 +9,21 @@ import (
 	"strconv"
 )
 
-type ServiceListRegistrar struct{}
+type ServiceRegistrar struct{}
 
-var serviceInfoService service.ServiceInfoServiceImpl
+var (
+	serviceInfoService   service.ServiceInfoServiceImpl
+	serviceDetailService service.ServiceDetailServiceImpl
+)
 
-func RegisterServiceListController(g *gin.RouterGroup) {
-	c := &ServiceListRegistrar{}
+func RegisterServiceController(g *gin.RouterGroup) {
+	c := &ServiceRegistrar{}
 	g.GET("/list", c.GetServiceList)
 	g.GET("/detail", c.GetServiceDetail)
 }
 
 // 获取所有的服务列表，通过分页的方式
-func (p *ServiceListRegistrar) GetServiceList(c *gin.Context) {
+func (p *ServiceRegistrar) GetServiceList(c *gin.Context) {
 	page, err := strconv.Atoi(c.DefaultQuery("page", "0"))
 	if ok := utils.CheckErrorAndResponse(c, err); ok {
 		log.Error(err.Error())
@@ -45,18 +48,19 @@ func (p *ServiceListRegistrar) GetServiceList(c *gin.Context) {
 	utils.ResponseSuccessObj(c, "查询成功", out)
 }
 
-func (p *ServiceListRegistrar) GetServiceDetail(c *gin.Context) {
+func (p *ServiceRegistrar) GetServiceDetail(c *gin.Context) {
 	serviceType := c.Query("service_type")
-	serviceId, err := strconv.ParseInt(c.Query("service_id"), utils.NUMBASE10, utils.INTEGER_BIT_SIZE64)
+	serviceId, err := strconv.ParseInt(c.Query("service_id"), utils.NumBase10, utils.IntegerBitSize64)
 	if err != nil {
 		utils.ResponseErrorM(c, "检查服务ID是否正确")
 		return
 	}
-	detail := &dto.ServiceDetail{
+	search := &dto.ServiceSearch{
 		ServiceType: serviceType,
 		ServiceId:   serviceId,
 	}
-	if err := serviceInfoService.GetServiceDetail(detail); err != nil {
+	detail, err := serviceDetailService.GetServiceDetail(search)
+	if err != nil {
 		utils.ResponseErrorM(c, err.Error())
 		return
 	}

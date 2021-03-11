@@ -24,22 +24,22 @@ func ResponseErrorCM(c *gin.Context, code int, msg string) {
 		Msg:  msg,
 	}
 	// 请求码为 200，而不是表示请求失败了
-	c.JSON(SUCCESS_CODE, r)
+	c.JSON(SuccessCode, r)
 }
 
 func ResponseErrorM(c *gin.Context, msg string) {
 	r := &Response{
-		Code: COMMON_ERROR_CODE,
+		Code: CommonErrorCode,
 		Msg:  msg,
 	}
-	c.JSON(SUCCESS_CODE, r)
+	c.JSON(SuccessCode, r)
 }
 
 func ResponseError(c *gin.Context) {
 	r := &Response{
-		Code: COMMON_ERROR_CODE,
+		Code: CommonErrorCode,
 	}
-	c.JSON(SUCCESS_CODE, r)
+	c.JSON(SuccessCode, r)
 }
 
 func ResponseSuccessAll(c *gin.Context, code int, msg string, data interface{}) {
@@ -48,7 +48,7 @@ func ResponseSuccessAll(c *gin.Context, code int, msg string, data interface{}) 
 		Msg:  msg,
 		Data: data,
 	}
-	c.JSON(SUCCESS_CODE, r)
+	c.JSON(SuccessCode, r)
 }
 
 func ResponseSuccessCM(c *gin.Context, code int, msg string) {
@@ -57,14 +57,14 @@ func ResponseSuccessCM(c *gin.Context, code int, msg string) {
 		Msg:  msg,
 		Data: nil,
 	}
-	c.JSON(SUCCESS_CODE, r)
+	c.JSON(SuccessCode, r)
 }
 
 func ResponseSuccessObj(c *gin.Context, msg string, data interface{}) {
 	r := &Response{
-		Code: SUCCESS_CODE,
+		Code: SuccessCode,
 		Msg:  msg,
 		Data: data,
 	}
-	c.JSON(SUCCESS_CODE, r)
+	c.JSON(SuccessCode, r)
 }

@@ -129,6 +129,9 @@ func NewCron() *cron.Cron {
 }
 
 func GetPage(page int, size int) (int, error) {
+	if page < 1 {
+		return 0, fmt.Errorf("页数不能小于1哦")
+	}
 	if size > 50 {
 		return 0, fmt.Errorf("一页最多只能查询50条记录哦")
 	}

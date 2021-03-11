@@ -10,5 +10,5 @@ func Ping(c *gin.Context) {
 }
 
 func PageNotFound(c *gin.Context) {
-	utils.ResponseErrorCM(c, utils.NOT_FOUND_ERROR, "页面未找到")
+	utils.ResponseErrorCM(c, utils.NotFoundError, "页面未找到")
 }

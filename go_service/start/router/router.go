@@ -33,10 +33,10 @@ func registerRouter(router *gin.Engine) {
 		controller.RegisterAdminController(group)
 	}
 
-	// service_info_controller.go
+	// service_controller.go
 	{
 		group := router.Group("/service")
-		controller.RegisterServiceListController(group)
+		controller.RegisterServiceController(group)
 	}
 	router.Static("/static", "./dist")
 }
