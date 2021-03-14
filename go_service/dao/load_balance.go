@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gateway/common/log"
 	"gateway/common/utils"
+	"strings"
 )
 
 type LoadBalance struct {
@@ -37,4 +38,12 @@ func (p *LoadBalanceDao) FindByServiceId(serviceId int64) (*LoadBalance, error) 
 		return nil, fmt.Errorf("找不到服务id为%d的负载均衡策略", serviceId)
 	}
 	return &loadBalance, nil
+}
+
+func (l *LoadBalance) GetIPListByModel() []string {
+	return strings.Split(l.IpList, ",")
+}
+
+func (l *LoadBalance) GetWeightListByModel() []string {
+	return strings.Split(l.WeightList, ",")
 }

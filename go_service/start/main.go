@@ -63,9 +63,14 @@ func ListenAndServe(endPoint string) {
 		router.ListenAndServe(r)
 		log.Info("Dashboard Application Start!")
 	} else {
-		service.ServiceManagerHandler.LoadOnce()
+		loadAllHandler()
 		http_proxy.RunHttpServer()
 		http_proxy.RunHttpTlsServer()
 		log.Info("proxy service start!")
 	}
+}
+
+func loadAllHandler() {
+	service.ServiceManagerHandler.LoadOnce()
+	service.InitLoadBalanceHandler()
 }
