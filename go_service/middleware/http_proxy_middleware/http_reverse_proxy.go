@@ -25,7 +25,8 @@ func HttpReverseProxy() gin.HandlerFunc {
 			return
 		}
 		proxy := reverse_proxy.NewLoadBalanceReverseProxy(c, lb)
-		proxy.ServeHTTP(c.Writer,c.Request)
-		c.Next()
+		proxy.ServeHTTP(c.Writer, c.Request)
+		c.Abort()
+		return
 	}
 }

@@ -16,7 +16,7 @@ rpc:
 
 # 决定 user 中间件是否开启
 admin:
-  filter: true
+  filter: false
 
 proxy:
   http:
@@ -29,3 +29,8 @@ proxy:
     read_timeout: 10
     write_timeout: 10
     max_header_bytes: 20
+
+cluster:
+  cluster_ip: "127.0.0.1"
+  cluster_port: "8091"
+  cluster_ssl_port: "8092"

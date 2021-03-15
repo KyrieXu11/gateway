@@ -45,9 +45,9 @@ func (p *LoadBalanceManager) GetLoadBalancer(s *dao.ServiceDetail) (load_balance
 	if s.HTTPRule.NeedHttps == 1 {
 		scheme = "https"
 	}
-	prefix := ""
+	suffix := ""
 	if s.HTTPRule.RuleType == utils.HTTPRuleTypePrefixURL {
-		prefix = s.HTTPRule.Rule
+		suffix = s.HTTPRule.Rule
 	}
 	weightList := s.LoadBalance.GetWeightListByModel()
 	ipList := s.LoadBalance.GetIPListByModel()
@@ -55,8 +55,8 @@ func (p *LoadBalanceManager) GetLoadBalancer(s *dao.ServiceDetail) (load_balance
 	for idx, ip := range ipList {
 		ipConf[ip] = weightList[idx]
 	}
-
-	lbConf, err := load_balance.NewLoadBalanceCheckConf(fmt.Sprintf("%s://%s", scheme, prefix), ipConf)
+	// TODO: fix http uri
+	lbConf, err := load_balance.NewLoadBalanceCheckConf(fmt.Sprintf("%s://%s", scheme, suffix), ipConf)
 	if err != nil {
 		log.Error(err.Error())
 		return nil, err

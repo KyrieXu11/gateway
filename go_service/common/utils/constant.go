@@ -29,12 +29,17 @@ const (
 	IntegerBitSize64 = 64
 	IntegerBitSize32 = 32
 
-	LoadTypeHTTP = 0
-	LoadTypeTCP  = 1
-	LoadTypeGRPC = 2
+	HTTPLoadType = 0
+	TCPLoadType  = 1
+	GrpcLoadType = 2
 
 	HTTPRuleTypePrefixURL = 0
 	HTTPRuleTypeDomain    = 1
+
+	HttpServiceType = "http"
+	TcpServiceType  = "tcp"
+	GrpcServiceType = "grpc"
+	AllServiceType  = "all"
 )
 
 var ERROR_CODE = []int{

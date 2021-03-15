@@ -16,8 +16,8 @@ type RealServer struct {
 }
 
 func main() {
-	s1 := &RealServer{Addr: "127.0.0.1:8080"}
-	s2 := &RealServer{Addr: "127.0.0.1:8081"}
+	s1 := &RealServer{Addr: "127.0.0.1:2003"}
+	s2 := &RealServer{Addr: "127.0.0.1:2004"}
 	s1.Run()
 	s2.Run()
 	quit := make(chan os.Signal)

@@ -5,9 +5,9 @@ import (
 )
 
 type Response struct {
-	Code int         // 状态码
-	Msg  string      // 返回给前端的消息
-	Data interface{} // 返回给前端的数据
+	Code int         `json:"code"` // 状态码
+	Msg  string      `json:"msg"`  // 返回给前端的消息
+	Data interface{} `json:"data"` // 返回给前端的数据
 }
 
 func CheckErrorAndResponse(c *gin.Context, err error) bool {

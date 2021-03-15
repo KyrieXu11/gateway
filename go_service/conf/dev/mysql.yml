@@ -2,6 +2,6 @@ username: root
 password: cXExODcxNzEyODQ5OQ==
 port: 3306
 dbName: gateway
-host: 127.0.0.1
+host: "192.168.127.128"
 max_idle: 10
 max_conn: 10

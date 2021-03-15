@@ -8,13 +8,13 @@ import (
 )
 
 type ServiceInfo struct {
-	Id          int64
-	LoadType    byte      `gorm:"column:load_type"`
-	ServiceName string    `gorm:"column:service_name"`
-	ServiceDesc string    `gorm:"column:service_desc"`
-	CreateAt    time.Time `gorm:"column:create_at"`
-	UpdateAt    time.Time `gorm:"column:update_at"`
-	Deleted     byte      `gorm:"column:is_delete"`
+	Id          int64     `json:"id" gorm:"primary_key"`
+	LoadType    int       `json:"load_type" gorm:"column:load_type"`
+	ServiceName string    `json:"service_name" gorm:"column:service_name"`
+	ServiceDesc string    `json:"service_desc" gorm:"column:service_desc"`
+	CreateAt    time.Time `json:"create_at" gorm:"column:create_at"`
+	UpdateAt    time.Time `json:"update_at" gorm:"column:update_at"`
+	Deleted     int8      `json:"deleted" gorm:"column:is_delete"`
 }
 
 func (p *ServiceInfo) TableName() string {
@@ -26,7 +26,7 @@ type ServiceInfoDao struct{}
 func (p *ServiceInfoDao) GetServiceList(page, size int) []*ServiceInfo {
 	db := utils.GetDB()
 	var res []*ServiceInfo
-	if err := db.Offset(page).Limit(size).Where("is_delete != 1").Find(&res).Error; err != nil {
+	if err := db.Where("is_delete = 0").Offset(page).Limit(size).Find(&res).Error; err != nil {
 		log.Error(err.Error())
 		return nil
 	}

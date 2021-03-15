@@ -28,7 +28,7 @@ var (
 func (p *ServiceDetailServiceImpl) GetServiceDetail(search *dto.ServiceSearch) (*dao.ServiceDetail, error) {
 	res := &dao.ServiceDetail{}
 	search.ServiceType = strings.ToLower(search.ServiceType)
-	typeList := []string{"http", "tcp", "grpc", "all"}
+	typeList := []string{utils.HttpServiceType, utils.TcpServiceType, utils.GrpcServiceType, utils.AllServiceType}
 	if contains := utils.SliceContains(typeList, search.ServiceType); !contains {
 		return nil, fmt.Errorf("检查服务类型是否正确")
 	}
@@ -127,7 +127,7 @@ func (p *ServiceManager) HTTPAccessMode(c *gin.Context) (*dao.ServiceDetail, err
 	host = host[:strings.Index(host, ":")]
 	path := c.Request.URL.Path
 	for _, serviceItem := range p.ServiceSlice {
-		if serviceItem.Info.LoadType != utils.LoadTypeHTTP {
+		if serviceItem.Info.LoadType != utils.HTTPLoadType {
 			continue
 		}
 		if serviceItem.HTTPRule.RuleType == utils.HTTPRuleTypeDomain {
@@ -151,7 +151,7 @@ func (p *ServiceManager) LoadOnce() error {
 		for _, info := range list {
 			search := dto.ServiceSearch{
 				ServiceId:   info.Id,
-				ServiceType: "all",
+				ServiceType: utils.AllServiceType,
 			}
 			detail, err := s.GetServiceDetail(&search)
 			if err != nil {
