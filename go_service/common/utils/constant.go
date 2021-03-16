@@ -23,6 +23,9 @@ const (
 	TranslatorKey  = "TranslatorKey"
 	SessionKeyUser = "user"
 
+	NeedHttps   = 1
+	NoNeedHttps = 0
+
 	NumBase10 = 10
 	NumBase2  = 2
 

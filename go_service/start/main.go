@@ -66,7 +66,7 @@ func ListenAndServe(endPoint string) {
 		loadAllHandler()
 		http_proxy.RunHttpServer()
 		http_proxy.RunHttpTlsServer()
-		log.Info("proxy service start!")
+		log.Info("gateway service start!")
 	}
 }
 

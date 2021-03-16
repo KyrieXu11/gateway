@@ -29,7 +29,7 @@ func (p *RealServer) HandlerFunc(w http.ResponseWriter, r *http.Request) {
 	s := fmt.Sprintf("http://%s%s\n", p.Addr, r.URL.Path)
 
 	ip := fmt.Sprintf("%v\n", r.Header.Get("X-Forwarded-For"))
-
+	log.Printf("host: %s ip: %s", s, ip)
 	io.WriteString(w, s)
 	io.WriteString(w, ip)
 }

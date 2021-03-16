@@ -148,6 +148,8 @@ func (p *ServiceManager) LoadOnce() error {
 	p.once.Do(func() {
 		list := serviceInfoDao.GetServiceList(0, math.MaxInt32)
 		s := ServiceDetailServiceImpl{}
+		p.Lock.Lock()
+		defer p.Lock.Unlock()
 		for _, info := range list {
 			search := dto.ServiceSearch{
 				ServiceId:   info.Id,

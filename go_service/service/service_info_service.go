@@ -73,7 +73,7 @@ func getServiceAddr(detail *dao.ServiceDetail) string {
 	serviceAddr := "unknown"
 	if detail.Info.LoadType == utils.HTTPLoadType {
 		if detail.HTTPRule.RuleType == utils.HTTPRuleTypePrefixURL {
-			if detail.HTTPRule.NeedHttps == 1 {
+			if detail.HTTPRule.NeedHttps == utils.NeedHttps {
 				serviceAddr = fmt.Sprintf("%s:%s%s", clusterIP, clusterSSLPort, detail.HTTPRule.Rule)
 			} else {
 				serviceAddr = fmt.Sprintf("%s:%s%s", clusterIP, clusterPort, detail.HTTPRule.Rule)
