@@ -1,4 +1,4 @@
-package main
+package listener
 
 import (
 	"context"
@@ -23,7 +23,7 @@ type EtcdManager struct {
 }
 
 func NewEtcdManager(hosts []string) *EtcdManager {
-	ctx, cancelFunc := context.WithTimeout(context.Background(), 100*time.Second)
+	ctx, cancelFunc := context.WithCancel(context.Background())
 	return &EtcdManager{
 		client: initEtcdClient(hosts),
 		hosts:  hosts,
@@ -36,39 +36,107 @@ func (p *EtcdManager) AddWatch(key string, listener Listener) {
 	go p.watch(key, listener)
 }
 
+func (p *EtcdManager) GetServiceListByPrefix(prefix string) (*map[string]string, error) {
+	prefix = "/" + prefix
+	resp, err := p.client.Get(p.ctx, prefix, clientv3.WithPrefix())
+	res := map[string]string{}
+	if err != nil {
+		return nil, err
+	}
+	for _, kv := range resp.Kvs {
+		res[string(kv.Key)] = string(kv.Value)
+	}
+	return &res, nil
+}
+
 func (p *EtcdManager) Register(name string, addr string, ttl int64) error {
+	ticker := time.NewTicker(time.Second * time.Duration(ttl))
 	go func() {
-		for true {
+		for {
 			key := "/" + name + "/" + addr
 			response, err := p.client.Get(p.ctx, key)
 			if err != nil {
 				log.Println(err)
 			} else if response.Count == 0 {
-				p.keepAlive(name, addr, ttl)
+				if err := p.keepAlive(name, addr, ttl); err != nil {
+					log.Println(err.Error())
+				}
 			}
+			<-ticker.C
 		}
 	}()
 	return nil
 }
 
 func (p *EtcdManager) keepAlive(name string, addr string, ttl int64) error {
-	leaseResp, err := p.client.Grant(context.Background(), ttl)
+	leaseResp, err := p.client.Grant(p.ctx, ttl)
 	if err != nil {
 		return err
 	}
-
-	_, err = p.client.Put(context.Background(), "/"+name+"/"+addr, addr, clientv3.WithLease(leaseResp.ID))
+	log.Printf("lease id : %x\n", leaseResp.ID)
+	log.Println("put value start")
+	_, err = p.client.Put(p.ctx, "/"+name+"/"+addr, addr, clientv3.WithLease(leaseResp.ID))
 	if err != nil {
 		log.Printf("put etcd error:%s", err)
 		return err
 	}
-
-	_, err = p.client.KeepAlive(context.Background(), leaseResp.ID)
+	log.Println("keep alive start")
+	_, err = p.client.KeepAlive(p.ctx, leaseResp.ID)
 	if err != nil {
 		log.Printf("keep alive error:%s", err)
 		return err
 	}
 	return nil
+}
+
+func (p *EtcdManager) WatchForPrefix(name string) {
+	key := "/" + name
+	ch := make(chan int)
+	go p.watchForPrefix(key, ch)
+	go func(ch chan int) {
+		for {
+			select {
+			case a := <-ch:
+				log.Println("delete", a)
+			default:
+				log.Println("111")
+				time.Sleep(1 * time.Second)
+			}
+			log.Println("lalala")
+		}
+	}(ch)
+}
+
+func (p *EtcdManager) watchForPrefix(key string, ch chan int) {
+	watchChan := p.client.Watch(p.ctx, key, clientv3.WithPrefix())
+	for {
+		select {
+		case resp := <-watchChan:
+			for _, ev := range resp.Events {
+				switch ev.Type {
+				case mvccpb.PUT:
+					if ev.IsCreate() {
+						log.Println("create")
+					} else if ev.IsModify() {
+						log.Println("update")
+					}
+					break
+				case mvccpb.DELETE:
+
+					break
+				default:
+					log.Println("no type")
+					break
+				}
+			}
+		}
+	}
+}
+
+func (p *EtcdManager) UnRegister(name string, addr string) {
+	if p.client != nil {
+		p.client.Delete(p.ctx, "/"+name+"/"+addr)
+	}
 }
 
 func (p *EtcdManager) Close() error {
@@ -156,13 +224,16 @@ func (p *DemoListener) Delete(key []byte, val []byte) {
 	log.Println("Delete")
 }
 
-func main() {
-	manager := NewEtcdManager([]string{"192.168.127.128:2379"})
-	defer manager.Close()
-	manager.AddWatch("a", &DemoListener{})
-	ctx, cancelFunc := context.WithTimeout(context.Background(), 20*time.Second)
-	select {
-	case <-ctx.Done():
-		cancelFunc()
-	}
-}
+// func main() {
+// 	manager := NewEtcdManager([]string{"192.168.127.128:2379"})
+// 	defer manager.Close()
+//
+//
+//
+//
+// 	ctx, cancelFunc := context.WithTimeout(context.Background(), 20*time.Second)
+// 	select {
+// 	case <-ctx.Done():
+// 		cancelFunc()
+// 	}
+// }

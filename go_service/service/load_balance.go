@@ -54,7 +54,6 @@ func (p *LoadBalanceManager) GetLoadBalancer(s *dao.ServiceDetail) (load_balance
 	for idx, ip := range ipList {
 		ipConf[ip] = weightList[idx]
 	}
-	// TODO: fix http uri
 	lbConf, err := load_balance.NewLoadBalanceCheckConf(fmt.Sprintf("%s://%s", protocol, "%s"), ipConf)
 	if err != nil {
 		log.Error(err.Error())
