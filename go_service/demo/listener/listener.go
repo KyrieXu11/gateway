@@ -37,7 +37,6 @@ func (p *EtcdManager) AddWatch(key string, listener Listener) {
 }
 
 func (p *EtcdManager) GetServiceListByPrefix(prefix string) (*map[string]string, error) {
-	prefix = "/" + prefix
 	resp, err := p.client.Get(p.ctx, prefix, clientv3.WithPrefix())
 	res := map[string]string{}
 	if err != nil {
@@ -98,11 +97,11 @@ func (p *EtcdManager) WatchForPrefix(name string) {
 			select {
 			case a := <-ch:
 				log.Println("delete", a)
-			default:
-				log.Println("111")
-				time.Sleep(1 * time.Second)
+				// default:
+				// 	log.Println("111")
+				// 	time.Sleep(1 * time.Second)
 			}
-			log.Println("lalala")
+			// log.Println("lalala")
 		}
 	}(ch)
 }
@@ -110,6 +109,13 @@ func (p *EtcdManager) WatchForPrefix(name string) {
 func (p *EtcdManager) watchForPrefix(key string, ch chan int) {
 	watchChan := p.client.Watch(p.ctx, key, clientv3.WithPrefix())
 	for {
+		list, err := p.GetServiceListByPrefix(key)
+		if err != nil {
+			log.Println(err.Error())
+		}
+		for k, v := range *list {
+			log.Printf("k : %s v : %s\n", k, v)
+		}
 		select {
 		case resp := <-watchChan:
 			for _, ev := range resp.Events {
@@ -122,10 +128,7 @@ func (p *EtcdManager) watchForPrefix(key string, ch chan int) {
 					}
 					break
 				case mvccpb.DELETE:
-
-					break
-				default:
-					log.Println("no type")
+					// log.Println("delete")
 					break
 				}
 			}

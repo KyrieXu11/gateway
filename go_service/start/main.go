@@ -10,7 +10,7 @@ import (
 )
 
 // 需要加载的模块
-var modules = []string{utils.ModuleApplication, utils.ModuleMySQL, utils.ModuleRedis}
+var modules = []string{utils.ModuleApplication, utils.ModuleMySQL}
 
 // 初始化模块
 func InitModules(configPath string) error {
@@ -39,7 +39,7 @@ func initModules(configPath string) error {
 		return err
 	}
 	// 加载 redis 连接
-	// 同时也做了session的配置
+	// 同时也做了redis session的配置
 	if err := initModule(module.InitRedis, utils.ModuleRedis); err != nil {
 		return err
 	}

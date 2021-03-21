@@ -133,6 +133,7 @@ func clearSession(session *sessions.Session) {
 		// 给爷整吐了,草
 		s.Clear()
 		s.Options(sessions.Options{
+			Path:   "/",
 			MaxAge: -1,
 		})
 		err := s.Save()

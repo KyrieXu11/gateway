@@ -7,7 +7,6 @@ import (
 	"gateway/service"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 // 定义空的结构体让不同的控制器的函数的名称可以一样
@@ -21,7 +20,7 @@ func RegisterAdminController(g *gin.RouterGroup) {
 	p := &AdminRegistrar{}
 	g.GET("/hello", p.Hello)
 	g.POST("/login", p.Login)
-	g.GET("/session/hello", p.SessionHello)
+	g.GET("/info", p.SessionHello)
 	g.GET("/logout", p.Logout)
 	g.POST("/register", p.Register)
 	g.PUT("/changepass", p.ChangePassword)
@@ -90,7 +89,6 @@ func (p *AdminRegistrar) SessionHello(c *gin.Context) {
 		log.Error(err.Error())
 		return
 	}
-	log.Info("", zap.Any("user info", a))
 	utils.ResponseSuccessObj(c, "", a)
 	return
 }

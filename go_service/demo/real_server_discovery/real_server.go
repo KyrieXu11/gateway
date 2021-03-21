@@ -25,14 +25,14 @@ func main() {
 	s2.Run(manager)
 	quit := make(chan os.Signal)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
-	q := <-quit
-	manager.UnRegister("service", s1.Addr)
-	manager.UnRegister("service", s2.Addr)
-	if s, ok := q.(syscall.Signal); ok {
-		os.Exit(int(s))
-	} else {
-		os.Exit(0)
-	}
+	<-quit
+	// manager.UnRegister("service", s1.Addr)
+	// manager.UnRegister("service", s2.Addr)
+	// if s, ok := q.(syscall.Signal); ok {
+	// 	os.Exit(int(s))
+	// } else {
+	// 	os.Exit(0)
+	// }
 }
 
 func (p *RealServer) HandlerFunc(w http.ResponseWriter, r *http.Request) {
