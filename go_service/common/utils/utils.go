@@ -45,7 +45,11 @@ func SetSessionVal(c *gin.Context, key string, inter interface{}) error {
 // 如果使用上面的函数的话获取的只能是string
 func GetSessionVal(c *gin.Context, key string, res interface{}) error {
 	session := sessions.Default(c)
-	inter := session.Get(key).(string)
+	admin := session.Get(key)
+	if admin == nil {
+		return fmt.Errorf("用户未登陆")
+	}
+	inter := admin.(string)
 	if err := jsoniter.Unmarshal([]byte(inter), res); err != nil {
 		return err
 	}

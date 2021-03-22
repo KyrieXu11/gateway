@@ -20,7 +20,7 @@ func RegisterAdminController(g *gin.RouterGroup) {
 	p := &AdminRegistrar{}
 	g.GET("/hello", p.Hello)
 	g.POST("/login", p.Login)
-	g.GET("/info", p.SessionHello)
+	g.GET("/info", p.UserInfo)
 	g.GET("/logout", p.Logout)
 	g.POST("/register", p.Register)
 	g.PUT("/changepass", p.ChangePassword)
@@ -83,10 +83,11 @@ func (p *AdminRegistrar) Logout(c *gin.Context) {
 	}
 }
 
-func (p *AdminRegistrar) SessionHello(c *gin.Context) {
+func (p *AdminRegistrar) UserInfo(c *gin.Context) {
 	a := &dto.AdminDto{}
 	if err := utils.GetSessionVal(c, utils.SessionKeyUser, a); err != nil {
 		log.Error(err.Error())
+		utils.ResponseErrorM(c,"未登陆或者内部服务器出错，稍后再试试吧")
 		return
 	}
 	utils.ResponseSuccessObj(c, "", a)
@@ -102,6 +103,7 @@ func (p *AdminRegistrar) ChangePassword(c *gin.Context) {
 	a := &dto.AdminDto{}
 	if err := utils.GetSessionVal(c, utils.SessionKeyUser, a); err != nil {
 		log.Error(err.Error())
+		utils.ResponseErrorM(c,"未登陆或者内部服务器出错，稍后再试试吧")
 		return
 	}
 	passwordDto.Username = a.Username
