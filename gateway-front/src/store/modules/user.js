@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '@/api/user'
+import { login, logout, getInfo, changePassword } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
@@ -63,7 +63,7 @@ const actions = {
         commit('SET_NAME', username)
         commit('SET_AVATAR', avatar)
         // commit('SET_INTRODUCTION', introduction)
-        const res = { 'roles': roles,'username':username,'avatar':avatar }
+        const res = { 'roles': roles, 'username': username, 'avatar': avatar }
         resolve(res)
       }).catch(error => {
         reject(error)
