@@ -38,6 +38,7 @@ module.exports = {
       warnings: false,
       errors: true
     },
+    // before: require('./mock/mock-server.js'),
     proxy: {
       [process.env.VUE_APP_BASE_API]: {
         target: base,
