@@ -17,7 +17,9 @@ func InitRouter(middleware ...gin.HandlerFunc) *gin.Engine {
 
 // 注册控制器
 func registerRouter(router *gin.Engine) {
-	router.Use(middleware.Cors(),
+	router.Use(
+		middleware.ValidatorMiddleware(),
+		middleware.Cors(),
 		middleware.GetCookieSessionFunc(),
 		middleware.CheckLogin())
 	// ping_controller.go

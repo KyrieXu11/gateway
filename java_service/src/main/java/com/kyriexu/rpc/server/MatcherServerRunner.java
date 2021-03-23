@@ -1,6 +1,7 @@
 package com.kyriexu.rpc.server;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -12,29 +13,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class MatcherServerRunner implements ApplicationRunner {
 
+    @Value("${grpc.start}")
+    private Boolean start;
+
     /**
      * gRpc 服务器
      */
-    private MatcherServer server;
-
-    /**
-     * MatcherServer getter
-     *
-     * @return matcherServer
-     */
-    public MatcherServer getServer() {
-        return server;
-    }
-
-    /**
-     * MatcherServer setter
-     *
-     * @param server matchServer
-     */
     @Autowired
-    public void setServer(MatcherServer server) {
-        this.server = server;
-    }
+    private MatcherServer server;
 
     /**
      * this method will be called automatically after spring container is initialized
@@ -46,8 +32,10 @@ public class MatcherServerRunner implements ApplicationRunner {
      */
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        // 主线程执行就好了
-        server.start();
-        server.blockUntilShutdown();
+        if (start){
+            // 主线程执行就好了
+            server.start();
+            server.blockUntilShutdown();
+        }
     }
 }

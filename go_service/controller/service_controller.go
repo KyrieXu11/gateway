@@ -20,6 +20,7 @@ func RegisterServiceController(g *gin.RouterGroup) {
 	c := &ServiceRegistrar{}
 	g.GET("/list", c.GetServiceList)
 	g.GET("/detail", c.GetServiceDetail)
+	g.POST("/add_http_service", c.AddHttpService)
 }
 
 // 获取所有的服务列表，通过分页的方式
@@ -48,6 +49,7 @@ func (p *ServiceRegistrar) GetServiceList(c *gin.Context) {
 	utils.ResponseSuccessObj(c, "查询成功", out)
 }
 
+// 获取服务详情
 func (p *ServiceRegistrar) GetServiceDetail(c *gin.Context) {
 	serviceType := c.Query("service_type")
 	serviceId, err := strconv.ParseInt(c.Query("service_id"), utils.NumBase10, utils.IntegerBitSize64)
@@ -65,4 +67,15 @@ func (p *ServiceRegistrar) GetServiceDetail(c *gin.Context) {
 		return
 	}
 	utils.ResponseSuccessObj(c, "成功", detail)
+}
+
+// 添加http服务
+func (p *ServiceRegistrar) AddHttpService(c *gin.Context) {
+	s := &dto.ServiceAddHTTPInput{}
+	if err := s.ValidateAndBindParam(c); err != nil {
+		log.Error(err.Error())
+		utils.ResponseErrorM(c, err.Error())
+		return
+	}
+
 }

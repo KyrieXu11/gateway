@@ -99,6 +99,7 @@ func (p *AdminRegistrar) ChangePassword(c *gin.Context) {
 	if err := passwordDto.ValidateAndBindParam(c); err != nil {
 		log.Error(err.Error())
 		utils.ResponseErrorM(c, "修改出错了")
+		return
 	}
 	a := &dto.AdminDto{}
 	if err := utils.GetSessionVal(c, utils.SessionKeyUser, a); err != nil {

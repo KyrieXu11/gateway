@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kyriexu.dao.AdminDao">
+
+    <resultMap id="admin" type="com.kyriexu.model.Admin">
+        <result column="is_delete" javaType="java.lang.Boolean"
+                property="deleted"/>
+    </resultMap>
+    <insert id="add" parameterType="com.kyriexu.model.Admin">
+        insert into gateway_admin (username, salt, password, create_at,
+                                   update_at, is_delete)
+        values (#{admin.username}, #{admin.salt}, #{admin.password},
+                #{admin.createAt},
+                #{admin.updateAt},
+                #{admin.deleted})
+    </insert>
+
+
+    <update id="update">
+        update gateway_admin
+        set password = #{newPass}
+        where username = #{username}
+    </update>
+
+    <select id="getAllAdmin" resultMap="admin">
+        select *
+        from gateway_admin
+    </select>
+    <select id="getAdminByusrname"
+            resultMap="admin">
+        select *
+        from gateway_admin
+        where username = #{username}
+    </select>
+</mapper>

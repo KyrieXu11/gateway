@@ -1,8 +1,11 @@
 package com.kyriexu.service.impl;
 
 import com.kyriexu.component.config.WhiteListConfig;
+import com.kyriexu.dto.AdminDto;
 import com.kyriexu.rpc.matchrpc.GoRequest;
 import com.kyriexu.service.adapter.AuthServiceAdapter;
+import com.kyriexu.utils.Constant;
+import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +14,6 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 
@@ -25,16 +27,14 @@ public class AuthServiceImpl extends AuthServiceAdapter {
     /**
      * logger
      */
-    public static final Logger LOGGER = LoggerFactory.getLogger(AuthServiceImpl.class);
+    public static final Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
+
+    private final PathMatcher matcher = new AntPathMatcher();
     /**
      * white list config bean.
      */
-    private WhiteListConfig whiteListConfig;
-
     @Autowired
-    public void setWhiteListConfig(WhiteListConfig whiteListConfig) {
-        this.whiteListConfig = whiteListConfig;
-    }
+    private WhiteListConfig whiteListConfig;
 
     /**
      * see {@link com.kyriexu.service.AuthService#checkAuth(GoRequest)}
@@ -46,31 +46,15 @@ public class AuthServiceImpl extends AuthServiceAdapter {
     public boolean checkAuth(GoRequest req) {
         // 由于只是统计方法执行时间，所以不在乎是否是线程安全的
         long l = System.currentTimeMillis();
-        LOGGER.info("start time -> :{}", l);
-
-        boolean res = false;
-        PathMatcher matcher = new AntPathMatcher();
-
-        Map<String, List<String>> whiteList = whiteListConfig.getUrls();
-
-        String method = req.getMethod().toLowerCase();
+        logger.info("start time -> :{}", l);
+        String method = req.getMethod();
         // TODO: IP 地址的校验
         String addr = req.getRemoteAddr();
         String path = req.getRealPath();
-
-        List<String> urls = whiteList.get(method);
-        for (String url : urls) {
-            if (matcher.match(url, path)) {
-                res = true;
-                break;
-            }
-            // 匹配成功则不会输出，只输出匹配失败的 url
-            LOGGER.info("pattern -> {} realpath -> {}", url, path);
-        }
-
+        boolean res = check(path, method);
         long end = System.currentTimeMillis();
-        LOGGER.info("end time -> :{}", end);
-        LOGGER.info("use time -> {}", end - l);
+        logger.info("end time -> :{}", end);
+        logger.info("use time -> {}", end - l);
         return res;
     }
 
@@ -82,12 +66,29 @@ public class AuthServiceImpl extends AuthServiceAdapter {
      */
     @Override
     public boolean checkAuth(HttpServletRequest request) {
-        Enumeration<String> names = request.getHeaderNames();
-        while (names.hasMoreElements()) {
-            String name = names.nextElement();
-            String header = request.getHeader(name);
-            LOGGER.info("{} is {}", name, header);
+        String method = request.getMethod();
+        String uri = request.getRequestURI();
+        Object user = request.getSession().getAttribute(Constant.USER);
+        if (null == user) {
+            return check(uri, method);
         }
-        return super.checkAuth(request);
+        AdminDto admin = (AdminDto) user;
+        return Strings.isNotBlank(admin.getUsername());
+    }
+
+    private boolean check(String path, String method) {
+        boolean res = false;
+        method = method.toLowerCase();
+        Map<String, List<String>> whiteList = whiteListConfig.getUrls();
+        List<String> urls = whiteList.get(method);
+        for (String url : urls) {
+            if (matcher.match(url, path)) {
+                logger.info("SUCCESS : pattern -> {} realpath -> {}", url, path);
+                res = true;
+                break;
+            }
+            logger.info("FAILED : pattern -> {} realpath -> {} ", url, path);
+        }
+        return res;
     }
 }

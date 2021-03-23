@@ -11,9 +11,11 @@ type ServiceInfoService interface{}
 
 type ServiceInfoServiceImpl struct{}
 
-var serviceDao dao.ServiceInfoDao
+var (
+	serviceDao dao.ServiceInfoDao
+	detailService ServiceDetailServiceImpl
+)
 
-var detailService ServiceDetailServiceImpl
 
 func (p *ServiceInfoServiceImpl) GetServiceInfoList(input *dto.ServiceInput) ([]*dao.ServiceInfo, error) {
 	page := input.PageNo
@@ -90,4 +92,8 @@ func getServiceAddr(detail *dao.ServiceDetail) string {
 		serviceAddr = fmt.Sprintf("%s:%d", clusterIP, detail.GRPCRule.Port)
 	}
 	return serviceAddr
+}
+
+func (p *ServiceInfoServiceImpl) name()  {
+	
 }

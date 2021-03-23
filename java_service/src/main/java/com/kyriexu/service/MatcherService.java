@@ -19,7 +19,7 @@ public class MatcherService extends AntPathMatcherGrpc.AntPathMatcherImplBase {
     /**
      * logger
      */
-    public static final Logger LOGGER = LoggerFactory.getLogger(MatcherService.class);
+    public static final Logger logger = LoggerFactory.getLogger(MatcherService.class);
 
     /**
      * white list map.
@@ -40,7 +40,7 @@ public class MatcherService extends AntPathMatcherGrpc.AntPathMatcherImplBase {
      */
     public MatcherService(AuthService authService) {
         this.authService = authService;
-        LOGGER.info("initialized matcher service");
+        logger.info("initialized matcher service");
     }
 
     /**
@@ -51,7 +51,7 @@ public class MatcherService extends AntPathMatcherGrpc.AntPathMatcherImplBase {
     @Deprecated
     public MatcherService(Map<String, List<String>> whiteList) {
         this.whiteList = whiteList;
-        LOGGER.info("initialized matcher service");
+        logger.info("initialized matcher service");
     }
 
     /**
@@ -110,14 +110,14 @@ public class MatcherService extends AntPathMatcherGrpc.AntPathMatcherImplBase {
 
             @Override
             public void onError(Throwable t) {
-                LOGGER.error("err cause {}", t.toString());
+                logger.error("err cause {}", t.toString());
             }
 
             @Override
             public void onCompleted() {
                 responseObserver.onNext(Result.newBuilder().setRes(res).build());
                 responseObserver.onCompleted();
-                LOGGER.info("match method completed");
+                logger.info("match method completed");
             }
         };
     }
