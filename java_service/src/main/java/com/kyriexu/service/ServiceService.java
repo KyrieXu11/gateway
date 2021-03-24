@@ -1,5 +1,9 @@
 package com.kyriexu.service;
 
+import com.kyriexu.dto.ServiceInput;
+import com.kyriexu.dto.ServiceSearch;
+import com.kyriexu.model.ServiceDetail;
+import com.kyriexu.model.ServiceInfo;
 import com.kyriexu.model.ServicePageBean;
 
 /**
@@ -7,5 +11,11 @@ import com.kyriexu.model.ServicePageBean;
  * @since 2021/3/23 18:15
  **/
 public interface ServiceService {
-    ServicePageBean getPageBean(int page, int size, String info);
+    ServicePageBean getPageBean(ServiceInput serviceInput);
+
+    ServiceDetail getServiceDetail(ServiceSearch search);
+
+    int getTotalPage(ServiceInput input);
+
+    int saveServiceInfo(ServiceInfo serviceInfo);
 }

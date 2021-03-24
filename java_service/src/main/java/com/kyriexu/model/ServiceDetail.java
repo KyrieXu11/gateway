@@ -19,4 +19,5 @@ public class ServiceDetail {
     private TcpRule tcpRule;
     private GrpcRule grpcRule;
     private LoadBalance loadBalance;
+    private AccessControl accessControl;
 }

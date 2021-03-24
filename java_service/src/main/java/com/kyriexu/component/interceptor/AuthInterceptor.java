@@ -32,6 +32,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         boolean res = authServiceImpl.checkAuth(request);
         if (!res) {
+            response.setHeader("content-type","application/json");
             response.setCharacterEncoding("UTF-8");
             PrintWriter writer = response.getWriter();
             String s = objectMapper.writeValueAsString(RespBean.error("没有访问权限或者未登陆"));

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kyriexu.dao.ServiceDao">
+    <resultMap id="serviceInfo"
+               type="com.kyriexu.model.ServiceInfo">
+        <result column="is_delete" javaType="java.lang.Boolean"
+                property="deleted"/>
+    </resultMap>
+    <insert id="saveServiceInfo">
+        insert into gateway_service_info(load_type, service_name, service_desc,
+                                         create_at, update_at, is_delete)
+        VALUES (#{info.loadType}, #{info.serviceName}, #{info.serviceDesc},
+                #{info.createAt}, #{info.updateAt}, #{info.deleted})
+    </insert>
+
+    <select id="getServiceInfoList"
+            resultMap="serviceInfo">
+        select *
+        from gateway_service_info
+        where is_delete != 1
+        limit #{page},#{size};
+    </select>
+    <select id="get" resultMap="serviceInfo">
+        select *
+        from gateway_service_info
+        where is_delete != 1
+          and id = #{id};
+    </select>
+
+    <select id="getTotal" resultType="java.lang.Integer">
+        select count(*)
+        from gateway_service_info
+        where is_delete != 1;
+    </select>
+    <select id="getByServiceName"
+            resultMap="serviceInfo">
+        select *
+        from gateway_service_info
+        where is_delete != 1
+          and service_name = #{serviceName};
+    </select>
+</mapper>

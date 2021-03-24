@@ -34,6 +34,10 @@ public class RespBean {
         return new RespBean(Constant.SUCCESS, "", data);
     }
 
+    public static RespBean ok(String msg,Object data) {
+        return new RespBean(Constant.SUCCESS, msg, data);
+    }
+
     public static RespBean error(String msg) {
         return new RespBean(Constant.COMMON_FAIL, msg, null);
     }
@@ -65,6 +69,4 @@ public class RespBean {
     public void setData(Object data) {
         this.data = data;
     }
-
-
 }

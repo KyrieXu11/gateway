@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021/1/31 21:36
  **/
 @RestController
-public class MainController {
+public class PingController {
 
     @GetMapping("/hello")
     public String index() {

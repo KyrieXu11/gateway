@@ -33,5 +33,4 @@ public class WhiteListConfig {
     public void setUrls(Map<String, List<String>> map) {
         this.urls = map;
     }
-
 }

@@ -8,6 +8,7 @@ import com.kyriexu.utils.RespBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -20,6 +21,7 @@ import java.util.Objects;
  **/
 @RestController
 @RequestMapping("/admin")
+@Validated
 public class AdminController {
 
     public static final Logger logger = LoggerFactory.getLogger(AdminController.class);
@@ -38,13 +40,13 @@ public class AdminController {
     }
 
     @PostMapping("/login")
-    public RespBean login(@RequestBody AdminDto adminDto, HttpSession session) {
+    public RespBean login(@RequestBody @Valid AdminDto adminDto, HttpSession session) {
         boolean b = adminService.checkPassword(adminDto);
         if (b) {
             adminDto.setPassword("");
             session.setAttribute(Constant.USER, adminDto);
-            logger.info("{}", adminDto);
-            return RespBean.ok("登陆成功");
+            logger.info("[LOGIN] :username : {}", adminDto.getUsername());
+            return RespBean.ok("登陆成功", adminDto);
         }
         return RespBean.error("登陆失败");
     }

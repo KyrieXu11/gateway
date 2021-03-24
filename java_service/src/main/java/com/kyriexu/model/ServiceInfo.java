@@ -20,5 +20,14 @@ public class ServiceInfo {
     private String serviceDesc;
     private Date createAt;
     private Date updateAt;
-    private Boolean deleted;
+    private boolean deleted;
+
+    public ServiceInfo(Integer loadType, String serviceName, String serviceDesc, Date createAt, Date updateAt, boolean deleted) {
+        this.loadType = loadType;
+        this.serviceName = serviceName;
+        this.serviceDesc = serviceDesc;
+        this.createAt = createAt;
+        this.updateAt = updateAt;
+        this.deleted = deleted;
+    }
 }

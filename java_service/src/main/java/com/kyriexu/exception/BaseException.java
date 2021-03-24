@@ -5,17 +5,17 @@ package com.kyriexu.exception;
  * @since 2020/3/29 16:52
  **/
 public class BaseException extends RuntimeException {
-    private ResultStatus resultStatus;
+    private ResultCode resultCode;
 
-    public ResultStatus getResultStatus() {
-        return resultStatus;
+    public ResultCode getResultStatus() {
+        return resultCode;
     }
 
-    public void setResultStatus(ResultStatus resultStatus) {
-        this.resultStatus = resultStatus;
+    public void setResultStatus(ResultCode resultCode) {
+        this.resultCode = resultCode;
     }
 
-    public BaseException(ResultStatus resultStatus) {
-        this.resultStatus = resultStatus;
+    public BaseException(ResultCode resultCode) {
+        this.resultCode = resultCode;
     }
 }

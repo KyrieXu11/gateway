@@ -15,7 +15,7 @@ public class AdminDto {
     public AdminDto() {
     }
 
-    public AdminDto(@NotBlank(message = "用户名不能为空") String username, String password) {
+    public AdminDto(String username, String password) {
         this.username = username;
         this.password = password;
     }

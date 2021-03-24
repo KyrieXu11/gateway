@@ -1,5 +1,7 @@
 package com.kyriexu.utils;
 
+import com.kyriexu.exception.BaseException;
+import com.kyriexu.exception.ResultCode;
 import org.apache.commons.codec.binary.Hex;
 
 import javax.servlet.http.HttpSession;
@@ -42,5 +44,21 @@ public class Utils {
     public static boolean isLogin(HttpSession session) {
         Object attribute = session.getAttribute(Constant.USER);
         return !Objects.isNull(attribute);
+    }
+
+    public static int getPage(int page, int size) {
+        if (page <= 0 || size <= 0) {
+            throw new BaseException(ResultCode.PAGE_NUM_ILLEGAL);
+        }
+        return (page - 1) * size;
+    }
+
+    public static boolean contains(String[] list, String s) {
+        for (String str : list) {
+            if (s.equals(str)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

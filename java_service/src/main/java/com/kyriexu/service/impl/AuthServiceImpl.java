@@ -83,11 +83,11 @@ public class AuthServiceImpl extends AuthServiceAdapter {
         List<String> urls = whiteList.get(method);
         for (String url : urls) {
             if (matcher.match(url, path)) {
-                logger.info("SUCCESS : pattern -> {} realpath -> {}", url, path);
+                logger.info("[SUCCESS] : pattern -> {} realpath -> {}", url, path);
                 res = true;
                 break;
             }
-            logger.info("FAILED : pattern -> {} realpath -> {} ", url, path);
+            logger.info("[FAILED] : pattern -> {} realpath -> {} ", url, path);
         }
         return res;
     }
