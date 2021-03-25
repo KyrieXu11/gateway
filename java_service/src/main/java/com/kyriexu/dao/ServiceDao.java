@@ -11,7 +11,7 @@ import java.util.List;
  **/
 public interface ServiceDao {
 
-    List<ServiceInfo> getServiceInfoList(@Param("page") int page, @Param("size") int size);
+    List<ServiceInfo> getServiceInfoList(@Param("page") int page, @Param("size") int size,@Param("query") String query);
 
     ServiceInfo get(@Param("id") Long id);
 
@@ -19,5 +19,5 @@ public interface ServiceDao {
 
     ServiceInfo getByServiceName(@Param("serviceName") String serviceName);
 
-    int saveServiceInfo(ServiceInfo info);
+    long saveServiceInfo(ServiceInfo info);
 }

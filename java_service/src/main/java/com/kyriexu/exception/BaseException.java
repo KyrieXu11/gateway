@@ -7,11 +7,11 @@ package com.kyriexu.exception;
 public class BaseException extends RuntimeException {
     private ResultCode resultCode;
 
-    public ResultCode getResultStatus() {
+    public ResultCode getResultCode() {
         return resultCode;
     }
 
-    public void setResultStatus(ResultCode resultCode) {
+    public void setResultCode(ResultCode resultCode) {
         this.resultCode = resultCode;
     }
 

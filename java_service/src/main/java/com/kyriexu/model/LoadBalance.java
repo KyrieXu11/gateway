@@ -17,17 +17,29 @@ import java.util.List;
 public class LoadBalance {
     private Long id;
     private Long serviceId;
-    private Integer checkMethod;
-    private Integer checkTimeout;
-    private Integer checkInterval;
-    private Integer roundType;
+    private int checkMethod;
+    private int checkTimeout;
+    private int checkInterval;
+    private int roundType;
     private String ipList;
     private String weightList;
     private String forbidList;
-    private Integer UpstreamConnectTimeout;
-    private Integer UpstreamHeaderTimeout;
-    private Integer UpstreamIdleTimeout;
-    private Integer UpstreamMaxIdle;
+    private int UpstreamConnectTimeout;
+    private int UpstreamHeaderTimeout;
+    private int UpstreamIdleTimeout;
+
+    public LoadBalance(Long serviceId, int roundType, String ipList, String weightList, int upstreamConnectTimeout, int upstreamHeaderTimeout, int upstreamIdleTimeout, int upstreamMaxIdle) {
+        this.serviceId = serviceId;
+        this.roundType = roundType;
+        this.ipList = ipList;
+        this.weightList = weightList;
+        UpstreamConnectTimeout = upstreamConnectTimeout;
+        UpstreamHeaderTimeout = upstreamHeaderTimeout;
+        UpstreamIdleTimeout = upstreamIdleTimeout;
+        UpstreamMaxIdle = upstreamMaxIdle;
+    }
+
+    private int UpstreamMaxIdle;
 
     public List<String> getIPListByModel() {
         return Arrays.asList(this.ipList.split(","));

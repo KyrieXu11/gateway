@@ -8,6 +8,7 @@ import com.kyriexu.dto.HttpRuleInput;
  **/
 public interface HttpRuleService {
 
-    int add(HttpRuleInput httpRuleInput);
+    boolean add(HttpRuleInput httpRuleInput);
 
+    boolean update(HttpRuleInput httpRuleInput);
 }

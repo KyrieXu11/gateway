@@ -8,7 +8,8 @@
         <result column="is_delete" javaType="java.lang.Boolean"
                 property="deleted"/>
     </resultMap>
-    <insert id="saveServiceInfo">
+    <insert id="saveServiceInfo" useGeneratedKeys="true" keyProperty="id"
+            keyColumn="id">
         insert into gateway_service_info(load_type, service_name, service_desc,
                                          create_at, update_at, is_delete)
         VALUES (#{info.loadType}, #{info.serviceName}, #{info.serviceDesc},
@@ -19,7 +20,12 @@
             resultMap="serviceInfo">
         select *
         from gateway_service_info
-        where is_delete != 1
+        <where>
+            is_delete != 1
+            <if test="query != null">
+                and service_name like concat('%',#{query},'%')
+            </if>
+        </where>
         limit #{page},#{size};
     </select>
     <select id="get" resultMap="serviceInfo">

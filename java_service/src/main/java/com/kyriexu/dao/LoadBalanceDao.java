@@ -8,5 +8,9 @@ import org.apache.ibatis.annotations.Param;
  * @since 2021/3/24 15:08
  **/
 public interface LoadBalanceDao {
+
     LoadBalance get(@Param("serviceId") Long serviceId);
+
+    int save(@Param("loadBalance") LoadBalance loadBalance);
+
 }

@@ -60,7 +60,7 @@ public class ServiceServiceImpl implements ServiceService {
     @Override
     public ServicePageBean getPageBean(ServiceInput serviceInput) {
         int page = Utils.getPage(serviceInput.getPage(), serviceInput.getSize());
-        List<ServiceInfo> infoList = serviceDao.getServiceInfoList(page, serviceInput.getSize());
+        List<ServiceInfo> infoList = serviceDao.getServiceInfoList(page, serviceInput.getSize(), serviceInput.getInfo());
         // TODO: 优化查询，改成批量查询在内存当中创建 ServiceDetail 对象
         List<ServiceListItem> items = new ArrayList<>(infoList.size());
         infoList.forEach(info -> {
@@ -110,7 +110,7 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     @Override
-    public int saveServiceInfo(ServiceInfo serviceInfo) {
+    public long saveServiceInfo(ServiceInfo serviceInfo) {
         return serviceDao.saveServiceInfo(serviceInfo);
     }
 

@@ -3,10 +3,56 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kyriexu.dao.HttpRuleDao">
+    <insert id="add" parameterType="com.kyriexu.model.HttpRule">
+        insert into gateway_service_http_rule
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serviceId != null">
+                service_id,
+            </if>
+            rule_type,
+            <if test="rule != null">
+                rule,
+            </if>
+            need_https,
+            need_strip_uri,
+            need_websocket,
+            <if test="urlRewrite != null">
+                url_rewrite,
+            </if>
+            <if test="headerTransfor != null">
+                header_transfor,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serviceId != null">
+                #{serviceId},
+            </if>
+            #{ruleType},
+            <if test="rule != null">
+                rule,
+            </if>
+            #{needHttps},
+            #{needStripUri},
+            #{needWebsocket},
+            <if test="urlRewrite != null">
+                #{urlRewrite},
+            </if>
+            <if test="headerTransfor != null">
+                #{headerTransfor},
+            </if>
+        </trim>
+    </insert>
 
     <select id="get" resultType="com.kyriexu.model.HttpRule">
         select *
         from gateway_service_http_rule
         where service_id = #{serviceId};
+    </select>
+    <select id="getByRuleTypeAndRule"
+            resultType="com.kyriexu.model.HttpRule">
+        select *
+        from gateway_service_http_rule
+        where rule_type = #{ruleType}
+          and rule = #{rule};
     </select>
 </mapper>

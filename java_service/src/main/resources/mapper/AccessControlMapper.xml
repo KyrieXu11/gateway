@@ -3,6 +3,43 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kyriexu.dao.AccessControlDao">
+    <insert id="save" parameterType="com.kyriexu.model.AccessControl">
+        insert into gateway_service_access_control
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="serviceId != null">
+                service_id,
+            </if>
+            open_auth,
+            <if test="blackList != null">
+                black_list,
+            </if>
+            <if test="whiteList != null">
+                white_list,
+            </if>
+            <if test="whiteHostName != null">
+                white_host_name,
+            </if>
+            clientip_flow_limit,
+            service_flow_limit
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serviceId != null">
+                #{serviceId},
+            </if>
+            #{openAuth},
+            <if test="blackList != null">
+                #{blackList},
+            </if>
+            <if test="whiteList != null">
+                #{whiteList},
+            </if>
+            <if test="whiteHostName != null">
+                #{whiteHostName},
+            </if>
+            #{clientipFlowLimit},
+            #{serviceFlowLimit}
+        </trim>
+    </insert>
 
 
     <select id="get" resultType="com.kyriexu.model.AccessControl">

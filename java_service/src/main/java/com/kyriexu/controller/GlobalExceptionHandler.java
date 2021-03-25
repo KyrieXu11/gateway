@@ -5,6 +5,7 @@ import com.kyriexu.exception.ResultCode;
 import com.kyriexu.utils.RespBean;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
+import java.util.Objects;
 
 /**
  * @author KyrieXu
@@ -25,7 +27,7 @@ import javax.validation.ValidationException;
 public class GlobalExceptionHandler {
     @ExceptionHandler(BaseException.class)
     public RespBean handlerBaseException(BaseException e) {
-        ResultCode resultCode = e.getResultStatus();
+        ResultCode resultCode = e.getResultCode();
         return RespBean.error(resultCode.getCode(), resultCode.getMsg());
     }
 
@@ -59,7 +61,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public RespBean methodArgumentNotValid(MethodArgumentNotValidException e) {
-        return RespBean.error(e.getBindingResult().getFieldError().getDefaultMessage());
+        FieldError fieldError = e.getBindingResult().getFieldError();
+        if (!Objects.isNull(fieldError)) {
+            return RespBean.error(fieldError.getDefaultMessage());
+        } else {
+            return RespBean.error("Unknown Valid Param");
+        }
     }
 
     @ExceptionHandler(DuplicateKeyException.class)

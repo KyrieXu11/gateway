@@ -17,5 +17,11 @@ public interface ServiceService {
 
     int getTotalPage(ServiceInput input);
 
-    int saveServiceInfo(ServiceInfo serviceInfo);
+    /**
+     * 添加 SserviceInfo
+     *
+     * @param serviceInfo serviceInfo
+     * @return 新增的实体的主键
+     */
+    long saveServiceInfo(ServiceInfo serviceInfo);
 }

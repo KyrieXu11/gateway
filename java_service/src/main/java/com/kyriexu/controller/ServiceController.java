@@ -28,7 +28,6 @@ import javax.validation.constraints.NotNull;
 @Validated
 public class ServiceController {
 
-
     @Autowired
     private ServiceService serviceService;
 

@@ -3,6 +3,13 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kyriexu.dao.LoadBalanceDao">
+    <insert id="save" parameterType="com.kyriexu.model.LoadBalance">
+        insert into gateway_service_load_balance
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            </trim>
+
+    </insert>
 
     <select id="get" resultType="com.kyriexu.model.LoadBalance">
         select *

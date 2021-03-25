@@ -14,10 +14,29 @@ import lombok.NoArgsConstructor;
 public class AccessControl {
     private Long id;
     private Long serviceId;
-    private Integer openAuth;
+    private int openAuth;
     private String blackList;
     private String whiteList;
     private String whiteHostName;
-    private Integer clientIpFlowLimit;
-    private Integer serviceFlowLimit;
+    private int clientIpFlowLimit;
+    private int serviceFlowLimit;
+
+    public AccessControl(Long serviceId, int openAuth, String blackList, String whiteList, int clientIpFlowLimit, int serviceFlowLimit) {
+        this.serviceId = serviceId;
+        this.openAuth = openAuth;
+        this.blackList = blackList;
+        this.whiteList = whiteList;
+        this.clientIpFlowLimit = clientIpFlowLimit;
+        this.serviceFlowLimit = serviceFlowLimit;
+    }
+
+    public AccessControl(Long serviceId, int openAuth, String blackList, String whiteList, String whiteHostName, int clientIpFlowLimit, int serviceFlowLimit) {
+        this.serviceId = serviceId;
+        this.openAuth = openAuth;
+        this.blackList = blackList;
+        this.whiteList = whiteList;
+        this.whiteHostName = whiteHostName;
+        this.clientIpFlowLimit = clientIpFlowLimit;
+        this.serviceFlowLimit = serviceFlowLimit;
+    }
 }

@@ -11,10 +11,8 @@
     <insert id="add" parameterType="com.kyriexu.model.Admin">
         insert into gateway_admin (username, salt, password, create_at,
                                    update_at, is_delete)
-        values (#{admin.username}, #{admin.salt}, #{admin.password},
-                #{admin.createAt},
-                #{admin.updateAt},
-                #{admin.deleted})
+        values (#{username}, #{salt}, #{password},
+                #{createAt}, #{updateAt}, #{deleted})
     </insert>
 
 
