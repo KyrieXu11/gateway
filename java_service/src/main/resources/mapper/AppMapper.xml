@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kyriexu.dao.AppDao">
+    <resultMap id="app" type="com.kyriexu.model.App">
+        <result property="deleted" column="is_delete"/>
+    </resultMap>
+
+    <select id="getAppList" resultMap="app">
+        select *
+        from gateway_app
+        <where>
+            is_delete != 1
+            <if test="query != null">
+                and name like concat('%',#{query},'%')
+            </if>
+        </where>
+        limit #{page},#{size}
+        order by id desc;
+    </select>
+</mapper>

@@ -6,6 +6,8 @@ import com.kyriexu.model.ServiceDetail;
 import com.kyriexu.model.ServiceInfo;
 import com.kyriexu.model.ServicePageBean;
 
+import java.util.List;
+
 /**
  * @author KyrieXu
  * @since 2021/3/23 18:15
@@ -24,4 +26,6 @@ public interface ServiceService {
      * @return 新增的实体的主键
      */
     long saveServiceInfo(ServiceInfo serviceInfo);
+
+    List<ServiceInfo> getServiceInfoList(ServiceInput serviceInput);
 }

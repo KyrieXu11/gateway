@@ -15,4 +15,5 @@ public interface HttpRuleDao {
 
     int add(@Param("httpRule") HttpRule httpRule);
 
+    int updateHttpRule(@Param("httpRule") HttpRule httpRule);
 }

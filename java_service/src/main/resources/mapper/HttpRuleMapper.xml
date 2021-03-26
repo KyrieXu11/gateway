@@ -42,6 +42,29 @@
             </if>
         </trim>
     </insert>
+    <update id="updateHttpRule" parameterType="com.kyriexu.model.HttpRule">
+        update gateway_service_http_rule
+        <set>
+            <trim suffixOverrides=",">
+                rule_type #{ruleType},
+                <if test="rule != null">
+                    rule = #{rule},
+                </if>
+                need_https = #{needHttps},
+                need_strip_uri = #{needStripUri},
+                need_websocket = #{needWebsocket},
+                <if test="urlRewrite != null">
+                    url_rewrite = #{urlRewrite},
+                </if>
+                <if test="headerTransfor != null">
+                    header_transfor = #{headerTransfor},
+                </if>
+            </trim>
+        </set>
+        <where>
+            service_id = #{serviceId}
+        </where>
+    </update>
 
     <select id="get" resultType="com.kyriexu.model.HttpRule">
         select *

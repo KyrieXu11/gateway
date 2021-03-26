@@ -9,7 +9,8 @@ import com.kyriexu.utils.Constant;
 public enum ResultCode {
     JSON_PROCESS_EXCEPTION(Constant.COMMON_FAIL, "JSON转化异常"),
     PAGE_NUM_ILLEGAL(Constant.COMMON_FAIL, "页数或者页面大小参数非法"),
-    ID_ILLEGAL(Constant.COMMON_FAIL, "检查服务ID是否正确"),
+    UPDATE_HTTP_RULE_FAIL(Constant.COMMON_FAIL, "更新HTTP RULE 失败"),
+    SERVICE_ID_ILLEGAL(Constant.COMMON_FAIL, "检查服务ID是否正确"),
     SIZE_NUM_LIMIT(Constant.COMMON_FAIL, "一页最多只能50条数据哦"),
     IP_WEIGHT_DIFFERENT(Constant.COMMON_FAIL, "ip 和 权重的数量不匹配"),
     OLD_PASS_WRONG_EXCEPTION(Constant.COMMON_FAIL, "原来的密码错了，检查一下吧"),

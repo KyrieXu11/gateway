@@ -13,4 +13,5 @@ public interface AccessControlDao {
 
     int save(@Param("accessControl") AccessControl accessControl);
 
+    int updateAccessControl(@Param("accessControl") AccessControl accessControl);
 }

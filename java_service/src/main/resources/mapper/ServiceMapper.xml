@@ -10,11 +10,77 @@
     </resultMap>
     <insert id="saveServiceInfo" useGeneratedKeys="true" keyProperty="id"
             keyColumn="id">
-        insert into gateway_service_info(load_type, service_name, service_desc,
-                                         create_at, update_at, is_delete)
-        VALUES (#{info.loadType}, #{info.serviceName}, #{info.serviceDesc},
-                #{info.createAt}, #{info.updateAt}, #{info.deleted})
+        insert into gateway_service_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="loadType != null">
+                load_type,
+            </if>
+            <if test="serviceName != null">
+                service_name,
+            </if>
+            <if test="serviceDesc != null">
+                service_desc,
+            </if>
+            <if test="createAt != null">
+                create_at,
+            </if>
+            <if test="updateAt != null">
+                update_at,
+            </if>
+            <if test="deleted != null">
+                is_delete,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="loadType != null">
+                #{loadType},
+            </if>
+            <if test="serviceName != null">
+                #{serviceName},
+            </if>
+            <if test="serviceDesc != null">
+                #{serviceDesc},
+            </if>
+            <if test="createAt != null">
+                #{createAt},
+            </if>
+            <if test="updateAt != null">
+                #{updateAt},
+            </if>
+            <if test="deleted != null">
+                #{deleted},
+            </if>
+        </trim>
     </insert>
+    <update id="updateServiceInfo"
+            parameterType="com.kyriexu.model.ServiceInfo">
+        update gateway_service_info
+        <set>
+            <trim suffixOverrides=",">
+                <if test="loadType != null">
+                    load_type = #{loadType},
+                </if>
+                <if test="serviceName != null">
+                    service_name = #{serviceName},
+                </if>
+                <if test="serviceDesc != null">
+                    service_desc = #{serviceDesc},
+                </if>
+                <if test="createAt != null">
+                    create_at = #{createAt},
+                </if>
+                <if test="updateAt != null">
+                    update_at = #{updateAt},
+                </if>
+                <if test="deleted != null">
+                    is_deleted =#{deleted},
+                </if>
+            </trim>
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
 
     <select id="getServiceInfoList"
             resultMap="serviceInfo">
@@ -26,7 +92,8 @@
                 and service_name like concat('%',#{query},'%')
             </if>
         </where>
-        limit #{page},#{size};
+        limit #{page},#{size}
+        order by id desc;
     </select>
     <select id="get" resultMap="serviceInfo">
         select *

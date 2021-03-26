@@ -1,5 +1,6 @@
 package com.kyriexu.dto;
 
+import com.kyriexu.utils.Constant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 /**
  * @author KyrieXu
@@ -27,6 +29,7 @@ public class HttpRuleInput {
     private String serviceName;
 
     @NotNull(message = "服务描述不能为空")
+    @Size(min = Constant.SERVICE_DESC_MIN, max = Constant.SERVICE_DESC_MAX)
     private String ServiceDesc;
 
     @Min(value = 0, message = "ruleType 最小不能小于0")

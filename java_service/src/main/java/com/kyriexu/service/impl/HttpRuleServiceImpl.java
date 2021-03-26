@@ -84,13 +84,34 @@ public class HttpRuleServiceImpl implements HttpRuleService {
         return true;
     }
 
+    @Transactional(rollbackFor = RuntimeException.class)
     @Override
     public boolean update(HttpRuleInput httpRuleInput) {
         if (!checkServiceId(httpRuleInput)) {
-            throw new BaseException(ResultCode.ID_ILLEGAL);
+            throw new BaseException(ResultCode.SERVICE_ID_ILLEGAL);
         }
-
-        return false;
+        boolean b = this.updateServiceInfo(httpRuleInput);
+        if (!b) {
+            logger.error("[FAIL] update ServiceInfo");
+            throw new BaseException(ResultCode.UPDATE_HTTP_RULE_FAIL);
+        }
+        b = this.updateHttpRule(httpRuleInput);
+        if (!b) {
+            logger.error("[FAIL] update HttpRule");
+            throw new BaseException(ResultCode.UPDATE_HTTP_RULE_FAIL);
+        }
+        b = this.updateAccessControl(httpRuleInput);
+        if (!b) {
+            logger.error("[FAIL] update AccessControl");
+            throw new BaseException(ResultCode.UPDATE_HTTP_RULE_FAIL);
+        }
+        b = this.updateLoadBalance(httpRuleInput);
+        if (!b) {
+            logger.error("[FAIL] update LoadBalance");
+            throw new BaseException(ResultCode.UPDATE_HTTP_RULE_FAIL);
+        }
+        logger.info("[SUCCESS] update HttpRuleInput Successfully");
+        return true;
     }
 
     private boolean checkServiceId(HttpRuleInput httpRuleInput) {
@@ -147,5 +168,50 @@ public class HttpRuleServiceImpl implements HttpRuleService {
                 httpRuleInput.getUpstreamMaxIdle()
         );
         return loadBalanceDao.save(loadBalance);
+    }
+
+    private boolean updateServiceInfo(HttpRuleInput httpRuleInput) {
+        ServiceInfo info = new ServiceInfo(
+                httpRuleInput.getId(),
+                Constant.HTTPLoadType,
+                httpRuleInput.getServiceName(),
+                httpRuleInput.getServiceDesc(),
+                null,
+                new Date(),
+                false
+        );
+        int i = serviceDao.updateServiceInfo(info);
+        return i > 0;
+    }
+
+    private boolean updateHttpRule(HttpRuleInput httpRuleInput) {
+        HttpRule rule = new HttpRule(
+                httpRuleInput.getId(),
+                httpRuleInput.getRuleType(),
+                httpRuleInput.getRule(),
+                httpRuleInput.getNeedHttps(),
+                httpRuleInput.getNeedStripUri(),
+                httpRuleInput.getNeedWebSocket(),
+                httpRuleInput.getUrlRewrite(),
+                httpRuleInput.getHeaderTransfor());
+        int i = httpRuleDao.updateHttpRule(rule);
+        return i > 0;
+    }
+
+    private boolean updateAccessControl(HttpRuleInput httpRuleInput) {
+        AccessControl accessControl = new AccessControl(
+                httpRuleInput.getId(),
+                httpRuleInput.getOpenAuth(),
+                httpRuleInput.getBlackList(),
+                httpRuleInput.getWhiteList(),
+                httpRuleInput.getClientipFlowLimit(),
+                httpRuleInput.getServiceFlowLimit()
+        );
+        int i = accessControlDao.updateAccessControl(accessControl);
+        return i > 0;
+    }
+
+    private boolean updateLoadBalance(HttpRuleInput httpRuleInput) {
+        return false;
     }
 }

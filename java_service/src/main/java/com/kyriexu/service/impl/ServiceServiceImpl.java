@@ -114,6 +114,13 @@ public class ServiceServiceImpl implements ServiceService {
         return serviceDao.saveServiceInfo(serviceInfo);
     }
 
+    @Override
+    public List<ServiceInfo> getServiceInfoList(ServiceInput serviceInput) {
+        int size = serviceInput.getSize();
+        int page = Utils.getPage(serviceInput.getPage(), size);
+        return serviceDao.getServiceInfoList(page, size, serviceInput.getInfo());
+    }
+
     private void setRule(ServiceSearch search, ServiceDetail detail) {
         String serviceType = search.getServiceType();
         Long serviceId = search.getServiceId();

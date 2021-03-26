@@ -20,7 +20,7 @@
                 white_host_name,
             </if>
             clientip_flow_limit,
-            service_flow_limit
+            service_flow_limit,
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="serviceId != null">
@@ -37,9 +37,32 @@
                 #{whiteHostName},
             </if>
             #{clientipFlowLimit},
-            #{serviceFlowLimit}
+            #{serviceFlowLimit},
         </trim>
     </insert>
+    <update id="updateAccessControl"
+            parameterType="com.kyriexu.model.AccessControl">
+        update gateway_service_access_control
+        <set>
+            <trim suffixOverrides=",">
+                open_auth = #{openAuth},
+                <if test="blackList != null">
+                    black_list = #{blackList},
+                </if>
+                <if test="whiteList != null">
+                    white_list = #{whiteList},
+                </if>
+                <if test="whiteHostName != null">
+                    white_host_name = #{whiteHostName},
+                </if>
+                clientip_flow_limit = #{clientipFlowLimit},
+                service_flow_limit = #{serviceFlowLimit},
+            </trim>
+        </set>
+        <where>
+            service_id = #{serviceId}
+        </where>
+    </update>
 
 
     <select id="get" resultType="com.kyriexu.model.AccessControl">

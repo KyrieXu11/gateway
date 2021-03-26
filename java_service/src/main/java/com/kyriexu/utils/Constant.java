@@ -15,6 +15,10 @@ public class Constant {
     public final static String SERVICE_HTTP = "http";
     public final static String SERVICE_GRPC = "grpc";
 
+    public final static int SERVICE_DESC_MIN = 1;
+    public final static int SERVICE_DESC_MAX = 255;
+
+
     public final static int HTTPLoadType = 0;
     public final static int TCPLoadType = 1;
     public final static int GrpcLoadType = 2;
