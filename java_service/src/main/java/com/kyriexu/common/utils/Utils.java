@@ -1,4 +1,4 @@
-package com.kyriexu.utils;
+package com.kyriexu.common.utils;
 
 import com.kyriexu.exception.BaseException;
 import com.kyriexu.exception.ResultCode;

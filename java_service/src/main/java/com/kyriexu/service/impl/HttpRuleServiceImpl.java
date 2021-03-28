@@ -12,7 +12,7 @@ import com.kyriexu.model.HttpRule;
 import com.kyriexu.model.LoadBalance;
 import com.kyriexu.model.ServiceInfo;
 import com.kyriexu.service.HttpRuleService;
-import com.kyriexu.utils.Constant;
+import com.kyriexu.common.utils.Constant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,6 +87,11 @@ public class HttpRuleServiceImpl implements HttpRuleService {
     @Transactional(rollbackFor = RuntimeException.class)
     @Override
     public boolean update(HttpRuleInput httpRuleInput) {
+        String[] ipList = httpRuleInput.getIpList().split(",");
+        String[] weightList = httpRuleInput.getWeightList().split(",");
+        if (ipList.length != weightList.length) {
+            throw new BaseException(ResultCode.IP_WEIGHT_DIFFERENT);
+        }
         if (!checkServiceId(httpRuleInput)) {
             throw new BaseException(ResultCode.SERVICE_ID_ILLEGAL);
         }
@@ -212,6 +217,17 @@ public class HttpRuleServiceImpl implements HttpRuleService {
     }
 
     private boolean updateLoadBalance(HttpRuleInput httpRuleInput) {
-        return false;
+        LoadBalance loadBalance = new LoadBalance(
+                httpRuleInput.getId(),
+                httpRuleInput.getRoundType(),
+                httpRuleInput.getIpList(),
+                httpRuleInput.getWeightList(),
+                httpRuleInput.getUpstreamConnectTimeout(),
+                httpRuleInput.getUpstreamHeaderTimeout(),
+                httpRuleInput.getUpstreamIdleTimeout(),
+                httpRuleInput.getUpstreamMaxIdle()
+        );
+        int i = loadBalanceDao.update(loadBalance);
+        return i > 0;
     }
 }

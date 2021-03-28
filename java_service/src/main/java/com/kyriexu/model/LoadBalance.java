@@ -24,22 +24,21 @@ public class LoadBalance {
     private String ipList;
     private String weightList;
     private String forbidList;
-    private int UpstreamConnectTimeout;
-    private int UpstreamHeaderTimeout;
-    private int UpstreamIdleTimeout;
+    private int upstreamConnectTimeout;
+    private int upstreamHeaderTimeout;
+    private int upstreamIdleTimeout;
+    private int upstreamMaxIdle;
 
     public LoadBalance(Long serviceId, int roundType, String ipList, String weightList, int upstreamConnectTimeout, int upstreamHeaderTimeout, int upstreamIdleTimeout, int upstreamMaxIdle) {
         this.serviceId = serviceId;
         this.roundType = roundType;
         this.ipList = ipList;
         this.weightList = weightList;
-        UpstreamConnectTimeout = upstreamConnectTimeout;
-        UpstreamHeaderTimeout = upstreamHeaderTimeout;
-        UpstreamIdleTimeout = upstreamIdleTimeout;
-        UpstreamMaxIdle = upstreamMaxIdle;
+        this.upstreamConnectTimeout = upstreamConnectTimeout;
+        this.upstreamHeaderTimeout = upstreamHeaderTimeout;
+        this.upstreamIdleTimeout = upstreamIdleTimeout;
+        this.upstreamMaxIdle = upstreamMaxIdle;
     }
-
-    private int UpstreamMaxIdle;
 
     public List<String> getIPListByModel() {
         return Arrays.asList(this.ipList.split(","));

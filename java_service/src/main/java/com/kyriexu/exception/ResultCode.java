@@ -1,6 +1,6 @@
 package com.kyriexu.exception;
 
-import com.kyriexu.utils.Constant;
+import com.kyriexu.common.utils.Constant;
 
 /**
  * @author KyrieXu

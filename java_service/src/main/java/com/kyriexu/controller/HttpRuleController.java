@@ -2,7 +2,7 @@ package com.kyriexu.controller;
 
 import com.kyriexu.dto.HttpRuleInput;
 import com.kyriexu.service.HttpRuleService;
-import com.kyriexu.utils.RespBean;
+import com.kyriexu.common.utils.RespBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;

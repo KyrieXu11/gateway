@@ -4,7 +4,7 @@ import com.kyriexu.component.config.WhiteListConfig;
 import com.kyriexu.dto.AdminDto;
 import com.kyriexu.rpc.matchrpc.GoRequest;
 import com.kyriexu.service.adapter.AuthServiceAdapter;
-import com.kyriexu.utils.Constant;
+import com.kyriexu.common.utils.Constant;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

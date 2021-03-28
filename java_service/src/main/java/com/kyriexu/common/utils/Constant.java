@@ -1,4 +1,4 @@
-package com.kyriexu.utils;
+package com.kyriexu.common.utils;
 
 /**
  * @author KyrieXu
@@ -15,8 +15,20 @@ public class Constant {
     public final static String SERVICE_HTTP = "http";
     public final static String SERVICE_GRPC = "grpc";
 
+    public final static String GO_SERVICE = "gateway-go";
+
     public final static int SERVICE_DESC_MIN = 1;
     public final static int SERVICE_DESC_MAX = 255;
+
+    public final static String REDIS_FLOW_DAY_KEY = "flow_day_count";
+    public final static String REDIS_FLOW_HOUR_KEY = "flow_hour_count";
+
+    public final static String FLOW_TOTAL = "flow_total";
+    public final static String FLOW_SERVICE_PREFIX = "flow_service_";
+    public final static String FLOW_APP_PREFIX = "flow_app_";
+
+    public final static int REDIS_DAY_KEY_EXPIRE = 86400 * 2;
+    public final static int REDIS_HOUR_KEY_EXPIRE = 86400 * 2;
 
 
     public final static int HTTPLoadType = 0;

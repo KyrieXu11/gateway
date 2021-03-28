@@ -2,7 +2,7 @@ package com.kyriexu.controller;
 
 import com.kyriexu.exception.BaseException;
 import com.kyriexu.exception.ResultCode;
-import com.kyriexu.utils.RespBean;
+import com.kyriexu.common.utils.RespBean;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;

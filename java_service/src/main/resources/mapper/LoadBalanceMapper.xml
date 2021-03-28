@@ -5,11 +5,41 @@
 <mapper namespace="com.kyriexu.dao.LoadBalanceDao">
     <insert id="save" parameterType="com.kyriexu.model.LoadBalance">
         insert into gateway_service_load_balance
-            <trim prefix="(" suffix=")" suffixOverrides=",">
+        <trim prefix="(" suffix=")" suffixOverrides=",">
 
-            </trim>
-
+        </trim>
     </insert>
+    <update id="update">
+        update gateway_service_load_balance
+        <set>
+            <trim suffixOverrides=",">
+                <if test="roundType != null">
+                    round_type = #{roundType},
+                </if>
+                <if test="ipList != null">
+                    ip_list = #{ipList},
+                </if>
+                <if test="weightList != null">
+                    weight_list = #{weightList},
+                </if>
+                <if test="upstreamConnectTimeout != null">
+                    upstream_connect_timeout = #{upstreamConnectTimeout},
+                </if>
+                <if test="upstreamHeaderTimeout != null">
+                    upstream_header_timeout = #{upstreamHeaderTimeout},
+                </if>
+                <if test="upstreamIdleTimeout != null">
+                    upstream_idle_timeout = #{upstreamIdleTimeout},
+                </if>
+                <if test="upstreamMaxIdle != null">
+                    upstream_max_idle = #{upstreamMaxIdle},
+                </if>
+            </trim>
+        </set>
+        <where>
+            service_id = #{serviceId}
+        </where>
+    </update>
 
     <select id="get" resultType="com.kyriexu.model.LoadBalance">
         select *

@@ -20,7 +20,6 @@ func RegisterServiceController(g *gin.RouterGroup) {
 	c := &ServiceRegistrar{}
 	g.GET("/list", c.GetServiceList)
 	g.GET("/detail", c.GetServiceDetail)
-	g.POST("/add_http_service", c.AddHttpService)
 }
 
 // 获取所有的服务列表，通过分页的方式
@@ -67,15 +66,4 @@ func (p *ServiceRegistrar) GetServiceDetail(c *gin.Context) {
 		return
 	}
 	utils.ResponseSuccessObj(c, "成功", detail)
-}
-
-// 添加http服务
-func (p *ServiceRegistrar) AddHttpService(c *gin.Context) {
-	s := &dto.ServiceAddHTTPInput{}
-	if err := s.ValidateAndBindParam(c); err != nil {
-		log.Error(err.Error())
-		utils.ResponseErrorM(c, err.Error())
-		return
-	}
-
 }

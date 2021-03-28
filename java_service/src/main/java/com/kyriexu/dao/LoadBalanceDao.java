@@ -13,4 +13,5 @@ public interface LoadBalanceDao {
 
     int save(@Param("loadBalance") LoadBalance loadBalance);
 
+    int update(@Param("loadBalance") LoadBalance loadBalance);
 }

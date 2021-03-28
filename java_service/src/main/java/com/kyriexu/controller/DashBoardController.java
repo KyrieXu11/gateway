@@ -1,15 +1,14 @@
 package com.kyriexu.controller;
 
-import com.kyriexu.dto.ServiceInput;
-import com.kyriexu.model.ServiceInfo;
-import com.kyriexu.service.ServiceService;
-import com.kyriexu.utils.RespBean;
+import com.kyriexu.common.utils.RespBean;
+import com.kyriexu.dto.PanelGroupDataOutput;
+import com.kyriexu.service.DashBoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author KyrieXu
@@ -20,12 +19,11 @@ import java.util.List;
 public class DashBoardController {
 
     @Autowired
-    private ServiceService serviceService;
+    private DashBoardService dashBoardService;
 
     @GetMapping("/panelGroupData")
-    public RespBean getPanelGroupData() {
-        ServiceInput serviceInput = new ServiceInput(1, 1);
-        List<ServiceInfo> serviceInfoList = serviceService.getServiceInfoList(serviceInput);
-        return RespBean.ok(serviceInfoList);
+    public RespBean getPanelGroupData(HttpServletRequest request) {
+        PanelGroupDataOutput panelGroupData = dashBoardService.getRemotePanelGroupData(request, false);
+        return RespBean.ok(panelGroupData);
     }
 }

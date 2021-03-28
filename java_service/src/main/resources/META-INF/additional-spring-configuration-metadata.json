@@ -9,6 +9,16 @@
       "name": "grpc.start",
       "type": "java.lang.String",
       "description": "decide grpc start."
+    },
+    {
+      "name": "go-service.host",
+      "type": "java.lang.String",
+      "description": "go 服务的地址."
+    },
+    {
+      "name": "consul.addr",
+      "type": "java.lang.String",
+      "description": "consul 的地址."
     }
   ]
 }

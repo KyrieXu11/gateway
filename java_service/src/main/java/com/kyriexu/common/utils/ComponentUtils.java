@@ -1,4 +1,4 @@
-package com.kyriexu.utils;
+package com.kyriexu.common.utils;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -19,27 +19,29 @@ public class ComponentUtils {
     @Value("${cluster.clusterSSLPort}")
     private int clusterSSLPort;
 
-    public int getClusterSSLPort() {
-        return clusterSSLPort;
+    @Value("${consul.addr}")
+    private String consulAddr;
+
+    @Value("${go-service.host}")
+    private String goServiceHost;
+
+    public String getConsulAddr() {
+        return consulAddr;
     }
 
-    public void setClusterSSLPort(int clusterSSLPort) {
-        this.clusterSSLPort = clusterSSLPort;
+    public String getGoServiceHost() {
+        return goServiceHost;
+    }
+
+    public int getClusterSSLPort() {
+        return clusterSSLPort;
     }
 
     public String getClusterIp() {
         return clusterIp;
     }
 
-    public void setClusterIp(String clusterIp) {
-        this.clusterIp = clusterIp;
-    }
-
     public int getClusterPort() {
         return clusterPort;
-    }
-
-    public void setClusterPort(int clusterPort) {
-        this.clusterPort = clusterPort;
     }
 }

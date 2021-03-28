@@ -1,6 +1,6 @@
 package com.kyriexu.dto;
 
-import com.kyriexu.utils.Constant;
+import com.kyriexu.common.utils.Constant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -20,9 +20,9 @@ import com.kyriexu.model.ServiceListItem;
 import com.kyriexu.model.ServicePageBean;
 import com.kyriexu.model.TcpRule;
 import com.kyriexu.service.ServiceService;
-import com.kyriexu.utils.ComponentUtils;
-import com.kyriexu.utils.Constant;
-import com.kyriexu.utils.Utils;
+import com.kyriexu.common.utils.ComponentUtils;
+import com.kyriexu.common.utils.Constant;
+import com.kyriexu.common.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

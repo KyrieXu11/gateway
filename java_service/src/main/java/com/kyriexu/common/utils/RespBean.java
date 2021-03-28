@@ -1,4 +1,4 @@
-package com.kyriexu.utils;
+package com.kyriexu.common.utils;
 
 /**
  * @author KyrieXu

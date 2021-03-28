@@ -43,6 +43,10 @@ const (
 	TcpServiceType  = "tcp"
 	GrpcServiceType = "grpc"
 	AllServiceType  = "all"
+
+
+	RedisFlowDayKey  = "flow_day_count"
+	RedisFlowHourKey = "flow_hour_count"
 )
 
 var ERROR_CODE = []int{
