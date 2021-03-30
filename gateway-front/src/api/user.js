@@ -25,7 +25,7 @@ export function logout() {
 
 export function changePassword(data){
   return request({
-    url: '/admin/changepass',
+    url: '/admin/changePass',
     method: 'put',
     data
   })

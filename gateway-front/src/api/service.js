@@ -8,26 +8,25 @@ export function serviceList(query) {
   })
 }
 
-export function serviceDelete(query) {
+export function serviceDelete(id) {
   return request({
-    url: '/service/service_delete',
-    method: 'get',
-    params: query
+    url: `/service/deleteService/` + id,
+    method: 'delete'
   })
 }
 
-export function serviceAddHttp(data) {
+export function addHttpService(data) {
   return request({
-    url: '/service/service_add_http',
+    url: '/service/addHttpService',
     method: 'post',
     data
   })
 }
 
-export function serviceUpdateHttp(data) {
+export function updateHttpService(data) {
   return request({
-    url: '/service/service_update_http',
-    method: 'post',
+    url: '/service/updateHttpService',
+    method: 'put',
     data
   })
 }

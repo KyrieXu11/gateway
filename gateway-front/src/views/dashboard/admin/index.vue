@@ -18,14 +18,14 @@
 </template>
 
 <script>
-import GithubCorner from "@/components/GithubCorner"
-import PanelGroup from "@/views/dashboard/admin/components/PanelGroup";
-import LineChart from "@/views/dashboard/admin/components/LineChart";
-import PieChart from "@/views/dashboard/admin/components/PieChart";
-import { panelGroupData, flowStat, serviceStat } from "@/api/dashboard";
+import GithubCorner from '@/components/GithubCorner'
+import PanelGroup from '@/views/dashboard/admin/components/PanelGroup'
+import LineChart from '@/views/dashboard/admin/components/LineChart'
+import PieChart from '@/views/dashboard/admin/components/PieChart'
+import { panelGroupData, flowStat, serviceStat } from '@/api/dashboard'
 
 export default {
-  name: "adminDashboard",
+  name: 'AdminDashboard',
   components: {
     PanelGroup,
     LineChart,
@@ -38,48 +38,48 @@ export default {
         serviceNum: 23,
         todayRequestNum: 1200,
         currentQps: 200,
-        appNum: 5,
+        appNum: 5
       },
       lineChartData: {
-        title: "今日流量统计",
-        today: [],
-        yesterday: [],
+        title: '今日流量统计',
+        today: [220, 182, 191, 134, 150, 120, 110, 125, 145, 122, 165, 122],
+        yesterday: [120, 110, 125, 145, 122, 165, 122, 220, 182, 191, 134, 150]
       },
       pieChartData: {
-        title: "服务占比",
+        title: '服务占比',
         legend: [],
-        series: [],
-      },
-    };
+        series: []
+      }
+    }
   },
   created() {
-    this.fetchPanelGroupData();
-    this.fetchFlowStat();
-    this.fetchServiceStat();
+    this.fetchPanelGroupData()
+    this.fetchFlowStat()
+    this.fetchServiceStat()
   },
   methods: {
     fetchPanelGroupData(id) {
-      // panelGroupData({ }).then(response => {
-      //   this.panelGroupData = response.data
-      // })
+      panelGroupData().then(response => {
+        this.panelGroupData = response.data
+      })
     },
     fetchFlowStat(id) {
-      // flowStat({ }).then(response => {
-      //   this.lineChartData.today = response.data.today
-      //   this.lineChartData.yesterday = response.data.yesterday
-      // })
+      flowStat().then(response => {
+        // this.lineChartData.today = response.data.today
+        // this.lineChartData.yesterday = response.data.yesterday
+      })
     },
     fetchServiceStat(id) {
-      // serviceStat({ }).then(response => {
-      //   this.pieChartData.legend = response.data.legend
-      //   this.pieChartData.series = response.data.data
-      // })
+      serviceStat().then(response => {
+        this.pieChartData.legend = response.data.legend
+        this.pieChartData.series = response.data.data
+      })
     },
     handleSetLineChartData(type) {
       // this.lineChartData = lineChartData[type]
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

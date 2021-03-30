@@ -1,25 +1,22 @@
 import request from '@/utils/request'
 
-export function panelGroupData(query) {
+export function panelGroupData() {
   return request({
-    url: '/dashboard/panel_group_data',
-    method: 'get',
-    params: query
+    url: '/dashboard/getPanelGroupData',
+    method: 'get'
   })
 }
 
-export function flowStat(query) {
+export function flowStat() {
   return request({
-    url: '/dashboard/flow_stat',
-    method: 'get',
-    params: query
+    url: '/dashboard/flowStat',
+    method: 'get'
   })
 }
 
-export function serviceStat(query) {
+export function serviceStat() {
   return request({
-    url: '/dashboard/service_stat',
-    method: 'get',
-    params: query
+    url: '/dashboard/serviceStat',
+    method: 'get'
   })
 }

@@ -79,49 +79,185 @@ export const constantRoutes = [
         path: 'dashboard',
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
-        meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
+        meta: { title: '仪表盘', icon: 'dashboard', affix: true }
       }
     ]
   },
+  // {
+  //   path: '/profile',
+  //   component: Layout,
+  //   redirect: '/profile/index',
+  //   hidden: true,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/profile/index'),
+  //       name: 'Profile',
+  //       meta: { title: '主页', icon: 'user', noCache: true }
+  //     }
+  //   ]
+  // },
   {
-    path: '/documentation',
+    path: '/service',
     component: Layout,
+    redirect: '/service/list',
+    name: '服务管理',
     children: [
       {
-        path: 'index',
-        component: () => import('@/views/documentation/index'),
-        name: 'Documentation',
-        meta: { title: 'Documentation', icon: 'documentation', affix: true }
-      }
-    ]
-  },
-  {
-    path: '/guide',
-    component: Layout,
-    redirect: '/guide/index',
-    children: [
+        path: 'list',
+        component: () => import('@/views/service/index'),
+        name: '服务列表',
+        meta: {
+          title: '服务列表',
+          icon: 'component',
+          affix: true
+        }
+      },
       {
-        path: 'index',
-        component: () => import('@/views/guide/index'),
-        name: 'Guide',
-        meta: { title: 'Guide', icon: 'guide', noCache: true }
-      }
-    ]
-  },
-  {
-    path: '/profile',
-    component: Layout,
-    redirect: '/profile/index',
-    hidden: true,
-    children: [
+        path: 'createHttpService',
+        component: () => import('@/views/service/http/index'),
+        name: '创建HTTP服务',
+        meta: {
+          title: '创建HTTP服务',
+          icon: 'component',
+          affix: false
+        },
+        hidden: true
+      },
       {
-        path: 'index',
-        component: () => import('@/views/profile/index'),
-        name: 'Profile',
-        meta: { title: 'Profile', icon: 'user', noCache: true }
+        path: 'createTcpService',
+        component: () => import('@/views/service/tcp/index'),
+        name: '创建TCP服务',
+        meta: {
+          title: '创建TCP服务',
+          icon: 'component',
+          affix: false
+        },
+        hidden: true
+      },
+      {
+        path: 'createGrpcService',
+        component: () => import('@/views/service/grpc/index'),
+        name: '创建Grpc服务',
+        meta: {
+          title: '创建Grpc服务',
+          icon: 'component',
+          affix: false
+        },
+        hidden: true
+      },
+      {
+        path: 'editHttpService/:id(\\d+)',
+        component: () => import('@/views/service/http/index'),
+        name: '修改HTTP服务',
+        meta: {
+          title: '修改HTTP服务',
+          icon: 'component',
+          affix: false
+        },
+        hidden: true
       }
     ]
   }
+  // {
+  //   path: '/service',
+  //   component: Layout,
+  //   redirect: '/service/list',
+  //   name: '服务管理',
+  //   meta: {
+  //     title: '服务管理',
+  //     icon: 'component'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'list',
+  //       component: () => import('@/views/service/list'),
+  //       name: '服务列表',
+  //       meta: {
+  //         title: '服务列表',
+  //         icon: 'component',
+  //         affix: true
+  //       }
+  //     },
+  //     {
+  //       path: 'service_create_http',
+  //       component: () => import('@/views/service/http'),
+  //       name: '创建HTTP服务',
+  //       meta: {
+  //         title: '创建HTTP服务',
+  //         icon: 'component',
+  //         affix: false
+  //       },
+  //       hidden: true
+  //     },
+  //     {
+  //       path: 'service_edit_http/:id(\\d+)',
+  //       component: () => import('@/views/service/http'),
+  //       name: '修改HTTP服务',
+  //       meta: {
+  //         title: '修改HTTP服务',
+  //         icon: 'component',
+  //         affix: false
+  //       },
+  //       hidden: true
+  //     },
+  //     {
+  //       path: 'service_create_tcp',
+  //       component: () => import('@/views/service/tcp'),
+  //       name: '创建TCP服务',
+  //       meta: {
+  //         title: '创建TCP服务',
+  //         icon: 'component',
+  //         affix: false
+  //       },
+  //       hidden: true
+  //     },
+  //     {
+  //       path: 'service_edit_tcp/:id(\\d+)',
+  //       component: () => import('@/views/service/tcp'),
+  //       name: '修改TCP服务',
+  //       meta: {
+  //         title: '修改TCP服务',
+  //         icon: 'component',
+  //         affix: false
+  //       },
+  //       hidden: true
+  //     },
+  //     {
+  //       path: 'service_create_grpc',
+  //       component: () => import('@/views/service/grpc'),
+  //       name: '创建GRPC服务',
+  //       meta: {
+  //         title: '创建GRPC服务',
+  //         icon: 'component',
+  //         affix: false
+  //       },
+  //       hidden: true
+  //     },
+  //     {
+  //       path: 'service_edit_grpc/:id(\\d+)',
+  //       component: () => import('@/views/service/grpc'),
+  //       name: '修改GRPC服务',
+  //       meta: {
+  //         title: '修改GRPC服务',
+  //         icon: 'component',
+  //         affix: false
+  //       },
+  //       hidden: true
+  //     },
+  //     {
+  //       path: 'service_stat/:id(\\d+)',
+  //       component: () => import('@/views/service/stat'),
+  //       name: '服务统计',
+  //       meta: {
+  //         title: '服务统计',
+  //         icon: 'component',
+  //         affix: false
+  //       },
+  //       hidden: true
+  //     }
+  //   ]
+  // }
 ]
 
 /**

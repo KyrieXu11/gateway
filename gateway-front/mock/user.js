@@ -1,4 +1,3 @@
-
 const tokens = {
   admin: {
     token: 'admin-token'
@@ -13,13 +12,13 @@ const users = {
     roles: ['admin'],
     introduction: 'I am a super administrator',
     avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
-    name: 'Super Admin'
+    username: 'Super Admin'
   },
   'editor-token': {
     roles: ['editor'],
     introduction: 'I am an editor',
     avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
-    name: 'Normal Editor'
+    username: 'Normal Editor'
   }
 }
 
@@ -35,13 +34,14 @@ module.exports = [
       // mock error
       if (!token) {
         return {
-          code: 60204,
-          message: 'Account and password are incorrect.'
+          code: 400,
+          msg: 'Account and password are incorrect.'
         }
       }
 
       return {
-        code: 20000,
+        code: 200,
+        msg: '登录成功',
         data: token
       }
     }
@@ -58,13 +58,14 @@ module.exports = [
       // mock error
       if (!info) {
         return {
-          code: 50008,
-          message: 'Login failed, unable to get user details.'
+          code: 400,
+          msg: 'Login failed, unable to get user details.'
         }
       }
 
       return {
-        code: 20000,
+        code: 200,
+        msg: '',
         data: info
       }
     }
@@ -76,8 +77,21 @@ module.exports = [
     type: 'post',
     response: _ => {
       return {
-        code: 20000,
+        code: 200,
+        msg: '',
         data: 'success'
+      }
+    }
+  },
+
+  {
+    url: '/admin/changePass',
+    type: 'put',
+    response: config => {
+      return {
+        code: 200,
+        msg: '修改成功',
+        data: null
       }
     }
   }
