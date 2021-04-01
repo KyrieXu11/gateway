@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -27,6 +28,7 @@ import org.springframework.web.client.RestTemplate;
 @MapperScans(value = {
         @MapperScan(basePackages = "com.kyriexu.dao")
 })
+@EnableAspectJAutoProxy
 public class MainApplication {
     /**
      * main method

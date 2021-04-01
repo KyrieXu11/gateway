@@ -2,8 +2,6 @@ package com.kyriexu.common.handler;
 
 import com.kyriexu.common.utils.Constant;
 import lombok.Data;
-import org.springframework.dao.DataAccessException;
-import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -48,19 +46,15 @@ public class RedisFlowCounter {
                 LocalDateTime now = LocalDateTime.now();
                 String dayKey = getDayKey(now);
                 String hourKey = getHourKey(now);
-                redisTemplate.executePipelined(new RedisCallback<String>() {
-                    @Override
-                    public String doInRedis(RedisConnection c) throws DataAccessException {
-                        byte[] dayKeyBytes = dayKey.getBytes();
-                        byte[] hourKeyBytes = hourKey.getBytes();
-                        c.incrBy(dayKeyBytes, tickerCount.get());
-                        c.expire(dayKeyBytes, Constant.REDIS_DAY_KEY_EXPIRE);
-                        c.incrBy(hourKeyBytes, tickerCount.get());
-                        c.expire(hourKeyBytes, Constant.REDIS_HOUR_KEY_EXPIRE);
-                        return null;
-                    }
+                redisTemplate.executePipelined((RedisCallback<String>) c -> {
+                    byte[] dayKeyBytes = dayKey.getBytes();
+                    byte[] hourKeyBytes = hourKey.getBytes();
+                    c.incrBy(dayKeyBytes, tickerCount.get());
+                    c.expire(dayKeyBytes, Constant.REDIS_DAY_KEY_EXPIRE);
+                    c.incrBy(hourKeyBytes, tickerCount.get());
+                    c.expire(hourKeyBytes, Constant.REDIS_HOUR_KEY_EXPIRE);
+                    return null;
                 });
-
             }
         }, 0, this.interval);
         // 注册到JVM钩子函数当中取消 timer 的运行

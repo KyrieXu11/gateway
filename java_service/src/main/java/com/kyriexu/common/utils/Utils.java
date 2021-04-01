@@ -1,10 +1,14 @@
 package com.kyriexu.common.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kyriexu.exception.BaseException;
 import com.kyriexu.exception.ResultCode;
 import org.apache.commons.codec.binary.Hex;
 
 import javax.servlet.http.HttpSession;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -60,5 +64,13 @@ public class Utils {
             }
         }
         return false;
+    }
+
+    public static void output(OutputStream out, ObjectMapper mapper, Object o) throws IOException {
+        BufferedOutputStream newOut = new BufferedOutputStream(out);
+        String s = mapper.writeValueAsString(o);
+        newOut.write(s.getBytes());
+        newOut.flush();
+        newOut.close();
     }
 }

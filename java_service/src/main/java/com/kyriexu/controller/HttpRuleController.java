@@ -23,14 +23,14 @@ public class HttpRuleController {
     @Autowired
     private HttpRuleService httpRuleService;
 
-    @PostMapping("/addHttpRule")
-    public RespBean addHttpRule(@RequestBody HttpRuleInput httpRuleInput) {
+    @PostMapping("/addHttpService")
+    public RespBean addHttpService(@RequestBody HttpRuleInput httpRuleInput) {
         boolean res = httpRuleService.add(httpRuleInput);
         return res ? RespBean.ok("添加成功") : RespBean.error("添加失败");
     }
 
-    @PutMapping("/updateHttpRule")
-    public RespBean updateHttpRule(@RequestBody HttpRuleInput httpRuleInput) {
+    @PutMapping("/updateHttpService")
+    public RespBean updateHttpService(@RequestBody HttpRuleInput httpRuleInput) {
         boolean res = httpRuleService.update(httpRuleInput);
         return res ? RespBean.ok("更新成功") : RespBean.error("更新失败");
     }

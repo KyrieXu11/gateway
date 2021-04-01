@@ -30,6 +30,7 @@ public class Constant {
     public final static int REDIS_DAY_KEY_EXPIRE = 86400 * 2;
     public final static int REDIS_HOUR_KEY_EXPIRE = 86400 * 2;
 
+    public final static String CODE = "code";
 
     public final static int HTTPLoadType = 0;
     public final static int TCPLoadType = 1;
@@ -42,6 +43,9 @@ public class Constant {
     public final static int NeedHttps = 1;
     public final static int NoNeedHttps = 0;
 
+    public final static String X_GATEWAY_TOKEN = "X-GATEWAY-TOKEN";
+
+    public final static String UUID_REGEX = "^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$";
 
     public final static String[] SERVICE_TYPE = new String[]{
             SERVICE_ALL,
