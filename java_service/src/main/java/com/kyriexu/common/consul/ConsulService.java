@@ -1,4 +1,4 @@
-package com.kyriexu.component.consul;
+package com.kyriexu.common.consul;
 
 import lombok.Data;
 

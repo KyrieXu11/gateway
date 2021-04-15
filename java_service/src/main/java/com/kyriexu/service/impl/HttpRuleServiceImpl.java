@@ -62,25 +62,25 @@ public class HttpRuleServiceImpl implements HttpRuleService {
         long serviceId = this.saveServiceInfo(httpRuleInput);
         if (serviceId < 1) {
             logger.error("[FAILED] insert ServiceInfo");
-            throw new RuntimeException("[FAILED] insert ServiceInfo, rollback");
+            throw new BaseException(ResultCode.ADD_HTTP_RULE_FAIL);
         }
-        logger.info("service id : {}", serviceId);
+        logger.info("insert http service,service id : {}", serviceId);
         int res = this.saveHttpRule(httpRuleInput, serviceId);
         if (res == 0) {
             logger.error("[FAILED] insert HttpRule");
-            throw new RuntimeException("[FAILED] insert HttpRule, rollback");
+            throw new BaseException(ResultCode.ADD_HTTP_RULE_FAIL);
         }
         res = this.saveAccessControl(httpRuleInput, serviceId);
         if (res == 0) {
             logger.error("[FAILED] insert AccessControl");
-            throw new RuntimeException("[FAILED] insert AccessControl, rollback");
+            throw new BaseException(ResultCode.ADD_HTTP_RULE_FAIL);
         }
         res = this.saveLoadBalance(httpRuleInput, serviceId);
         if (res == 0) {
             logger.error("[FAILED] insert LoadBalance");
-            throw new RuntimeException("[FAILED] insert LoadBalance, rollback");
+            throw new BaseException(ResultCode.ADD_HTTP_RULE_FAIL);
         }
-        logger.info("[SUCCESS] insert HttpRuleInput Successfully");
+        logger.info("[SUCCESS] insert HttpService Successfully");
         return true;
     }
 
@@ -92,7 +92,7 @@ public class HttpRuleServiceImpl implements HttpRuleService {
         if (ipList.length != weightList.length) {
             throw new BaseException(ResultCode.IP_WEIGHT_DIFFERENT);
         }
-        if (!checkServiceId(httpRuleInput)) {
+        if (!httpRuleInput.checkId()) {
             throw new BaseException(ResultCode.SERVICE_ID_ILLEGAL);
         }
         boolean b = this.updateServiceInfo(httpRuleInput);
@@ -115,16 +115,11 @@ public class HttpRuleServiceImpl implements HttpRuleService {
             logger.error("[FAIL] update LoadBalance");
             throw new BaseException(ResultCode.UPDATE_HTTP_RULE_FAIL);
         }
-        logger.info("[SUCCESS] update HttpRuleInput Successfully");
+        logger.info("[SUCCESS] update HttpService Successfully");
         return true;
     }
 
-    private boolean checkServiceId(HttpRuleInput httpRuleInput) {
-        Long id = httpRuleInput.getId();
-        return id != null && id != 0;
-    }
-
-    private Long saveServiceInfo(HttpRuleInput httpRuleInput) {
+    private long saveServiceInfo(HttpRuleInput httpRuleInput) {
         String serviceName = httpRuleInput.getServiceName();
         String serviceDesc = httpRuleInput.getServiceDesc();
         Date date = new Date();
@@ -132,7 +127,11 @@ public class HttpRuleServiceImpl implements HttpRuleService {
                 Constant.HTTPLoadType,
                 serviceName, serviceDesc,
                 date, date, false);
-        return serviceDao.saveServiceInfo(info);
+        int i = serviceDao.saveServiceInfo(info);
+        if (i == 0) {
+            info.setId(0L);
+        }
+        return info.getId();
     }
 
     private int saveHttpRule(HttpRuleInput httpRuleInput, long serviceId) {
@@ -212,7 +211,7 @@ public class HttpRuleServiceImpl implements HttpRuleService {
                 httpRuleInput.getClientipFlowLimit(),
                 httpRuleInput.getServiceFlowLimit()
         );
-        int i = accessControlDao.updateAccessControl(accessControl);
+        int i = accessControlDao.update(accessControl);
         return i > 0;
     }
 

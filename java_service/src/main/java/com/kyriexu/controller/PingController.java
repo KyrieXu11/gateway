@@ -1,7 +1,8 @@
 package com.kyriexu.controller;
 
 import com.kyriexu.common.utils.RespBean;
-import com.kyriexu.component.annotation.ValidateCode;
+import com.kyriexu.annotation.InternalAccess;
+import com.kyriexu.annotation.ValidateCode;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,12 @@ public class PingController {
     @DeleteMapping("/d")
     @ValidateCode
     public RespBean del() {
+        return RespBean.ok("123");
+    }
+
+    @GetMapping("/s")
+    @InternalAccess
+    public RespBean submit() {
         return RespBean.ok("123");
     }
 }

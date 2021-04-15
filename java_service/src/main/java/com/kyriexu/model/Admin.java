@@ -1,5 +1,7 @@
 package com.kyriexu.model;
 
+import com.kyriexu.common.utils.Constant;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -21,6 +23,7 @@ public class Admin {
     private boolean deleted;
 
     public Admin() {
+        this.salt = Constant.PASSWORD_SALT;
     }
 
     public Admin(String username, String password) {
@@ -29,7 +32,7 @@ public class Admin {
         this.updateAt = new Date();
         this.createAt = new Date();
         this.deleted = false;
-        this.salt = "admin";
+        this.salt = Constant.PASSWORD_SALT;
     }
 
     public Integer getId() {

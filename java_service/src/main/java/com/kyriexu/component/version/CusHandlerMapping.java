@@ -1,6 +1,6 @@
 package com.kyriexu.component.version;
 
-import com.kyriexu.component.annotation.ApiVersion;
+import com.kyriexu.annotation.ApiVersion;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.servlet.mvc.condition.RequestCondition;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;

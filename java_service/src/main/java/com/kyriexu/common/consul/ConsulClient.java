@@ -1,4 +1,4 @@
-package com.kyriexu.component.consul;
+package com.kyriexu.common.consul;
 
 import com.google.common.net.HostAndPort;
 import com.orbitz.consul.AgentClient;

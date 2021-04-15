@@ -1,5 +1,7 @@
 package com.kyriexu.common.handler;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -19,6 +21,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  **/
 @Component
 public class FlowCounterHandler {
+
+    public static final Logger logger = LoggerFactory.getLogger(FlowCounterHandler.class);
+
     private final ReadWriteLock lock;
     private final Map<String, RedisFlowCounter> redisCounterMap;
     private final List<RedisFlowCounter> redisCounterList;
@@ -33,6 +38,7 @@ public class FlowCounterHandler {
         this.lock = new ReentrantReadWriteLock();
         this.redisCounterList = new ArrayList<>();
         this.redisCounterMap = new HashMap<>();
+        logger.info("[INIT] init the flowCounterHandler");
     }
 
     public RedisFlowCounter getCounter(String serviceName) {
@@ -41,7 +47,10 @@ public class FlowCounterHandler {
                 return redisFlowCounter;
             }
         }
-        RedisFlowCounter redisFlowCounter = new RedisFlowCounter(serviceName, TimeUnit.SECONDS.toMillis(10), this.executor, this.redisTemplate);
+        RedisFlowCounter redisFlowCounter = new RedisFlowCounter(
+                serviceName,
+                TimeUnit.SECONDS.toMillis(10),
+                this.executor, this.redisTemplate);
         try {
             this.lock.writeLock().lock();
             this.redisCounterList.add(redisFlowCounter);

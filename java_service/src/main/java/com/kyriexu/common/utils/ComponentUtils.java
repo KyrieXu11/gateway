@@ -23,14 +23,14 @@ public class ComponentUtils {
     private String consulAddr;
 
     @Value("${go-service.host}")
-    private String goServiceHost;
+    private String goServiceAddr;
 
     public String getConsulAddr() {
         return consulAddr;
     }
 
-    public String getGoServiceHost() {
-        return goServiceHost;
+    public String getGoServiceAddr() {
+        return goServiceAddr;
     }
 
     public int getClusterSSLPort() {

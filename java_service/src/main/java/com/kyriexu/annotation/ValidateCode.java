@@ -1,6 +1,4 @@
-package com.kyriexu.component.annotation;
-
-import org.springframework.web.bind.annotation.Mapping;
+package com.kyriexu.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -10,13 +8,10 @@ import java.lang.annotation.Target;
 
 /**
  * @author KyrieXu
- * @since 2021/3/24 17:13
+ * @since 2021/4/1 11:36
  **/
-@Target({ElementType.METHOD, ElementType.TYPE})
+@Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Mapping
-public @interface ApiVersion {
-    int value() default 1;
+public @interface ValidateCode {
 }
-

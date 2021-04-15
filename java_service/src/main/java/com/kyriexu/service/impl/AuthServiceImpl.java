@@ -1,6 +1,6 @@
 package com.kyriexu.service.impl;
 
-import com.kyriexu.component.config.WhiteListConfig;
+import com.kyriexu.config.WhiteListConfig;
 import com.kyriexu.dto.AdminDto;
 import com.kyriexu.rpc.matchrpc.GoRequest;
 import com.kyriexu.service.adapter.AuthServiceAdapter;

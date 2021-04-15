@@ -1,7 +1,8 @@
-package com.kyriexu.component.aspect;
+package com.kyriexu.aspect;
 
 import com.kyriexu.common.utils.Constant;
 import com.kyriexu.common.utils.RespBean;
+import com.kyriexu.service.SubmitService;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -26,7 +27,10 @@ public class SingleSubmitAspect {
     @Autowired
     private HttpServletRequest request;
 
-    @Around("@annotation(com.kyriexu.component.annotation.SingleSubmit)")
+    @Autowired
+    private SubmitService submitService;
+
+    @Around("@annotation(com.kyriexu.annotation.SingleSubmit)")
     public Object singleSubmit(ProceedingJoinPoint joinPoint) throws Throwable {
         String reqToken = request.getHeader(Constant.X_GATEWAY_TOKEN);
         if (StringUtils.isEmpty(reqToken)) {
@@ -37,26 +41,14 @@ public class SingleSubmitAspect {
             logger.info("[FAIL] token : {} is illegal", reqToken);
             return RespBean.error("Illegal Token");
         }
-        if (isTokenExist(reqToken)) {
+        if (submitService.isTokenExist(reqToken)) {
             logger.info("[FAIL] token : {} is already exist", reqToken);
-            removeToken(reqToken);
-            return RespBean.error("Token Already Exist");
+            submitService.removeToken(reqToken);
+            return RespBean.error("Don't Submit Form Twice");
         } else {
             logger.info("[SUCCESS] saved token : {}", reqToken);
-            saveToken(reqToken);
+            submitService.saveToken(reqToken);
             return joinPoint.proceed();
         }
     }
-
-    private void removeToken(String token) {
-    }
-
-    private void saveToken(String token) {
-    }
-
-    private boolean isTokenExist(String token) {
-        return false;
-    }
-
-
 }

@@ -67,10 +67,10 @@ public class Utils {
     }
 
     public static void output(OutputStream out, ObjectMapper mapper, Object o) throws IOException {
-        BufferedOutputStream newOut = new BufferedOutputStream(out);
-        String s = mapper.writeValueAsString(o);
-        newOut.write(s.getBytes());
-        newOut.flush();
-        newOut.close();
+        try(BufferedOutputStream newOut = new BufferedOutputStream(out)){
+            String s = mapper.writeValueAsString(o);
+            newOut.write(s.getBytes());
+            newOut.flush();
+        }
     }
 }

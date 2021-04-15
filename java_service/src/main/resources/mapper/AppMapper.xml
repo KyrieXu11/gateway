@@ -6,6 +6,101 @@
     <resultMap id="app" type="com.kyriexu.model.App">
         <result property="deleted" column="is_delete"/>
     </resultMap>
+    <insert id="add" parameterType="com.kyriexu.model.App">
+        insert into gateway_app
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="app.appId != null">
+                app_id,
+            </if>
+            <if test="app.name != null">
+                name,
+            </if>
+            <if test="app.secret != null">
+                secret,
+            </if>
+            <if test="app.whiteIps != null">
+                white_ips,
+            </if>
+            <if test="app.qpd != null">
+                qpd,
+            </if>
+            <if test="app.qps != null">
+                qps,
+            </if>
+            <if test="app.createAt != null">
+                create_at,
+            </if>
+            <if test="app.updateAt != null">
+                update_at,
+            </if>
+            <if test="app.deleted != null">
+                is_delete,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="app.appId != null">
+                #{app.appId},
+            </if>
+            <if test="app.name != null">
+                #{app.name},
+            </if>
+            <if test="app.secret != null">
+                #{app.secret},
+            </if>
+            <if test="app.whiteIps != null">
+                #{app.whiteIps},
+            </if>
+            <if test="app.qpd != null">
+                #{app.qpd},
+            </if>
+            <if test="app.qps != null">
+                #{app.qps},
+            </if>
+            <if test="app.createAt != null">
+                #{app.createAt},
+            </if>
+            <if test="app.updateAt != null">
+                #{app.updateAt},
+            </if>
+            <if test="app.deleted != null">
+                #{app.deleted},
+            </if>
+        </trim>
+    </insert>
+    <update id="update" parameterType="com.kyriexu.model.App">
+        update gateway_app
+        <set>
+            <trim suffixOverrides=",">
+                <if test="app.name != null">
+                    name = #{app.name},
+                </if>
+                <if test="app.secret != null">
+                    secret = #{app.secret},
+                </if>
+                <if test="app.whiteIps != null">
+                    white_ips=#{app.whiteIps},
+                </if>
+                <if test="app.qpd != null">
+                    qpd=#{app.qpd},
+                </if>
+                <if test="app.qps != null">
+                    qps=#{app.qps},
+                </if>
+                <if test="app.createAt != null">
+                    create_at=#{app.createAt},
+                </if>
+                <if test="app.updateAt != null">
+                    update_at=#{app.updateAt},
+                </if>
+                <if test="app.deleted != null">
+                    is_delete=#{app.deleted},
+                </if>
+            </trim>
+        </set>
+        <where>
+            is_delete = 0 and app_id = #{app.appId}
+        </where>
+    </update>
 
     <select id="getAppList" resultMap="app">
         select *
@@ -16,7 +111,22 @@
                 and name like concat('%',#{query},'%')
             </if>
         </where>
-        limit #{page},#{size}
-        order by id desc;
+        order by id desc limit #{page},#{size}
+    </select>
+    <select id="count" resultType="java.lang.Integer">
+        select count(*)
+        from gateway_app
+        <where>
+            is_delete = 0
+            <if test="query != null">
+                and name like concat('%',#{query},'%')
+            </if>
+        </where>
+    </select>
+    <select id="get" resultType="com.kyriexu.model.App">
+        select *
+        from gateway_app
+        where is_delete != 1
+          and app_id = #{appId};
     </select>
 </mapper>

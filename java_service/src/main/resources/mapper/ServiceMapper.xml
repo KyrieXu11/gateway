@@ -8,47 +8,47 @@
         <result column="is_delete" javaType="java.lang.Boolean"
                 property="deleted"/>
     </resultMap>
-    <insert id="saveServiceInfo" useGeneratedKeys="true" keyProperty="id"
+    <insert id="saveServiceInfo" useGeneratedKeys="true" keyProperty="info.id"
             keyColumn="id">
         insert into gateway_service_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="loadType != null">
+            <if test="info.loadType != null">
                 load_type,
             </if>
-            <if test="serviceName != null">
+            <if test="info.serviceName != null">
                 service_name,
             </if>
-            <if test="serviceDesc != null">
+            <if test="info.serviceDesc != null">
                 service_desc,
             </if>
-            <if test="createAt != null">
+            <if test="info.createAt != null">
                 create_at,
             </if>
-            <if test="updateAt != null">
+            <if test="info.updateAt != null">
                 update_at,
             </if>
-            <if test="deleted != null">
+            <if test="info.deleted != null">
                 is_delete,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="loadType != null">
-                #{loadType},
+            <if test="info.loadType != null">
+                #{info.loadType},
             </if>
-            <if test="serviceName != null">
-                #{serviceName},
+            <if test="info.serviceName != null">
+                #{info.serviceName},
             </if>
-            <if test="serviceDesc != null">
-                #{serviceDesc},
+            <if test="info.serviceDesc != null">
+                #{info.serviceDesc},
             </if>
-            <if test="createAt != null">
-                #{createAt},
+            <if test="info.createAt != null">
+                #{info.createAt},
             </if>
-            <if test="updateAt != null">
-                #{updateAt},
+            <if test="info.updateAt != null">
+                #{info.updateAt},
             </if>
-            <if test="deleted != null">
-                #{deleted},
+            <if test="info.deleted != null">
+                #{info.deleted},
             </if>
         </trim>
     </insert>
@@ -57,28 +57,29 @@
         update gateway_service_info
         <set>
             <trim suffixOverrides=",">
-                <if test="loadType != null">
-                    load_type = #{loadType},
+                <if test="info.loadType != null">
+                    load_type = #{info.loadType},
                 </if>
-                <if test="serviceName != null">
-                    service_name = #{serviceName},
+                <if test="info.serviceName != null">
+                    service_name = #{info.serviceName},
                 </if>
-                <if test="serviceDesc != null">
-                    service_desc = #{serviceDesc},
+                <if test="info.serviceDesc != null">
+                    service_desc = #{info.serviceDesc},
                 </if>
-                <if test="createAt != null">
-                    create_at = #{createAt},
+                <if test="info.createAt != null">
+                    create_at = #{info.createAt},
                 </if>
-                <if test="updateAt != null">
-                    update_at = #{updateAt},
+                <if test="info.updateAt != null">
+                    update_at = #{info.updateAt},
                 </if>
-                <if test="deleted != null">
-                    is_deleted =#{deleted},
+                <if test="info.deleted != null">
+                    is_delete =#{info.deleted},
                 </if>
             </trim>
         </set>
         <where>
-            id = #{id}
+            is_delete = 0 and
+            id = #{info.id}
         </where>
     </update>
 
@@ -92,8 +93,8 @@
                 and service_name like concat('%',#{query},'%')
             </if>
         </where>
-        limit #{page},#{size}
-        order by id desc;
+        order by id desc
+        limit #{page},#{size};
     </select>
     <select id="get" resultMap="serviceInfo">
         select *
@@ -105,7 +106,12 @@
     <select id="getTotal" resultType="java.lang.Integer">
         select count(*)
         from gateway_service_info
-        where is_delete != 1;
+        <where>
+            is_delete != 1
+            <if test="query != null">
+                and service_name like concat('%',#{query},'%')
+            </if>
+        </where>
     </select>
     <select id="getByServiceName"
             resultMap="serviceInfo">
@@ -113,5 +119,12 @@
         from gateway_service_info
         where is_delete != 1
           and service_name = #{serviceName};
+    </select>
+    <select id="countByLoadType"
+            resultType="com.kyriexu.dto.ServiceStatItemOutput">
+        select load_type, count(*) as value
+        from gateway_service_info
+        where is_delete = 0
+        group by load_type
     </select>
 </mapper>

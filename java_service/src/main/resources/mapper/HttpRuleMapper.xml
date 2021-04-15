@@ -6,39 +6,39 @@
     <insert id="add" parameterType="com.kyriexu.model.HttpRule">
         insert into gateway_service_http_rule
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="serviceId != null">
+            <if test="httpRule.serviceId != null">
                 service_id,
             </if>
             rule_type,
-            <if test="rule != null">
+            <if test="httpRule.rule != null">
                 rule,
             </if>
             need_https,
             need_strip_uri,
             need_websocket,
-            <if test="urlRewrite != null">
+            <if test="httpRule.urlRewrite != null">
                 url_rewrite,
             </if>
-            <if test="headerTransfor != null">
+            <if test="httpRule.headerTransfor != null">
                 header_transfor,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="serviceId != null">
-                #{serviceId},
+            <if test="httpRule.serviceId != null">
+                #{httpRule.serviceId},
             </if>
-            #{ruleType},
-            <if test="rule != null">
-                rule,
+            #{httpRule.ruleType},
+            <if test="httpRule.rule != null">
+                #{httpRule.rule},
             </if>
-            #{needHttps},
-            #{needStripUri},
-            #{needWebsocket},
-            <if test="urlRewrite != null">
-                #{urlRewrite},
+            #{httpRule.needHttps},
+            #{httpRule.needStripUri},
+            #{httpRule.needWebsocket},
+            <if test="httpRule.urlRewrite != null">
+                #{httpRule.urlRewrite},
             </if>
-            <if test="headerTransfor != null">
-                #{headerTransfor},
+            <if test="httpRule.headerTransfor != null">
+                #{httpRule.headerTransfor},
             </if>
         </trim>
     </insert>
@@ -46,23 +46,23 @@
         update gateway_service_http_rule
         <set>
             <trim suffixOverrides=",">
-                rule_type #{ruleType},
-                <if test="rule != null">
-                    rule = #{rule},
+                rule_type #{httpRule.ruleType},
+                <if test="httpRule.rule != null">
+                    rule = #{httpRule.rule},
                 </if>
-                need_https = #{needHttps},
-                need_strip_uri = #{needStripUri},
-                need_websocket = #{needWebsocket},
-                <if test="urlRewrite != null">
-                    url_rewrite = #{urlRewrite},
+                need_https = #{httpRule.needHttps},
+                need_strip_uri = #{httpRule.needStripUri},
+                need_websocket = #{httpRule.needWebsocket},
+                <if test="httpRule.urlRewrite != null">
+                    url_rewrite = #{httpRule.urlRewrite},
                 </if>
-                <if test="headerTransfor != null">
-                    header_transfor = #{headerTransfor},
+                <if test="httpRule.headerTransfor != null">
+                    header_transfor = #{httpRule.headerTransfor},
                 </if>
             </trim>
         </set>
         <where>
-            service_id = #{serviceId}
+            service_id = #{httpRule.serviceId}
         </where>
     </update>
 

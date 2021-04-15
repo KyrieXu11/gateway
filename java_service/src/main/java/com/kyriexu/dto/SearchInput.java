@@ -15,7 +15,7 @@ import javax.validation.constraints.Min;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ServiceInput {
+public class SearchInput {
     @Min(value = 1, message = "页数最小为1")
     private int page;
     @Min(value = 1, message = "页大小最小为1")
@@ -23,9 +23,9 @@ public class ServiceInput {
     private int size;
     private String info;
 
-
-    public ServiceInput(int page, int size) {
+    public SearchInput(int page, int size) {
         this.page = page;
         this.size = size;
     }
+
 }

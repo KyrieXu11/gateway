@@ -1,5 +1,7 @@
 package com.kyriexu.dto;
 
+import com.kyriexu.annotation.validation.HeaderTransFor;
+import com.kyriexu.annotation.validation.IpList;
 import com.kyriexu.common.utils.Constant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,6 +26,8 @@ public class HttpRuleInput {
      * 更新时需要用到id,插入不需要,所以在更新的时要手动校验ID
      */
     private Long id;
+
+    // @Pattern(regexp = "^[a-zA-Z0-9_]{6,128}$", message = "服务名称不符合规则")
 
     @NotNull(message = "服务名称不能为空")
     private String serviceName;
@@ -52,14 +56,20 @@ public class HttpRuleInput {
     private int needWebSocket;
 
     private String urlRewrite;
+
+    @HeaderTransFor
     private String headerTransfor;
 
     @Min(value = 0, message = "OpenAuth 最小不能小于0")
     @Max(value = 1, message = "OpenAuth 最大不能超过1")
     private int openAuth;
 
+    @IpList(message = "黑名单格式不正确")
     private String blackList;
+    @IpList(message = "白名单格式不正确")
     private String whiteList;
+
+    @Min(value = 0, message = "ServiceFlowLimit 最小不能小于0")
     private int clientipFlowLimit;
 
     @Min(value = 0, message = "ServiceFlowLimit 最小不能小于0")
@@ -68,6 +78,7 @@ public class HttpRuleInput {
     @Min(value = 0, message = "RoundType 最小不能小于0")
     @Max(value = 3, message = "RoundType 最大不能超过3")
     private int roundType;
+    @IpList(message = "ip列表格式不正确")
     private String ipList;
     private String weightList;
 
@@ -82,4 +93,8 @@ public class HttpRuleInput {
 
     @Min(value = 0, message = "UpstreamMaxIdle 最小不能小于0")
     private int upstreamMaxIdle;
+
+    public boolean checkId() {
+        return id != null && id != 0;
+    }
 }

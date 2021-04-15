@@ -1,8 +1,9 @@
 package com.kyriexu.component.interceptor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kyriexu.service.AuthService;
 import com.kyriexu.common.utils.RespBean;
+import com.kyriexu.common.utils.Utils;
+import com.kyriexu.service.AuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.PrintWriter;
 
 /**
  * @author KyrieXu
@@ -34,11 +34,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         if (!res) {
             response.setHeader("content-type","application/json");
             response.setCharacterEncoding("UTF-8");
-            PrintWriter writer = response.getWriter();
-            String s = objectMapper.writeValueAsString(RespBean.error("没有访问权限或者未登陆"));
-            writer.write(s);
-            writer.flush();
-            writer.close();
+            Utils.output(response.getOutputStream(),objectMapper,RespBean.error("没有访问权限或者未登陆"));
         }
         return res;
     }

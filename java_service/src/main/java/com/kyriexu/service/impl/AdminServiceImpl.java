@@ -77,7 +77,8 @@ public class AdminServiceImpl implements AdminService {
         if (Strings.isBlank(adminDto.getPassword())) {
             throw new BaseException(ResultCode.PASS_IS_NULL_EXCEPTION);
         }
-        Admin admin = new Admin(adminDto.getUsername(), adminDto.getPassword());
+        String saltyPass = Utils.getSaltyPass(Constant.PASSWORD_SALT, adminDto.getPassword());
+        Admin admin = new Admin(adminDto.getUsername(), saltyPass);
         int res = adminDao.add(admin);
         boolean b = res > 0;
         if (b) {

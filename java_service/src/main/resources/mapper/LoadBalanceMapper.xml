@@ -6,38 +6,87 @@
     <insert id="save" parameterType="com.kyriexu.model.LoadBalance">
         insert into gateway_service_load_balance
         <trim prefix="(" suffix=")" suffixOverrides=",">
-
+            <if test="loadBalance.serviceId != null">
+                service_id,
+            </if>
+            <if test="loadBalance.roundType != null">
+                round_type,
+            </if>
+            <if test="loadBalance.ipList != null">
+                ip_list,
+            </if>
+            <if test="loadBalance.weightList != null">
+                weight_list,
+            </if>
+            <if test="loadBalance.upstreamConnectTimeout != null">
+                upstream_connect_timeout,
+            </if>
+            <if test="loadBalance.upstreamHeaderTimeout != null">
+                upstream_header_timeout,
+            </if>
+            <if test="loadBalance.upstreamIdleTimeout != null">
+                upstream_idle_timeout,
+            </if>
+            <if test="loadBalance.upstreamMaxIdle != null">
+                upstream_max_idle,
+            </if>
+        </trim>
+        <trim prefix="values (" suffixOverrides="," suffix=")">
+            <if test="loadBalance.serviceId != null">
+                #{loadBalance.serviceId},
+            </if>
+            <if test="loadBalance.roundType != null">
+                #{loadBalance.roundType},
+            </if>
+            <if test="loadBalance.ipList != null">
+                #{loadBalance.ipList},
+            </if>
+            <if test="loadBalance.weightList != null">
+                #{loadBalance.weightList},
+            </if>
+            <if test="loadBalance.upstreamConnectTimeout != null">
+                #{loadBalance.upstreamConnectTimeout},
+            </if>
+            <if test="loadBalance.upstreamHeaderTimeout != null">
+                #{loadBalance.upstreamHeaderTimeout},
+            </if>
+            <if test="loadBalance.upstreamIdleTimeout != null">
+                #{loadBalance.upstreamIdleTimeout},
+            </if>
+            <if test="loadBalance.upstreamMaxIdle != null">
+                #{loadBalance.upstreamMaxIdle},
+            </if>
         </trim>
     </insert>
-    <update id="update">
+    <update id="update" parameterType="com.kyriexu.model.LoadBalance">
         update gateway_service_load_balance
         <set>
             <trim suffixOverrides=",">
-                <if test="roundType != null">
-                    round_type = #{roundType},
+                <if test="loadBalance.roundType != null">
+                    round_type = #{loadBalance.roundType},
                 </if>
-                <if test="ipList != null">
-                    ip_list = #{ipList},
+                <if test="loadBalance.ipList != null">
+                    ip_list = #{loadBalance.ipList},
                 </if>
-                <if test="weightList != null">
-                    weight_list = #{weightList},
+                <if test="loadBalance.weightList != null">
+                    weight_list = #{loadBalance.weightList},
                 </if>
-                <if test="upstreamConnectTimeout != null">
-                    upstream_connect_timeout = #{upstreamConnectTimeout},
+                <if test="loadBalance.upstreamConnectTimeout != null">
+                    upstream_connect_timeout = #{loadBalance.upstreamConnectTimeout},
                 </if>
-                <if test="upstreamHeaderTimeout != null">
-                    upstream_header_timeout = #{upstreamHeaderTimeout},
+                <if test="loadBalance.upstreamHeaderTimeout != null">
+                    upstream_header_timeout = #{loadBalance.upstreamHeaderTimeout},
                 </if>
-                <if test="upstreamIdleTimeout != null">
-                    upstream_idle_timeout = #{upstreamIdleTimeout},
+                <if test="loadBalance.upstreamIdleTimeout != null">
+                    upstream_idle_timeout = #{loadBalance.upstreamIdleTimeout},
                 </if>
-                <if test="upstreamMaxIdle != null">
-                    upstream_max_idle = #{upstreamMaxIdle},
+                <if test="loadBalance.upstreamMaxIdle != null">
+                    upstream_max_idle = #{loadBalance.upstreamMaxIdle},
                 </if>
             </trim>
         </set>
         <where>
-            service_id = #{serviceId}
+            service_id = #{loadBalance.serviceId}
         </where>
     </update>
 

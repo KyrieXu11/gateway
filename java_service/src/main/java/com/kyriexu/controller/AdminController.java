@@ -1,10 +1,11 @@
 package com.kyriexu.controller;
 
+import com.kyriexu.common.handler.FlowCounterHandler;
+import com.kyriexu.common.utils.Constant;
+import com.kyriexu.common.utils.RespBean;
 import com.kyriexu.dto.AdminDto;
 import com.kyriexu.dto.PasswordInput;
 import com.kyriexu.service.AdminService;
-import com.kyriexu.common.utils.Constant;
-import com.kyriexu.common.utils.RespBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 import java.util.Objects;
 
 /**
@@ -26,10 +26,12 @@ import java.util.Objects;
  **/
 @RestController
 @RequestMapping("/admin")
-@Validated
 public class AdminController {
 
     public static final Logger logger = LoggerFactory.getLogger(AdminController.class);
+
+    @Autowired
+    private FlowCounterHandler flowCounterHandler;
 
     @Autowired
     private AdminService adminService;
@@ -45,7 +47,7 @@ public class AdminController {
     }
 
     @PostMapping("/login")
-    public RespBean login(@RequestBody @Valid AdminDto adminDto, HttpSession session) {
+    public RespBean login(@RequestBody @Validated AdminDto adminDto, HttpSession session) {
         boolean b = adminService.checkPassword(adminDto);
         if (b) {
             adminDto.setPassword("");
@@ -56,8 +58,8 @@ public class AdminController {
         return RespBean.error("登陆失败");
     }
 
-    @PutMapping("/changepass")
-    public RespBean changePass(@RequestBody @Valid PasswordInput passwordInput) {
+    @PutMapping("/changePass")
+    public RespBean changePass(@RequestBody @Validated PasswordInput passwordInput) {
         boolean res = adminService.changePass(passwordInput);
         return res ? RespBean.ok("修改成功") : RespBean.error("修改失败");
     }
@@ -68,8 +70,18 @@ public class AdminController {
         return RespBean.ok("注销成功");
     }
 
-    @PostMapping("/register")
-    public RespBean register(@RequestBody @Valid AdminDto adminDto) {
-        return adminService.register(adminDto) ? RespBean.ok("注册成功") : RespBean.error("注册失败");
-    }
+
+
+
+    // @PostMapping("/register")
+    // public RespBean register(@RequestBody @Valid AdminDto adminDto) {
+    //     return adminService.register(adminDto) ? RespBean.ok("注册成功") : RespBean.error("注册失败");
+    // }
+
+    // @GetMapping("/incr")
+    // public RedisFlowCounter incr(@RequestParam @NotNull String appId) {
+    //     RedisFlowCounter counter = flowCounterHandler.getCounter(Constant.FLOW_SERVICE_PREFIX + appId);
+    //     counter.increase();
+    //     return counter;
+    // }
 }

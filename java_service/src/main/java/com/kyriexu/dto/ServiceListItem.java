@@ -1,4 +1,4 @@
-package com.kyriexu.model;
+package com.kyriexu.dto;
 
 /**
  * @author KyrieXu

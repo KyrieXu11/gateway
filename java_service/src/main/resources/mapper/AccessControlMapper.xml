@@ -6,61 +6,61 @@
     <insert id="save" parameterType="com.kyriexu.model.AccessControl">
         insert into gateway_service_access_control
         <trim prefix="(" suffixOverrides="," suffix=")">
-            <if test="serviceId != null">
+            <if test="accessControl.serviceId != null">
                 service_id,
             </if>
             open_auth,
-            <if test="blackList != null">
+            <if test="accessControl.blackList != null">
                 black_list,
             </if>
-            <if test="whiteList != null">
+            <if test="accessControl.whiteList != null">
                 white_list,
             </if>
-            <if test="whiteHostName != null">
+            <if test="accessControl.whiteHostName != null">
                 white_host_name,
             </if>
             clientip_flow_limit,
             service_flow_limit,
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="serviceId != null">
-                #{serviceId},
+            <if test="accessControl.serviceId != null">
+                #{accessControl.serviceId},
             </if>
             #{openAuth},
-            <if test="blackList != null">
-                #{blackList},
+            <if test="accessControl.blackList != null">
+                #{accessControl.blackList},
             </if>
-            <if test="whiteList != null">
-                #{whiteList},
+            <if test="accessControl.whiteList != null">
+                #{accessControl.whiteList},
             </if>
-            <if test="whiteHostName != null">
-                #{whiteHostName},
+            <if test="accessControl.whiteHostName != null">
+                #{accessControl.whiteHostName},
             </if>
-            #{clientipFlowLimit},
-            #{serviceFlowLimit},
+            #{accessControl.clientipFlowLimit},
+            #{accessControl.serviceFlowLimit},
         </trim>
     </insert>
-    <update id="updateAccessControl"
+    <update id="update"
             parameterType="com.kyriexu.model.AccessControl">
         update gateway_service_access_control
         <set>
             <trim suffixOverrides=",">
-                open_auth = #{openAuth},
-                <if test="blackList != null">
-                    black_list = #{blackList},
+                open_auth = #{accessControl.openAuth},
+                <if test="accessControl.blackList != null">
+                    black_list = #{accessControl.blackList},
                 </if>
-                <if test="whiteList != null">
-                    white_list = #{whiteList},
+                <if test="accessControl.whiteList != null">
+                    white_list = #{accessControl.whiteList},
                 </if>
-                <if test="whiteHostName != null">
-                    white_host_name = #{whiteHostName},
+                <if test="accessControl.whiteHostName != null">
+                    white_host_name = #{accessControl.whiteHostName},
                 </if>
-                clientip_flow_limit = #{clientipFlowLimit},
-                service_flow_limit = #{serviceFlowLimit},
+                clientip_flow_limit = #{accessControl.clientipFlowLimit},
+                service_flow_limit = #{accessControl.serviceFlowLimit},
             </trim>
         </set>
         <where>
-            service_id = #{serviceId}
+            service_id = #{accessControl.serviceId}
         </where>
     </update>
 

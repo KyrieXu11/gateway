@@ -14,6 +14,6 @@ import lombok.NoArgsConstructor;
 public class PanelGroupDataOutput {
     private long serviceNum;
     private long appNum;
-    private long currentQPS;
+    private long currentQps;
     private long todayRequestNum;
 }

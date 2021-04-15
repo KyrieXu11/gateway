@@ -1,10 +1,12 @@
 package com.kyriexu.service;
 
-import com.kyriexu.dto.ServiceInput;
+import com.kyriexu.dto.DashServiceStatOutput;
+import com.kyriexu.dto.SearchInput;
+import com.kyriexu.dto.ServiceListItem;
 import com.kyriexu.dto.ServiceSearch;
+import com.kyriexu.model.PageBean;
 import com.kyriexu.model.ServiceDetail;
 import com.kyriexu.model.ServiceInfo;
-import com.kyriexu.model.ServicePageBean;
 
 import java.util.List;
 
@@ -13,19 +15,27 @@ import java.util.List;
  * @since 2021/3/23 18:15
  **/
 public interface ServiceService {
-    ServicePageBean getPageBean(ServiceInput serviceInput);
+    PageBean<ServiceListItem> getPageBean(SearchInput searchInput);
 
     ServiceDetail getServiceDetail(ServiceSearch search);
 
-    int getTotalPage(ServiceInput input);
+    ServiceDetail getServiceDetail(ServiceInfo info);
+
+    int getTotalPage(SearchInput input);
 
     /**
-     * 添加 SserviceInfo
+     * 添加 ServiceInfo
      *
      * @param serviceInfo serviceInfo
      * @return 新增的实体的主键
      */
-    long saveServiceInfo(ServiceInfo serviceInfo);
+    int saveServiceInfo(ServiceInfo serviceInfo);
 
-    List<ServiceInfo> getServiceInfoList(ServiceInput serviceInput);
+    List<ServiceInfo> getServiceInfoList(SearchInput searchInput);
+
+    DashServiceStatOutput countByLoadType();
+
+    boolean del(Long serviceId);
+
+    List<ServiceDetail> getServiceDetails(SearchInput input);
 }

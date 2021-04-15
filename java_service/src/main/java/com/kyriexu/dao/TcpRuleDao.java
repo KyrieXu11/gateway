@@ -9,4 +9,6 @@ import org.apache.ibatis.annotations.Param;
  **/
 public interface TcpRuleDao {
     TcpRule get(@Param("serviceId") Long serviceId);
+
+    int add(@Param("tcpRule") TcpRule tcpRule);
 }

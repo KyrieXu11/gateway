@@ -1,15 +1,18 @@
 package com.kyriexu.model;
 
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
 /**
  * @author KyrieXu
  * @since 2021/3/23 18:17
  **/
-public class ServicePageBean {
+@NoArgsConstructor
+public class PageBean<T> {
     private int total;
     private int current;
-    private List<ServiceListItem> items;
+    private List<T> items;
 
     public int getTotal() {
         return total;
@@ -27,15 +30,15 @@ public class ServicePageBean {
         this.current = current;
     }
 
-    public List<ServiceListItem> getItems() {
+    public List<T> getItems() {
         return items;
     }
 
-    public void setItems(List<ServiceListItem> items) {
+    public void setItems(List<T> items) {
         this.items = items;
     }
 
-    public ServicePageBean(int total, int current, List<ServiceListItem> items) {
+    public PageBean(int total, int current, List<T> items) {
         this.total = total;
         this.current = current;
         this.items = items;

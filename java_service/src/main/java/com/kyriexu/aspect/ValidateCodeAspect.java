@@ -1,6 +1,5 @@
-package com.kyriexu.component.aspect;
+package com.kyriexu.aspect;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kyriexu.common.utils.Constant;
 import com.kyriexu.common.utils.RespBean;
 import com.kyriexu.controller.CommonController;
@@ -35,16 +34,14 @@ public class ValidateCodeAspect {
     private HttpServletResponse response;
 
     @Autowired
-    private ObjectMapper mapper;
-
-    @Autowired
     private CommonController commonController;
 
-    @Around("@annotation(com.kyriexu.component.annotation.ValidateCode)")
+    @Around("@annotation(com.kyriexu.annotation.ValidateCode)")
     public Object handleDelReq(ProceedingJoinPoint joinPoint) throws Throwable {
         HttpSession session = request.getSession();
         String code = (String) session.getAttribute(Constant.CODE);
         if (StringUtils.isEmpty(code)) {
+            logger.info("[FAIL] haven't call VerifyCode");
             return RespBean.error("请输入验证码");
         }
         // 设置 HttpServletRequest 为父子线程共享
@@ -52,16 +49,16 @@ public class ValidateCodeAspect {
         try {
             code = request.getParameter("code");
             if (StringUtils.isEmpty(code)) {
+                logger.info("[FAIL] parameter code is null");
                 return RespBean.error("请输入验证码");
             }
-            String c1 = code.toLowerCase();
-            String c2 = ((String) session.getAttribute(Constant.CODE)).toLowerCase();
-            if (!StringUtils.isEmpty(c1) && c2.equals(c1)) {
+            String reqCode = code.toLowerCase();
+            code = ((String) session.getAttribute(Constant.CODE)).toLowerCase();
+            if (!StringUtils.isEmpty(reqCode) && code.equals(reqCode)) {
                 logger.info("[SUCCESS] match code successfully");
             } else {
-                logger.info("[FAIL] code is not correct,wrong code is {} correct code is {}", c1, c2);
-                // response.setContentType("application/json");
-                commonController.verifyCode(response, session);
+                logger.info("[FAIL] code is not correct,wrong code is {};correct code is {}", reqCode, code);
+                commonController.verifyCode(false, response, session);
                 return null;
             }
         } catch (IOException e) {

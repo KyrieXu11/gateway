@@ -7,6 +7,7 @@ package com.kyriexu.common.utils;
 public class Constant {
     public final static int SUCCESS = 200;
     public final static int COMMON_FAIL = 400;
+    public final static int SERVER_ERROR = 500;
 
     public final static int SIZE_LIMIT = 50;
 
@@ -47,10 +48,17 @@ public class Constant {
 
     public final static String UUID_REGEX = "^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$";
 
+    public final static String ContentTypeJson = "application/json";
+
+    public final static String FlowAppPrefix = "flow_app_";
+
+    public final static String PASSWORD_SALT = "admin";
+
+    public final static int MIN_PAGE = 1;
+
     public final static String[] SERVICE_TYPE = new String[]{
-            SERVICE_ALL,
-            SERVICE_TCP,
             SERVICE_HTTP,
+            SERVICE_TCP,
             SERVICE_GRPC
     };
 

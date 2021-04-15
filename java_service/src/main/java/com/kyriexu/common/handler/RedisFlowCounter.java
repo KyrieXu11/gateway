@@ -2,6 +2,7 @@ package com.kyriexu.common.handler;
 
 import com.kyriexu.common.utils.Constant;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -17,6 +18,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * @since 2021/3/27 17:43
  **/
 @Data
+@Slf4j
 public class RedisFlowCounter {
     private final Timer timer;
     private String appId;
@@ -47,14 +49,17 @@ public class RedisFlowCounter {
                 String dayKey = getDayKey(now);
                 String hourKey = getHourKey(now);
                 redisTemplate.executePipelined((RedisCallback<String>) c -> {
+                    log.info("start redis pipeline");
                     byte[] dayKeyBytes = dayKey.getBytes();
                     byte[] hourKeyBytes = hourKey.getBytes();
                     c.incrBy(dayKeyBytes, tickerCount.get());
                     c.expire(dayKeyBytes, Constant.REDIS_DAY_KEY_EXPIRE);
                     c.incrBy(hourKeyBytes, tickerCount.get());
                     c.expire(hourKeyBytes, Constant.REDIS_HOUR_KEY_EXPIRE);
+                    log.info("end redis pipeline");
                     return null;
                 });
+                long totalCount = getData(now);
             }
         }, 0, this.interval);
         // 注册到JVM钩子函数当中取消 timer 的运行
@@ -77,5 +82,9 @@ public class RedisFlowCounter {
 
     private long getData(LocalDateTime time) {
         return (long) this.redisTemplate.opsForValue().get(getDayKey(time));
+    }
+
+    public void increase() {
+        this.threadPoolTaskExecutor.execute(this.tickerCount::incrementAndGet);
     }
 }

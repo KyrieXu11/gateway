@@ -1,32 +1,42 @@
 package com.kyriexu.service.impl;
 
+import com.kyriexu.common.utils.ComponentUtils;
+import com.kyriexu.common.utils.Constant;
+import com.kyriexu.common.utils.HttpUtils;
+import com.kyriexu.common.utils.Utils;
 import com.kyriexu.dao.AccessControlDao;
 import com.kyriexu.dao.GrpcRuleDao;
 import com.kyriexu.dao.HttpRuleDao;
 import com.kyriexu.dao.LoadBalanceDao;
 import com.kyriexu.dao.ServiceDao;
 import com.kyriexu.dao.TcpRuleDao;
-import com.kyriexu.dto.ServiceInput;
+import com.kyriexu.dto.DashServiceStatOutput;
+import com.kyriexu.dto.ListDto;
+import com.kyriexu.dto.SearchInput;
+import com.kyriexu.dto.ServiceListItem;
 import com.kyriexu.dto.ServiceSearch;
+import com.kyriexu.dto.ServiceStatItemOutput;
 import com.kyriexu.exception.BaseException;
 import com.kyriexu.exception.ResultCode;
 import com.kyriexu.model.AccessControl;
 import com.kyriexu.model.GrpcRule;
 import com.kyriexu.model.HttpRule;
 import com.kyriexu.model.LoadBalance;
+import com.kyriexu.model.PageBean;
 import com.kyriexu.model.ServiceDetail;
 import com.kyriexu.model.ServiceInfo;
-import com.kyriexu.model.ServiceListItem;
-import com.kyriexu.model.ServicePageBean;
 import com.kyriexu.model.TcpRule;
 import com.kyriexu.service.ServiceService;
-import com.kyriexu.common.utils.ComponentUtils;
-import com.kyriexu.common.utils.Constant;
-import com.kyriexu.common.utils.Utils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,6 +45,8 @@ import java.util.List;
  **/
 @Service
 public class ServiceServiceImpl implements ServiceService {
+
+    public static final Logger logger = LoggerFactory.getLogger(ServiceServiceImpl.class);
 
     @Autowired
     private ServiceDao serviceDao;
@@ -57,41 +69,57 @@ public class ServiceServiceImpl implements ServiceService {
     @Autowired
     private ComponentUtils componentUtils;
 
+    @Autowired
+    private HttpServletRequest request;
+
     @Override
-    public ServicePageBean getPageBean(ServiceInput serviceInput) {
-        int page = Utils.getPage(serviceInput.getPage(), serviceInput.getSize());
-        List<ServiceInfo> infoList = serviceDao.getServiceInfoList(page, serviceInput.getSize(), serviceInput.getInfo());
-        // TODO: 优化查询，改成批量查询在内存当中创建 ServiceDetail 对象
-        List<ServiceListItem> items = new ArrayList<>(infoList.size());
+    public PageBean<ServiceListItem> getPageBean(SearchInput input) {
+        List<ServiceInfo> infoList = this.getServiceInfoList(input);
+        List<ServiceDetail> detailList = new ArrayList<>();
         infoList.forEach(info -> {
-            ServiceSearch search = new ServiceSearch(info.getId(), Constant.SERVICE_ALL);
-            ServiceDetail detail = getServiceDetail(search);
-            String addr = getAddr(detail);
-            List<String> ipList = detail.getLoadBalance().getIPListByModel();
-            ServiceListItem item = new ServiceListItem(
-                    info.getId(),
-                    info.getServiceName(),
-                    info.getServiceDesc(),
-                    info.getLoadType(),
-                    addr,
-                    0L,
-                    0L,
-                    ipList.size()
-            );
-            items.add(item);
+            ServiceDetail detail = getServiceDetail(info);
+            detailList.add(detail);
         });
-        return new ServicePageBean(this.getTotalPage(serviceInput), serviceInput.getPage(), items);
+        String url = String.format("http://%s%s", componentUtils.getGoServiceAddr(), request.getRequestURI());
+        logger.info("[INTERNAL CALL] url : {}", url);
+        ListDto<ServiceDetail> dto = new ListDto<>(detailList);
+        List<ServiceListItem> items;
+        try {
+            items = HttpUtils.post(url, dto);
+            return new PageBean<>(this.getTotalPage(input), input.getPage(), items);
+        } catch (IOException e) {
+            logger.error("[FAIL] IOException cause: ", e);
+            throw new BaseException(ResultCode.INTERNAL_EXCEPTION);
+        }
     }
 
     @Override
     public ServiceDetail getServiceDetail(ServiceSearch search) {
         ServiceDetail detail = new ServiceDetail();
-        String serviceType = search.getServiceType();
-        Long serviceId = search.getServiceId();
-        if (!Utils.contains(Constant.SERVICE_TYPE, serviceType)) {
-            throw new BaseException(ResultCode.NO_SUCH_SERVICE_TYPE);
+        // String serviceType = search.getServiceType();
+        // Long serviceId = search.getServiceId();
+        // if (!Utils.contains(Constant.SERVICE_TYPE, serviceType)) {
+        //     throw new BaseException(ResultCode.NO_SUCH_SERVICE_TYPE);
+        // }
+        // ServiceInfo info = serviceDao.get(serviceId);
+        // detail.setInfo(info);
+        // setRule(search, detail);
+        // LoadBalance loadBalance = loadBalanceDao.get(serviceId);
+        // AccessControl accessControl = accessControlDao.get(serviceId);
+        // detail.setLoadBalance(loadBalance);
+        // detail.setAccessControl(accessControl);
+        return detail;
+    }
+
+    @Override
+    public ServiceDetail getServiceDetail(ServiceInfo info) {
+        ServiceDetail detail = new ServiceDetail();
+        Long serviceId = info.getId();
+        if (StringUtils.isEmpty(info.getServiceName())) {
+            info = serviceDao.get(serviceId);
         }
-        setRule(search, detail);
+        detail.setInfo(info);
+        setRule(info, detail);
         LoadBalance loadBalance = loadBalanceDao.get(serviceId);
         AccessControl accessControl = accessControlDao.get(serviceId);
         detail.setLoadBalance(loadBalance);
@@ -100,9 +128,9 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     @Override
-    public int getTotalPage(ServiceInput input) {
+    public int getTotalPage(SearchInput input) {
         int size = input.getSize();
-        int res = serviceDao.getTotal(size);
+        int res = serviceDao.getTotal(input.getInfo());
         if (res % size != 0) {
             return res / size + 1;
         }
@@ -110,42 +138,101 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     @Override
-    public long saveServiceInfo(ServiceInfo serviceInfo) {
+    public int saveServiceInfo(ServiceInfo serviceInfo) {
         return serviceDao.saveServiceInfo(serviceInfo);
     }
 
     @Override
-    public List<ServiceInfo> getServiceInfoList(ServiceInput serviceInput) {
-        int size = serviceInput.getSize();
-        int page = Utils.getPage(serviceInput.getPage(), size);
-        return serviceDao.getServiceInfoList(page, size, serviceInput.getInfo());
+    public DashServiceStatOutput countByLoadType() {
+        List<ServiceStatItemOutput> list = serviceDao.countByLoadType();
+        List<String> legend = new ArrayList<>();
+        DashServiceStatOutput out = new DashServiceStatOutput();
+        list.forEach(item -> {
+            String name = Constant.SERVICE_TYPE[item.getLoadType()];
+            item.setName(name);
+            legend.add(name);
+        });
+        out.setData(list);
+        out.setLegend(legend);
+        return out;
     }
 
-    private void setRule(ServiceSearch search, ServiceDetail detail) {
-        String serviceType = search.getServiceType();
-        Long serviceId = search.getServiceId();
+    @Override
+    public List<ServiceDetail> getServiceDetails(SearchInput input) {
+        List<ServiceInfo> list = this.getServiceInfoList(input);
+        List<ServiceDetail> details = new ArrayList<>();
+        list.forEach(info -> {
+            ServiceDetail detail = getServiceDetail(info);
+            details.add(detail);
+        });
+        return details;
+    }
+
+    @Override
+    public boolean del(Long serviceId) {
         ServiceInfo info = serviceDao.get(serviceId);
-        detail.setInfo(info);
-        switch (serviceType) {
-            case Constant.SERVICE_HTTP:
+        if (info != null && info.isDeleted()) {
+            throw new BaseException(ResultCode.SERVICE_ALREADY_DELETED);
+        } else if (info == null) {
+            throw new BaseException(ResultCode.SERVICE_NO_EXIST);
+        }
+        info = new ServiceInfo();
+        info.setId(serviceId);
+        info.setUpdateAt(new Date());
+        info.setDeleted(true);
+        int i = serviceDao.updateServiceInfo(info);
+        return i > 0;
+    }
+
+    @Override
+    public List<ServiceInfo> getServiceInfoList(SearchInput searchInput) {
+        int size = searchInput.getSize();
+        int page = Utils.getPage(searchInput.getPage(), size);
+        return serviceDao.getServiceInfoList(page, size, searchInput.getInfo());
+    }
+
+    // private void setRule(ServiceSearch search, ServiceDetail detail) {
+    //     String serviceType = search.getServiceType();
+    //     Long serviceId = search.getServiceId();
+    //     switch (serviceType) {
+    //         case Constant.SERVICE_HTTP:
+    //             HttpRule httpRule = httpRuleDao.get(serviceId);
+    //             detail.setHttpRule(httpRule);
+    //             break;
+    //         case Constant.SERVICE_TCP:
+    //             TcpRule tcpRule = tcpRuleDao.get(serviceId);
+    //             detail.setTcpRule(tcpRule);
+    //             break;
+    //         case Constant.SERVICE_GRPC:
+    //             GrpcRule grpcRule = grpcRuleDao.get(serviceId);
+    //             detail.setGrpcRule(grpcRule);
+    //             break;
+    //         case Constant.SERVICE_ALL:
+    //             search.setServiceType(Constant.SERVICE_HTTP);
+    //             setRule(search, detail);
+    //             search.setServiceType(Constant.SERVICE_TCP);
+    //             setRule(search, detail);
+    //             search.setServiceType(Constant.SERVICE_GRPC);
+    //             setRule(search, detail);
+    //             search.setServiceType(Constant.SERVICE_ALL);
+    //             break;
+    //     }
+    // }
+
+    private void setRule(ServiceInfo info, ServiceDetail detail) {
+        Long serviceId = info.getId();
+        switch (info.getLoadType()) {
+            case Constant.HTTPLoadType:
                 HttpRule httpRule = httpRuleDao.get(serviceId);
                 detail.setHttpRule(httpRule);
                 break;
-            case Constant.SERVICE_TCP:
+            case Constant.TCPLoadType:
                 TcpRule tcpRule = tcpRuleDao.get(serviceId);
                 detail.setTcpRule(tcpRule);
                 break;
-            case Constant.SERVICE_GRPC:
+            case Constant.GrpcLoadType:
                 GrpcRule grpcRule = grpcRuleDao.get(serviceId);
                 detail.setGrpcRule(grpcRule);
-                break;
-            case Constant.SERVICE_ALL:
-                ServiceSearch s = new ServiceSearch(serviceId, Constant.SERVICE_HTTP);
-                setRule(s, detail);
-                s.setServiceType(Constant.SERVICE_TCP);
-                setRule(s, detail);
-                s.setServiceType(Constant.SERVICE_GRPC);
-                setRule(s, detail);
                 break;
         }
     }

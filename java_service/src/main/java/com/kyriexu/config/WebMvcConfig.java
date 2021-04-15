@@ -1,4 +1,4 @@
-package com.kyriexu.component.config;
+package com.kyriexu.config;
 
 import com.kyriexu.component.interceptor.AuthInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;

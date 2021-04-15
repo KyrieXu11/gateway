@@ -11,4 +11,12 @@ import java.util.List;
  **/
 public interface AppDao {
     List<App> getAppList(@Param("page") int page, @Param("size") int size, @Param("query") String query);
+
+    Integer count(@Param("query") String info);
+
+    int update(@Param("app") App app);
+
+    App get(@Param("appId") String appId);
+
+    int add(@Param("app") App app);
 }

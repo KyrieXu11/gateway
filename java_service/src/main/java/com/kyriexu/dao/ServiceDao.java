@@ -1,5 +1,6 @@
 package com.kyriexu.dao;
 
+import com.kyriexu.dto.ServiceStatItemOutput;
 import com.kyriexu.model.ServiceInfo;
 import org.apache.ibatis.annotations.Param;
 
@@ -15,11 +16,13 @@ public interface ServiceDao {
 
     ServiceInfo get(@Param("id") Long id);
 
-    int getTotal(@Param("size") int size);
+    int getTotal(@Param("query") String info);
 
     ServiceInfo getByServiceName(@Param("serviceName") String serviceName);
 
-    long saveServiceInfo(@Param("info") ServiceInfo info);
+    int saveServiceInfo(@Param("info") ServiceInfo info);
 
     int updateServiceInfo(@Param("info") ServiceInfo info);
+
+    List<ServiceStatItemOutput> countByLoadType();
 }

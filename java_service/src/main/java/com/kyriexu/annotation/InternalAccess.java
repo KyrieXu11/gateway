@@ -1,4 +1,4 @@
-package com.kyriexu.component.annotation;
+package com.kyriexu.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -8,10 +8,10 @@ import java.lang.annotation.Target;
 
 /**
  * @author KyrieXu
- * @since 2021/4/1 11:36
+ * @since 2021/4/7 13:32
  **/
-@Target({ElementType.METHOD})
+@Target({ElementType.METHOD,ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface ValidateCode {
+public @interface InternalAccess {
 }
