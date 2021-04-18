@@ -25,7 +25,7 @@ public class CommonController {
 
 
     @GetMapping("/verifyCode")
-    public void verifyCode(@RequestParam(value = "base64",defaultValue = "0") boolean isBase64, HttpServletResponse response, HttpSession session) throws IOException {
+    public void verifyCode(@RequestParam(value = "base64",defaultValue = "1") boolean isBase64, HttpServletResponse response, HttpSession session) throws IOException {
         VerifyCode code;
         if (!isBase64) {
             code = new VerifyCode();

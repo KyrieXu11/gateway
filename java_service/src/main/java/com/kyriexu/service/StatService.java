@@ -14,5 +14,4 @@ public interface StatService {
     PanelGroupDataOutput getRemotePanelGroupData(boolean isConsul);
 
     <V> ServiceStatOut getRemoteServiceStat(Map<String,V> params);
-
 }

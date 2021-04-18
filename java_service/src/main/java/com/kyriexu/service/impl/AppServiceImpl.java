@@ -41,8 +41,8 @@ public class AppServiceImpl implements AppService {
     private AppDao appDao;
 
     @Override
-    public App detail(String appId) {
-        return appDao.get(appId);
+    public App detail(Long id) {
+        return appDao.get(id);
     }
 
     @Override
@@ -52,15 +52,15 @@ public class AppServiceImpl implements AppService {
     }
 
     @Override
-    public boolean del(String appId) {
-        App app = appDao.get(appId);
+    public boolean del(Long id) {
+        App app = appDao.get(id);
         if (app != null && app.isDeleted()) {
             throw new BaseException(ResultCode.APP_ALREADY_DELETED);
         } else if (app == null) {
             throw new BaseException(ResultCode.APP_NO_EXIST);
         }
         app = new App();
-        app.setAppId(appId);
+        app.setId(id);
         app.setDeleted(true);
         app.setUpdateAt(new Date());
         int rows = appDao.update(app);
@@ -74,15 +74,14 @@ public class AppServiceImpl implements AppService {
         logger.info("[INTERNAL CALL] url : {}", url);
         ListDto<App> appListDto = new ListDto<>(appList);
         try {
-            List<AppListItem> res = HttpUtils.post(url, appListDto);
+            List<AppListItem> res = HttpUtils.post(url, appListDto,List.class);
             PageBean<AppListItem> pageBean = new PageBean<>();
             pageBean.setItems(res);
             pageBean.setCurrent(input.getPage());
             pageBean.setTotal(getTotalPage(input));
-            logger.info("AppListPageBean : {}", pageBean);
             return pageBean;
         } catch (IOException e) {
-            logger.error("[FAIL] invoke getAppPageBean()", e.getCause());
+            logger.error("[FAIL] invoke getAppPageBean() cause:", e.getCause());
             throw new BaseException(ResultCode.INTERNAL_EXCEPTION);
         }
     }

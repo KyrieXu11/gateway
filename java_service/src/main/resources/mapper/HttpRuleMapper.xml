@@ -46,13 +46,13 @@
         update gateway_service_http_rule
         <set>
             <trim suffixOverrides=",">
-                rule_type #{httpRule.ruleType},
+                rule_type = #{httpRule.ruleType},
                 <if test="httpRule.rule != null">
                     rule = #{httpRule.rule},
                 </if>
                 need_https = #{httpRule.needHttps},
                 need_strip_uri = #{httpRule.needStripUri},
-                need_websocket = #{httpRule.needWebsocket},
+                need_websocket = #{httpRule.needWebSocket},
                 <if test="httpRule.urlRewrite != null">
                     url_rewrite = #{httpRule.urlRewrite},
                 </if>

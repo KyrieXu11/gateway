@@ -74,6 +74,41 @@ public class TcpRuleServiceImpl implements TcpRuleService {
         return true;
     }
 
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class)
+    public boolean update(TcpRuleInput input) {
+        String[] ipList = input.getIpList().split(",");
+        String[] weightList = input.getWeightList().split(",");
+        if (ipList.length != weightList.length) {
+            throw new BaseException(ResultCode.IP_WEIGHT_DIFFERENT);
+        }
+        if (!input.checkId()) {
+            throw new BaseException(ResultCode.SERVICE_ID_ILLEGAL);
+        }
+        boolean res = updateServiceInfo(input);
+        if (!res) {
+            logger.error("[FAIL] update tcp service info");
+            throw new BaseException(ResultCode.UPDATE_TCP_RULE_FAIL);
+        }
+        res = updateTcpRule(input);
+        if (!res) {
+            logger.error("[FAIL] update tcp rule");
+            throw new BaseException(ResultCode.UPDATE_TCP_RULE_FAIL);
+        }
+        res = updateAccessControl(input);
+        if (!res) {
+            logger.error("[FAIL] update tcp access control");
+            throw new BaseException(ResultCode.UPDATE_TCP_RULE_FAIL);
+        }
+        res = updateLoadBalance(input);
+        if (!res) {
+            logger.error("[FAIL] update tcp load balance");
+            throw new BaseException(ResultCode.UPDATE_TCP_RULE_FAIL);
+        }
+        logger.info("[SUCCESS] update tcp service successfully");
+        return true;
+    }
+
     private long saveServiceInfo(TcpRuleInput input) {
         ServiceInfo info = new ServiceInfo();
         info.setServiceName(input.getServiceName());
@@ -118,6 +153,48 @@ public class TcpRuleServiceImpl implements TcpRuleService {
         accessControl.setWhiteHostName(input.getWhiteHostName());
         accessControl.setWhiteList(input.getWhiteList());
         int rows = accessControlDao.save(accessControl);
+        return rows > 0;
+    }
+
+    private boolean updateServiceInfo(TcpRuleInput input) {
+        ServiceInfo info = new ServiceInfo();
+        info.setId(input.getId());
+        info.setServiceName(input.getServiceName());
+        info.setServiceDesc(input.getServiceDesc());
+        info.setLoadType(Constant.TCPLoadType);
+        info.setUpdateAt(new Date());
+        return serviceDao.updateServiceInfo(info) > 0;
+    }
+
+    private boolean updateAccessControl(TcpRuleInput input) {
+        AccessControl accessControl = new AccessControl(
+                input.getId(),
+                input.getOpenAuth(),
+                input.getBlackList(),
+                input.getWhiteList(),
+                input.getClientipFlowLimit(),
+                input.getServiceFlowLimit()
+        );
+        int i = accessControlDao.update(accessControl);
+        return i > 0;
+    }
+
+    private boolean updateLoadBalance(TcpRuleInput input) {
+        LoadBalance loadBalance = new LoadBalance();
+        loadBalance.setServiceId(input.getId());
+        loadBalance.setIpList(input.getIpList());
+        loadBalance.setForbidList(input.getForbidList());
+        loadBalance.setRoundType(input.getRoundType());
+        loadBalance.setWeightList(input.getWeightList());
+        int i = loadBalanceDao.update(loadBalance);
+        return i > 0;
+    }
+
+    private boolean updateTcpRule(TcpRuleInput input) {
+        TcpRule rule = new TcpRule();
+        rule.setServiceId(input.getId());
+        rule.setPort(input.getPort());
+        int rows = tcpRuleDao.update(rule);
         return rows > 0;
     }
 }

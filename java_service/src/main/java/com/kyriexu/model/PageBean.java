@@ -1,6 +1,7 @@
 package com.kyriexu.model;
 
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -9,6 +10,7 @@ import java.util.List;
  * @since 2021/3/23 18:17
  **/
 @NoArgsConstructor
+@ToString
 public class PageBean<T> {
     private int total;
     private int current;

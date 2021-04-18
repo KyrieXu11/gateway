@@ -8,4 +8,6 @@ import com.kyriexu.dto.TcpRuleInput;
  **/
 public interface TcpRuleService {
     boolean add(TcpRuleInput input);
+
+    boolean update(TcpRuleInput input);
 }

@@ -22,6 +22,19 @@
             </if>
         </trim>
     </insert>
+    <update id="update" parameterType="com.kyriexu.model.TcpRule">
+        update gateway_service_tcp_rule
+            <set>
+                <trim suffixOverrides=",">
+                    <if test="rule.port != null">
+                        port = #{rule.port},
+                    </if>
+                </trim>
+            </set>
+            <where>
+                service_id = #{rule.serviceId}
+            </where>
+    </update>
 
 
     <select id="get" resultType="com.kyriexu.model.TcpRule">

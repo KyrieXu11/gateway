@@ -55,7 +55,7 @@
                 <if test="accessControl.whiteHostName != null">
                     white_host_name = #{accessControl.whiteHostName},
                 </if>
-                clientip_flow_limit = #{accessControl.clientipFlowLimit},
+                clientip_flow_limit = #{accessControl.clientIpFlowLimit},
                 service_flow_limit = #{accessControl.serviceFlowLimit},
             </trim>
         </set>

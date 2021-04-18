@@ -1,6 +1,7 @@
 package com.kyriexu.controller;
 
 import com.kyriexu.annotation.InternalAccess;
+import com.kyriexu.annotation.ValidateCode;
 import com.kyriexu.common.utils.Constant;
 import com.kyriexu.common.utils.RespBean;
 import com.kyriexu.dto.SearchInput;
@@ -44,8 +45,8 @@ public class ServiceController {
     private StatService statService;
 
     @GetMapping("/list")
-    public RespBean list(@RequestParam @Min(value = 1, message = "页码最少为1页") int page,
-                         @RequestParam @Min(value = 1, message = "页面最少为1条记录") @Max(value = Constant.SIZE_LIMIT, message = "一页最多50条记录") int size,
+    public RespBean list(@RequestParam(defaultValue = "1") @Min(value = 1, message = "页码最少为1页") int page,
+                         @RequestParam(defaultValue = "20") @Min(value = 1, message = "页面最少为1条记录") @Max(value = Constant.SIZE_LIMIT, message = "一页最多50条记录") int size,
                          @RequestParam @Nullable String info) {
         SearchInput searchInput = new SearchInput(page, size, info);
         PageBean<ServiceListItem> pageBean = serviceService.getPageBean(searchInput);
@@ -76,9 +77,9 @@ public class ServiceController {
     }
 
     @DeleteMapping("/del/{id}")
+    @ValidateCode
     public RespBean delService(@PathVariable(value = "id") @NotNull @Min(value = 1, message = "服务ID不能<=0") Long serviceId) {
         boolean res = serviceService.del(serviceId);
         return res ? RespBean.ok("删除成功") : RespBean.error("删除失败");
     }
-
 }

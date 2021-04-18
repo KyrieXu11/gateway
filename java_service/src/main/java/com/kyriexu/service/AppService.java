@@ -15,9 +15,9 @@ public interface AppService {
 
     PageBean<AppListItem> getAppPageBean(SearchInput input);
 
-    boolean del(String appId);
+    boolean del(Long id);
 
-    App detail(String appId);
+    App detail(Long id);
 
     List<App> getAppList(SearchInput input);
 }

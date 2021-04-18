@@ -83,12 +83,11 @@ public class ServiceServiceImpl implements ServiceService {
         String url = String.format("http://%s%s", componentUtils.getGoServiceAddr(), request.getRequestURI());
         logger.info("[INTERNAL CALL] url : {}", url);
         ListDto<ServiceDetail> dto = new ListDto<>(detailList);
-        List<ServiceListItem> items;
         try {
-            items = HttpUtils.post(url, dto);
+            List<ServiceListItem> items = HttpUtils.post(url, dto,List.class);
             return new PageBean<>(this.getTotalPage(input), input.getPage(), items);
         } catch (IOException e) {
-            logger.error("[FAIL] IOException cause: ", e);
+            logger.error("[FAIL] get service list item cause: ", e);
             throw new BaseException(ResultCode.INTERNAL_EXCEPTION);
         }
     }

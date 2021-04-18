@@ -15,7 +15,6 @@ import org.springframework.lang.Nullable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,9 +42,9 @@ public class AppController {
     private AppService appService;
 
     @GetMapping("/appStat")
-    public RespBean appStat(@RequestParam(value = "app_id") @NotNull String appId) {
-        Map<String, String> params = new HashMap<>();
-        params.put("app_id", appId);
+    public RespBean appStat(@RequestParam(value = "id") @NotNull @Min(value = 1, message = "租户ID不能<=0") Long id) {
+        Map<String, Long> params = new HashMap<>();
+        params.put("id", id);
         ServiceStatOut serviceStat = statService.getRemoteServiceStat(params);
         return serviceStat != null ? RespBean.ok(serviceStat) : RespBean.error("统计失败");
     }
@@ -60,16 +59,15 @@ public class AppController {
     }
 
     @DeleteMapping("/delApp/{id}")
-    public RespBean del(@PathVariable(value = "id") @NotNull String appId) {
-        boolean del = appService.del(appId);
+    public RespBean del(@RequestParam(value = "id") @NotNull @Min(value = 1, message = "租户ID不能<=0") Long id) {
+        boolean del = appService.del(id);
         return del ? RespBean.ok("删除成功") : RespBean.error("删除失败");
     }
 
     @GetMapping("/detail")
-    public RespBean detail(@RequestParam(value = "app_id") @NotNull @Min(value = 1, message = "租户ID不能<=0") Long appId) {
-        String appIdStr = appId.toString();
-        App app = appService.detail(appIdStr);
-        return app != null ? RespBean.ok(app) : RespBean.error("未找到");
+    public RespBean detail(@RequestParam(value = "id") @NotNull @Min(value = 1, message = "租户ID不能<=0") Long id) {
+        App app = appService.detail(id);
+        return app != null ? RespBean.ok(app) : RespBean.error("未找到租户详情");
     }
 
     @GetMapping("/once/appList")

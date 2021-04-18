@@ -21,7 +21,7 @@ public class AppDaoTest {
 
     @Test
     public void get() {
-        App app = appDao.get("app_id_a");
+        App app = appDao.get(123L);
         Assert.assertNotNull(app);
     }
 }

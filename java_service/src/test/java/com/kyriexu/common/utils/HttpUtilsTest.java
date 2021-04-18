@@ -5,7 +5,10 @@ import com.kyriexu.model.App;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,7 +18,10 @@ import java.util.List;
 public class HttpUtilsTest {
 
     @Test
-    public void get() {
+    public void get() throws ParseException {
+        // 2006-01-02T15:04:05Z07:00
+        System.out.println(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+                .format(new Date()));
     }
 
     @Test
@@ -32,12 +38,12 @@ public class HttpUtilsTest {
             app.setSecret("234234");
         }
         class TempDto {
-            public List<App> appList;
+            public List<App> list;
         }
         TempDto tempDto = new TempDto();
-        tempDto.appList = appList;
+        tempDto.list = appList;
         try {
-            List<AppListItem> post = HttpUtils.post("http://127.0.0.1:8081/app/list", tempDto);
+            List<AppListItem> post = HttpUtils.post("http://127.0.0.1:8081/app/list", tempDto,List.class);
             System.out.println(post);
         } catch (IOException e) {
             e.printStackTrace();

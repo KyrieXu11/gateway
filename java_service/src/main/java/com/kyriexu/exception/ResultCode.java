@@ -9,7 +9,8 @@ import com.kyriexu.common.utils.Constant;
 public enum ResultCode {
     JSON_PROCESS_EXCEPTION(Constant.COMMON_FAIL, "JSON转化异常"),
     PAGE_NUM_ILLEGAL(Constant.COMMON_FAIL, "页数或者页面大小参数非法"),
-    UPDATE_HTTP_RULE_FAIL(Constant.COMMON_FAIL, "更新HTTP 服务失败"),
+    UPDATE_HTTP_RULE_FAIL(Constant.COMMON_FAIL, "更新 HTTP 服务失败"),
+    UPDATE_TCP_RULE_FAIL(Constant.COMMON_FAIL, "更新 Tcp 服务失败"),
     ADD_HTTP_RULE_FAIL(Constant.COMMON_FAIL, "添加 HTTP 服务失败"),
     ADD_TCP_RULE_FAILED(Constant.COMMON_FAIL, "添加 TCP 服务失败"),
     SERVICE_ID_ILLEGAL(Constant.COMMON_FAIL, "检查服务ID是否正确"),

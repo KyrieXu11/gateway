@@ -13,9 +13,13 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Map;
 
 /**
  * @author KyrieXu
@@ -23,13 +27,26 @@ import java.io.IOException;
  **/
 public class HttpUtils {
 
+    public static final Logger logger = LoggerFactory.getLogger(HttpUtils.class);
+
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     static {
         objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+        // 2006-01-02T15:04:05Z07:00
+        objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'"));
     }
 
-    public static <T> T get(String url) throws IOException {
+    public static <T, V> T get(String url, Map<String, V> params, Class<T> tClass) throws IOException {
+        StringBuilder sb = new StringBuilder(url);
+        if (params != null && params.size() != 0) {
+            sb.append("?");
+            params.forEach((k, v) -> sb.append(k)
+                    .append("=")
+                    .append(v)
+                    .append("&"));
+        }
+        url = sb.toString();
         String res;
         try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
             HttpGet get = new HttpGet(url);
@@ -39,7 +56,8 @@ public class HttpUtils {
                     res = EntityUtils.toString(entity);
                     InternResp<T> resp = objectMapper.readValue(res, InternResp.class);
                     if (resp.getCode() == Constant.SUCCESS) {
-                        return resp.getData();
+                        T data = resp.getData();
+                        return objectMapper.convertValue(data, tClass);
                     }
                 }
             }
@@ -47,7 +65,7 @@ public class HttpUtils {
         return null;
     }
 
-    public static <T, A> T post(String url, A o) throws IOException {
+    public static <T, A> T post(String url, A o, Class<T> tClass) throws IOException {
         String s = objectMapper.writeValueAsString(o);
         String res;
         try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
@@ -62,9 +80,15 @@ public class HttpUtils {
                     res = EntityUtils.toString(entity);
                     InternResp<T> resp = objectMapper.readValue(res, InternResp.class);
                     if (resp.getCode() == Constant.SUCCESS) {
-                        return resp.getData();
+                        logger.info("[SUCCESS] call {} successfully", url);
+                        T data = resp.getData();
+                        return objectMapper.convertValue(data, tClass);
+                    } else {
+                        logger.error("[FAIL] msg:{}, traceId:{}",resp.getMsg(),resp.getTraceId());
+                        return null;
                     }
                 }
+                logger.error("[FAIL] call api failed");
             }
         }
         return null;

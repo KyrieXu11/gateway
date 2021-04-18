@@ -1,5 +1,6 @@
 package com.kyriexu.aspect;
 
+import com.kyriexu.annotation.ValidateCode;
 import com.kyriexu.common.utils.Constant;
 import com.kyriexu.common.utils.RespBean;
 import com.kyriexu.controller.CommonController;
@@ -36,8 +37,8 @@ public class ValidateCodeAspect {
     @Autowired
     private CommonController commonController;
 
-    @Around("@annotation(com.kyriexu.annotation.ValidateCode)")
-    public Object handleDelReq(ProceedingJoinPoint joinPoint) throws Throwable {
+    @Around("@annotation(validateCode)")
+    public Object handleDelReq(ProceedingJoinPoint joinPoint,ValidateCode validateCode) throws Throwable {
         HttpSession session = request.getSession();
         String code = (String) session.getAttribute(Constant.CODE);
         if (StringUtils.isEmpty(code)) {
@@ -55,10 +56,11 @@ public class ValidateCodeAspect {
             String reqCode = code.toLowerCase();
             code = ((String) session.getAttribute(Constant.CODE)).toLowerCase();
             if (!StringUtils.isEmpty(reqCode) && code.equals(reqCode)) {
-                logger.info("[SUCCESS] match code successfully");
+                // session.removeAttribute(Constant.CODE);
+                logger.info("[SUCCESS] match code successfully,remove code attribute");
             } else {
                 logger.info("[FAIL] code is not correct,wrong code is {};correct code is {}", reqCode, code);
-                commonController.verifyCode(false, response, session);
+                commonController.verifyCode(validateCode.base64(), response, session);
                 return null;
             }
         } catch (IOException e) {

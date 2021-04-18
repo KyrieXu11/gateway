@@ -47,9 +47,9 @@ public class StatServiceImpl implements StatService {
             ServiceHealth serviceHealth = serviceList.get(0);
             int port = serviceHealth.getService().getPort();
             String address = serviceHealth.getService().getAddress();
-            url = String.format("http://%s:%d/%s", address, port, uri);
+            url = String.format("http://%s:%d%s", address, port, uri);
         } else {
-            url = String.format("http://%s/%s", componentUtils.getGoServiceAddr(), uri);
+            url = String.format("http://%s%s", componentUtils.getGoServiceAddr(), uri);
         }
         logger.info("[INTERNAL CALL] url: {}", url);
         return restTemplateHttpUtils.getInternalGenericObject(url, null, PanelGroupDataOutput.class);
@@ -58,8 +58,8 @@ public class StatServiceImpl implements StatService {
     @Override
     public <V> ServiceStatOut getRemoteServiceStat(Map<String, V> params) {
         String uri = request.getRequestURI();
-        String url = String.format("http://%s/%s", componentUtils.getGoServiceAddr(), uri);
+        String url = String.format("http://%s%s", componentUtils.getGoServiceAddr(), uri);
         logger.info("[INTERNAL CALL] url: {}", url);
-        return restTemplateHttpUtils.getInternalGenericObject(url, params, ServiceStatOut.class);
+        return restTemplateHttpUtils.getInternalGenericObject(url, params,ServiceStatOut.class);
     }
 }

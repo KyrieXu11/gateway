@@ -1,5 +1,6 @@
 package com.kyriexu.common.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kyriexu.dto.InternResp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,9 +25,12 @@ public class RestTemplateHttpUtils {
     public static final Logger logger = LoggerFactory.getLogger(RestTemplateHttpUtils.class);
 
     @Autowired
+    private ObjectMapper objectMapper;
+
+    @Autowired
     private RestTemplate restTemplate;
 
-    public <T, V> T getInternalGenericObject(String url, Map<String, V> urlParams, Class<T> tClass) {
+    public <T, V> T getInternalGenericObject(String url, Map<String, V> urlParams,Class<T> tClass) {
         StringBuilder sb = new StringBuilder(url);
         if (urlParams != null && urlParams.size() != 0) {
             sb.append("?");
@@ -38,16 +42,18 @@ public class RestTemplateHttpUtils {
         ParameterizedTypeReference<InternResp<T>> reference = new ParameterizedTypeReference<InternResp<T>>() {
         };
         ResponseEntity<InternResp<T>> resp = restTemplate.exchange(sb.toString(), HttpMethod.GET, null, reference);
-        return tClass.cast(getBody(resp));
+        T out = getBody(resp);
+        return objectMapper.convertValue(out, tClass);
     }
 
     @Deprecated
-    public <T,V> T postForObject(String url, Map<String, V> body, Class<T> tClass) {
+    public <T,V> T postForObject(String url, Map<String, V> body) {
         HttpEntity<Map<String, V>> entity = new HttpEntity<>(body);
         ParameterizedTypeReference<InternResp<T>> reference = new ParameterizedTypeReference<InternResp<T>>() {
         };
         ResponseEntity<InternResp<T>> resp = restTemplate.exchange(url, HttpMethod.POST, entity, reference);
-        return tClass.cast(getBody(resp));
+        T out = getBody(resp);
+        return out;
     }
 
     private <T> T getBody(ResponseEntity<InternResp<T>> resp) {

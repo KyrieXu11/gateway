@@ -49,7 +49,7 @@ public class RestTemplateHttpUtilsTest {
             String s = mapper.writeValueAsString(appList);
             Map<String, String> a = new HashMap<>();
             a.put("a", s);
-            List<AppListItem> list = restTemplateHttpUtils.postForObject("http://127.0.0.1:8081/app/list", a, List.class);
+            List<AppListItem> list = restTemplateHttpUtils.postForObject("http://127.0.0.1:8081/app/list", a);
             System.out.println(list);
         } catch (JsonProcessingException e) {
             e.printStackTrace();

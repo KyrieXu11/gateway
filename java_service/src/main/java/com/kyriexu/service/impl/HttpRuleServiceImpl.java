@@ -61,7 +61,7 @@ public class HttpRuleServiceImpl implements HttpRuleService {
         }
         long serviceId = this.saveServiceInfo(httpRuleInput);
         if (serviceId < 1) {
-            logger.error("[FAILED] insert ServiceInfo");
+            logger.error("[FAILED] insert http ServiceInfo");
             throw new BaseException(ResultCode.ADD_HTTP_RULE_FAIL);
         }
         logger.info("insert http service,service id : {}", serviceId);
@@ -72,12 +72,12 @@ public class HttpRuleServiceImpl implements HttpRuleService {
         }
         res = this.saveAccessControl(httpRuleInput, serviceId);
         if (res == 0) {
-            logger.error("[FAILED] insert AccessControl");
+            logger.error("[FAILED] insert http AccessControl");
             throw new BaseException(ResultCode.ADD_HTTP_RULE_FAIL);
         }
         res = this.saveLoadBalance(httpRuleInput, serviceId);
         if (res == 0) {
-            logger.error("[FAILED] insert LoadBalance");
+            logger.error("[FAILED] insert http LoadBalance");
             throw new BaseException(ResultCode.ADD_HTTP_RULE_FAIL);
         }
         logger.info("[SUCCESS] insert HttpService Successfully");
@@ -97,7 +97,7 @@ public class HttpRuleServiceImpl implements HttpRuleService {
         }
         boolean b = this.updateServiceInfo(httpRuleInput);
         if (!b) {
-            logger.error("[FAIL] update ServiceInfo");
+            logger.error("[FAIL] update http ServiceInfo");
             throw new BaseException(ResultCode.UPDATE_HTTP_RULE_FAIL);
         }
         b = this.updateHttpRule(httpRuleInput);
@@ -107,12 +107,12 @@ public class HttpRuleServiceImpl implements HttpRuleService {
         }
         b = this.updateAccessControl(httpRuleInput);
         if (!b) {
-            logger.error("[FAIL] update AccessControl");
+            logger.error("[FAIL] update http AccessControl");
             throw new BaseException(ResultCode.UPDATE_HTTP_RULE_FAIL);
         }
         b = this.updateLoadBalance(httpRuleInput);
         if (!b) {
-            logger.error("[FAIL] update LoadBalance");
+            logger.error("[FAIL] update http LoadBalance");
             throw new BaseException(ResultCode.UPDATE_HTTP_RULE_FAIL);
         }
         logger.info("[SUCCESS] update HttpService Successfully");

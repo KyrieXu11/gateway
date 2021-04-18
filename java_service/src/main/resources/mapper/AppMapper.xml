@@ -98,7 +98,7 @@
             </trim>
         </set>
         <where>
-            is_delete = 0 and app_id = #{app.appId}
+            is_delete = 0 and id = #{app.id}
         </where>
     </update>
 
@@ -111,7 +111,7 @@
                 and name like concat('%',#{query},'%')
             </if>
         </where>
-        order by id desc limit #{page},#{size}
+        order by id limit #{page},#{size}
     </select>
     <select id="count" resultType="java.lang.Integer">
         select count(*)
@@ -127,6 +127,6 @@
         select *
         from gateway_app
         where is_delete != 1
-          and app_id = #{appId};
+          and id = #{id}
     </select>
 </mapper>

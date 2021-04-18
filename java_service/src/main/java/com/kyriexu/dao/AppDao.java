@@ -16,7 +16,7 @@ public interface AppDao {
 
     int update(@Param("app") App app);
 
-    App get(@Param("appId") String appId);
+    App get(@Param("id") Long id);
 
     int add(@Param("app") App app);
 }

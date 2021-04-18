@@ -5,6 +5,7 @@ import com.kyriexu.annotation.InternalAccess;
 import com.kyriexu.annotation.ValidateCode;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -19,10 +20,10 @@ public class PingController {
         return "hello";
     }
 
-    @DeleteMapping("/d")
+    @DeleteMapping("/d/{id}")
     @ValidateCode
-    public RespBean del() {
-        return RespBean.ok("123");
+    public RespBean del(@PathVariable Integer id) {
+        return RespBean.ok(id.toString());
     }
 
     @GetMapping("/s")
