@@ -153,7 +153,7 @@ export default {
   },
   methods: {
     fetchData(id) {
-      const query = { 'id': id }
+      const query = { 'service_id': id }
       serviceDetail(query).then(response => {
         this.form.id = response.data.info.id
         this.form.load_type = response.data.info.load_type

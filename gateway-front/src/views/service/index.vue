@@ -9,17 +9,17 @@
       >
         搜索服务
       </el-button>
-      <router-link :to="'/service/createHttpService/'">
+      <router-link :to="'/service/add_http_service/'">
         <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit">
           添加HTTP服务
         </el-button>
       </router-link>
-      <router-link :to="'/service/createTcpService/'">
+      <router-link :to="'/service/add_tcp_service/'">
         <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit">
           添加TCP服务
         </el-button>
       </router-link>
-      <router-link :to="'/service/createGrpcService/'">
+      <router-link :to="'/service/add_grpc_service/'">
         <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit">
           添加GRPC服务
         </el-button>
@@ -79,17 +79,17 @@
               统计
             </el-button>
           </router-link>
-          <router-link v-if="row.load_type===0" :to="'/service/editHttpService/'+row.id">
+          <router-link v-if="row.load_type===0" :to="'/service/edit_http_service/'+row.id">
             <el-button style="margin-left: 10px" type="primary" size="mini">
               修改
             </el-button>
           </router-link>
-          <router-link v-if="row.load_type===1" :to="'/service/service_edit_tcp/'+row.id">
+          <router-link v-if="row.load_type===1" :to="'/service/edit_tcp_service/'+row.id">
             <el-button style="margin-left: 10px" type="primary" size="mini">
               修改
             </el-button>
           </router-link>
-          <router-link v-if="row.load_type===2" :to="'/service/service_edit_grpc/'+row.id">
+          <router-link v-if="row.load_type===2" :to="'/service/edit_grpc_service/'+row.id">
             <el-button style="margin-left: 10px" type="primary" size="mini">
               修改
             </el-button>
@@ -108,7 +108,7 @@
 </template>
 
 <script>
-import { serviceList, serviceDelete } from '@/api/service'
+import { serviceList, serviceDelete, verifyCode } from '@/api/service'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
@@ -139,8 +139,8 @@ export default {
       total: 0,
       listLoading: true,
       listQuery: {
-        page_no: 1,
-        page_size: 20,
+        page: 1,
+        size: 20,
         info: ''
       },
       temp: {
@@ -168,31 +168,62 @@ export default {
       this.getList()
     },
     handleDelete(row, index) {
-      this.$confirm('此操作将删除该记录, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        const deleteQuery = {
-          'id': row.id
-        }
-        serviceDelete(deleteQuery).then(response => {
+      verifyCode({}).then(resp => {
+        const { data } = resp
+        this.$prompt('<strong>请输入验证码<strong><br><img alt="code" src="' + data + '">', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputPattern: /^[0-9a-zA-Z]{4}$/,
+          inputErrorMessage: '验证码格式不正确',
+          dangerouslyUseHTMLString: true
+        }).then(({ value }) => {
+          const query = {
+            'code': value
+          }
+          serviceDelete(query, row.id).then(resp => {
+            this.$notify({
+              title: 'Success',
+              message: '删除成功',
+              type: 'success',
+              duration: 2000
+            })
+            this.getList()
+          })
+        }).catch(() => {
           this.$notify({
             title: 'Success',
-            message: '删除成功',
-            type: 'success',
+            message: '已取消删除',
+            type: 'info',
             duration: 2000
           })
-          this.getList()
-        })
-      }).catch(() => {
-        this.$notify({
-          title: 'Success',
-          message: '已取消删除',
-          type: 'info',
-          duration: 2000
         })
       })
+
+      // this.$confirm('此操作将删除该记录, 是否继续?', '提示', {
+      //   confirmButtonText: '确定',
+      //   cancelButtonText: '取消',
+      //   type: 'warning'
+      // }).then(() => {
+      //   const deleteQuery = {
+      //     'id': row.id
+      //   }
+      //   serviceDelete(deleteQuery).then(response => {
+      //     this.$notify({
+      //       title: 'Success',
+      //       message: '删除成功',
+      //       type: 'success',
+      //       duration: 2000
+      //     })
+      //     this.getList()
+      //   })
+      // }).catch(() => {
+      //   this.$notify({
+      //     title: 'Success',
+      //     message: '已取消删除',
+      //     type: 'info',
+      //     duration: 2000
+      //   })
+      // })
       // this.list.splice(index, 1)
     }
   }

@@ -7,6 +7,7 @@ const article = require('./article')
 const search = require('./remote-search')
 const dashboard = require('./dashboard')
 const service = require('./service')
+const app = require('./app')
 
 const mocks = [
   ...user,
@@ -14,7 +15,8 @@ const mocks = [
   ...article,
   ...search,
   ...dashboard,
-  ...service
+  ...service,
+  ...app
 ]
 
 // for front mock

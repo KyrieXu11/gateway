@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function panelGroupData() {
   return request({
-    url: '/dashboard/getPanelGroupData',
+    url: '/dashboard/panelGroupData',
     method: 'get'
   })
 }

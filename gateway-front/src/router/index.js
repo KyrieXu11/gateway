@@ -7,10 +7,10 @@ Vue.use(Router)
 import Layout from '@/layout'
 
 /* Router Modules */
-import componentsRouter from './modules/components'
-import chartsRouter from './modules/charts'
-import tableRouter from './modules/table'
-import nestedRouter from './modules/nested'
+// import componentsRouter from './modules/components'
+// import chartsRouter from './modules/charts'
+// import tableRouter from './modules/table'
+// import nestedRouter from './modules/nested'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -100,11 +100,11 @@ export const constantRoutes = [
   {
     path: '/service',
     component: Layout,
-    redirect: '/service/list',
+    redirect: '/service/service_list',
     name: '服务管理',
     children: [
       {
-        path: 'list',
+        path: 'service_list',
         component: () => import('@/views/service/index'),
         name: '服务列表',
         meta: {
@@ -114,7 +114,7 @@ export const constantRoutes = [
         }
       },
       {
-        path: 'createHttpService',
+        path: 'add_http_service',
         component: () => import('@/views/service/http/index'),
         name: '创建HTTP服务',
         meta: {
@@ -125,7 +125,7 @@ export const constantRoutes = [
         hidden: true
       },
       {
-        path: 'createTcpService',
+        path: 'add_tcp_service',
         component: () => import('@/views/service/tcp/index'),
         name: '创建TCP服务',
         meta: {
@@ -136,7 +136,7 @@ export const constantRoutes = [
         hidden: true
       },
       {
-        path: 'createGrpcService',
+        path: 'add_grpc_service',
         component: () => import('@/views/service/grpc/index'),
         name: '创建Grpc服务',
         meta: {
@@ -147,7 +147,7 @@ export const constantRoutes = [
         hidden: true
       },
       {
-        path: 'editHttpService/:id(\\d+)',
+        path: 'edit_http_service/:id(\\d+)',
         component: () => import('@/views/service/http/index'),
         name: '修改HTTP服务',
         meta: {
@@ -156,9 +156,89 @@ export const constantRoutes = [
           affix: false
         },
         hidden: true
+      },
+      {
+        path: 'edit_tcp_service/:id(\\d+)',
+        component: () => import('@/views/service/tcp/index'),
+        name: '修改Tcp服务',
+        meta: {
+          title: '修改Tcp服务',
+          icon: 'component',
+          affix: false
+        },
+        hidden: true
+      },
+      {
+        path: 'edit_grpc_service/:id(\\d+)',
+        component: () => import('@/views/service/grpc/index'),
+        name: '修改gRpc服务',
+        meta: {
+          title: '修改gRpc服务',
+          icon: 'component',
+          affix: false
+        },
+        hidden: true
+      },
+      {
+        path: 'service_stat/:id(\\d+)',
+        component: () => import('@/views/service/stat/stat'),
+        name: '服务统计',
+        meta: {
+          title: '服务统计',
+          icon: 'component',
+          affix: false
+        },
+        hidden: true
       }
     ]
+  },
+  {
+    path: '/app',
+    redirect: '/app/app_list',
+    component: Layout,
+    name: '租户管理',
+    meta: {
+      title: '租户管理',
+      icon: 'user'
+    },
+    children: [{
+      path: 'app_list',
+      component: () => import('@/views/app'),
+      name: '租户列表',
+      meta: {
+        title: '租户列表',
+        icon: 'user',
+        affix: false
+      }
+    }, {
+      path: 'add_app',
+      component: () => import('@/views/app/add/index'),
+      name: 'add_app',
+      meta: {
+        title: '创建租户',
+        icon: 'edit'
+      },
+      hidden: true
+    }, {
+      path: 'edit_app/:id(\\d+)',
+      component: () => import('@/views/app/add/index'),
+      name: 'edit_app',
+      meta: {
+        title: '修改租户'
+      },
+      hidden: true
+    }, {
+      path: 'app_stat/:id(\\d+)',
+      component: () => import('@/views/app/stat'),
+      name: 'AppStat',
+      meta: {
+        title: '租户流量统计',
+        noCache: true
+      },
+      hidden: true
+    }]
   }
+
   // {
   //   path: '/service',
   //   component: Layout,

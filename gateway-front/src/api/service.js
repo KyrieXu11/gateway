@@ -8,10 +8,11 @@ export function serviceList(query) {
   })
 }
 
-export function serviceDelete(id) {
+export function serviceDelete(query, id) {
   return request({
-    url: `/service/deleteService/` + id,
-    method: 'delete'
+    url: `/service/delService/` + id,
+    method: 'delete',
+    params: query
   })
 }
 
@@ -41,7 +42,7 @@ export function serviceDetail(query) {
 
 export function serviceStat(query) {
   return request({
-    url: '/service/service_stat',
+    url: '/service/serviceStat',
     method: 'get',
     params: query
   })
@@ -49,7 +50,7 @@ export function serviceStat(query) {
 
 export function serviceAddTcp(data) {
   return request({
-    url: '/service/service_add_tcp',
+    url: '/service/addTcpService',
     method: 'post',
     data
   })
@@ -57,15 +58,15 @@ export function serviceAddTcp(data) {
 
 export function serviceUpdateTcp(data) {
   return request({
-    url: '/service/service_update_tcp',
-    method: 'post',
+    url: '/service/updateTcpService',
+    method: 'put',
     data
   })
 }
 
 export function serviceAddGrpc(data) {
   return request({
-    url: '/service/service_add_grpc',
+    url: '/service/addGrpcService',
     method: 'post',
     data
   })
@@ -73,8 +74,16 @@ export function serviceAddGrpc(data) {
 
 export function serviceUpdateGrpc(data) {
   return request({
-    url: '/service/service_update_grpc',
-    method: 'post',
+    url: '/service/updateGrpcService',
+    method: 'put',
     data
+  })
+}
+
+export function verifyCode(query) {
+  return request({
+    url: '/verifyCode',
+    method: 'get',
+    params: query
   })
 }

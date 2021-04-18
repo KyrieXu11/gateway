@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-editor-container">
-    <github-corner class="github-corner" />
+    <!--<github-corner class="github-corner" />-->
     <panel-group :data="panelGroupData" />
     <el-row :gutter="32">
       <el-col :xs="24" :sm="24" :lg="16">
@@ -18,27 +18,26 @@
 </template>
 
 <script>
-import GithubCorner from '@/components/GithubCorner'
 import PanelGroup from '@/views/dashboard/admin/components/PanelGroup'
 import LineChart from '@/views/dashboard/admin/components/LineChart'
 import PieChart from '@/views/dashboard/admin/components/PieChart'
-import { panelGroupData, flowStat, serviceStat } from '@/api/dashboard'
+import { flowStat, panelGroupData, serviceStat } from '@/api/dashboard'
 
 export default {
   name: 'AdminDashboard',
   components: {
     PanelGroup,
     LineChart,
-    PieChart,
-    GithubCorner
+    PieChart
+    // GithubCorner
   },
   data() {
     return {
       panelGroupData: {
-        serviceNum: 23,
-        todayRequestNum: 1200,
-        currentQps: 200,
-        appNum: 5
+        service_num: 23,
+        today_request_num: 1200,
+        current_qps: 200,
+        app_num: 5
       },
       lineChartData: {
         title: '今日流量统计',
@@ -65,8 +64,8 @@ export default {
     },
     fetchFlowStat(id) {
       flowStat().then(response => {
-        // this.lineChartData.today = response.data.today
-        // this.lineChartData.yesterday = response.data.yesterday
+        this.lineChartData.today = response.data.today
+        this.lineChartData.yesterday = response.data.yesterday
       })
     },
     fetchServiceStat(id) {

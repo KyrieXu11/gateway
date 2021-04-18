@@ -9,7 +9,7 @@
           <div class="card-panel-text">服务数</div>
           <count-to
             :start-val="0"
-            :end-val="data.serviceNum"
+            :end-val="data.service_num"
             :duration="2600"
             class="card-panel-num"
           />
@@ -25,7 +25,7 @@
           <div class="card-panel-text">当日请求量</div>
           <count-to
             :start-val="0"
-            :end-val="data.todayRequestNum"
+            :end-val="data.today_request_num"
             :duration="3000"
             class="card-panel-num"
           />
@@ -41,7 +41,7 @@
           <div class="card-panel-text">当前QPS</div>
           <count-to
             :start-val="0"
-            :end-val="data.currentQps"
+            :end-val="data.current_qps"
             :duration="3200"
             class="card-panel-num"
           />
@@ -55,7 +55,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">租户数</div>
-          <count-to :start-val="0" :end-val="data.appNum" :duration="3600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="data.app_num" :duration="3600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -74,10 +74,10 @@ export default {
       type: Object,
       default() {
         return {
-          serviceNum: 0,
-          todayRequestNum: 0,
-          currentQps: 0,
-          appNum: 0
+          service_num: 0,
+          today_request_num: 0,
+          current_qps: 0,
+          app_num: 0
         }
       }
     }

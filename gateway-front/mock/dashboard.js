@@ -5,6 +5,11 @@ const panelData = {
   todayRequestNum: 10
 }
 
+const data = {
+  today: [1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 10],
+  yesterday: [200, 222, 111, 2222, 99999, 1111, 1]
+}
+
 const DashServiceStatItem1 = {
   name: 'abc',
   loadType: 1,
@@ -24,7 +29,7 @@ const DashServiceStat = {
 
 module.exports = [
   {
-    url: '/dashboard/getPanelGroupData',
+    url: '/dashboard/panelGroupData',
     type: 'get',
     response: req => {
       // mock error
@@ -42,7 +47,7 @@ module.exports = [
       return {
         code: 200,
         msg: '',
-        data: DashServiceStatItem1
+        data: data
       }
     }
   },
