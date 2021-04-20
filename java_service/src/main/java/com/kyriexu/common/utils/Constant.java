@@ -56,6 +56,11 @@ public class Constant {
 
     public final static int MIN_PAGE = 1;
 
+    public final static int RandomRoundType = 0;
+    public final static int RoundRobinRoundType = 1;
+    public final static int WeightRoundType = 2;
+    public final static int IpHashRoundType = 3;
+
     public final static String[] SERVICE_TYPE = new String[]{
             SERVICE_HTTP,
             SERVICE_TCP,

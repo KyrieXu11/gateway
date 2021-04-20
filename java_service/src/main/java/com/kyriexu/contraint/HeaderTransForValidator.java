@@ -13,7 +13,7 @@ public class HeaderTransForValidator implements ConstraintValidator<HeaderTransF
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        if ("".equals(value)) {
+        if (null == value ||"".equals(value)) {
             return true;
         } else {
             return value.split(" ").length == 3;

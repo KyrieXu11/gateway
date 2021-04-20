@@ -1,6 +1,7 @@
 package com.kyriexu.contraint;
 
 import com.kyriexu.annotation.validation.IpList;
+import org.springframework.util.StringUtils;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -12,7 +13,7 @@ import javax.validation.ConstraintValidatorContext;
 public class IpListValidator implements ConstraintValidator<IpList, String> {
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        if ("".equals(value)) {
+        if (StringUtils.isEmpty(value)) {
             return true;
         }
         for (String s : value.split(",")) {

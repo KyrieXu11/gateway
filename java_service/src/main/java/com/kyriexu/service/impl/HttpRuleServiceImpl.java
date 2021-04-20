@@ -1,5 +1,6 @@
 package com.kyriexu.service.impl;
 
+import com.kyriexu.common.utils.Constant;
 import com.kyriexu.dao.AccessControlDao;
 import com.kyriexu.dao.HttpRuleDao;
 import com.kyriexu.dao.LoadBalanceDao;
@@ -12,7 +13,6 @@ import com.kyriexu.model.HttpRule;
 import com.kyriexu.model.LoadBalance;
 import com.kyriexu.model.ServiceInfo;
 import com.kyriexu.service.HttpRuleService;
-import com.kyriexu.common.utils.Constant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,18 +46,23 @@ public class HttpRuleServiceImpl implements HttpRuleService {
     @Override
     public boolean add(HttpRuleInput httpRuleInput) {
         String[] ipList = httpRuleInput.getIpList().split(",");
-        String[] weightList = httpRuleInput.getWeightList().split(",");
-        if (ipList.length != weightList.length) {
-            throw new BaseException(ResultCode.IP_WEIGHT_DIFFERENT);
+        int roundType = httpRuleInput.getRoundType();
+        if (roundType == Constant.WeightRoundType){
+            String weight = httpRuleInput.getWeightList();
+            String[] weightList = weight.split(",");
+            if (ipList.length != weightList.length) {
+                throw new BaseException(ResultCode.IP_WEIGHT_DIFFERENT);
+            }
         }
         String serviceName = httpRuleInput.getServiceName();
         ServiceInfo info = serviceDao.getByServiceName(serviceName);
         if (info != null) {
             throw new BaseException(ResultCode.SERVICE_NAME_ALREADY_EXIST);
         }
+        httpRuleInput.setRule(httpRuleInput.getRule().trim());
         HttpRule httpRule = httpRuleDao.getByRuleTypeAndRule(httpRuleInput.getRuleType(), httpRuleInput.getRule());
         if (httpRule != null) {
-            throw new BaseException(ResultCode.SERVICE_PREFIX_DOMAIN_ALEADY_EXIST);
+            throw new BaseException(ResultCode.SERVICE_PREFIX_DOMAIN_ALREADY_EXIST);
         }
         long serviceId = this.saveServiceInfo(httpRuleInput);
         if (serviceId < 1) {

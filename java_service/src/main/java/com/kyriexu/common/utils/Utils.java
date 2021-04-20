@@ -73,4 +73,14 @@ public class Utils {
             newOut.flush();
         }
     }
+
+    public static String encode(String algorithm,String str) throws NoSuchAlgorithmException {
+        MessageDigest encoder = MessageDigest.getInstance(algorithm);
+        byte[] array = encoder.digest(str.getBytes());
+        StringBuilder sb = new StringBuilder();
+        for (byte b : array) {
+            sb.append(Integer.toHexString((b & 0xFF) | 0x100).toLowerCase(),1,3);
+        }
+        return sb.toString();
+    }
 }

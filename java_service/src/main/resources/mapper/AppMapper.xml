@@ -129,4 +129,10 @@
         where is_delete != 1
           and id = #{id}
     </select>
+    <select id="getByAppId" resultType="com.kyriexu.model.App">
+        select *
+        from gateway_app
+        where is_delete = 0
+          and app_id = #{appId};
+    </select>
 </mapper>

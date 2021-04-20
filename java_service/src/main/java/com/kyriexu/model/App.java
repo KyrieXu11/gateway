@@ -1,9 +1,11 @@
 package com.kyriexu.model;
 
+import com.kyriexu.annotation.validation.IpList;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -14,10 +16,13 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class App {
-    private long id;
+    private Long id;
+    @NotNull
     private String appId;
+    @NotNull
     private String name;
     private String secret;
+    @IpList(message = "白名单格式不正确")
     private String whiteIps;
     private long qpd;
     private long qps;

@@ -16,7 +16,6 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 
 /**
  * @author KyrieXu
@@ -47,24 +46,20 @@ public class ValidateCodeAspect {
         }
         // 设置 HttpServletRequest 为父子线程共享
         // RequestContextHolder.setRequestAttributes(RequestContextHolder.currentRequestAttributes(), true);
-        try {
-            code = request.getParameter("code");
-            if (StringUtils.isEmpty(code)) {
-                logger.info("[FAIL] parameter code is null");
-                return RespBean.error("请输入验证码");
-            }
-            String reqCode = code.toLowerCase();
-            code = ((String) session.getAttribute(Constant.CODE)).toLowerCase();
-            if (!StringUtils.isEmpty(reqCode) && code.equals(reqCode)) {
-                // session.removeAttribute(Constant.CODE);
-                logger.info("[SUCCESS] match code successfully,remove code attribute");
-            } else {
-                logger.info("[FAIL] code is not correct,wrong code is {};correct code is {}", reqCode, code);
-                commonController.verifyCode(validateCode.base64(), response, session);
-                return null;
-            }
-        } catch (IOException e) {
-            logger.error("[FAIL] fail to send verify code,cause", e.getCause());
+        code = request.getParameter("code");
+        if (StringUtils.isEmpty(code)) {
+            logger.info("[FAIL] parameter code is null");
+            return RespBean.error("请输入验证码");
+        }
+        String reqCode = code.toLowerCase();
+        code = ((String) session.getAttribute(Constant.CODE)).toLowerCase();
+        if (!StringUtils.isEmpty(reqCode) && code.equals(reqCode)) {
+            session.removeAttribute(Constant.CODE);
+            logger.info("[SUCCESS] match code successfully,remove code attribute");
+        } else {
+            logger.info("[FAIL] code is not correct,wrong code is {};correct code is {}", reqCode, code);
+            // commonController.verifyCode(validateCode.base64(), response, session);
+            return RespBean.error("验证码错误");
         }
         return joinPoint.proceed();
     }

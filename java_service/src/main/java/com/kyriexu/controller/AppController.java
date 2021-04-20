@@ -1,6 +1,7 @@
 package com.kyriexu.controller;
 
 import com.kyriexu.annotation.InternalAccess;
+import com.kyriexu.annotation.ValidateCode;
 import com.kyriexu.common.utils.Constant;
 import com.kyriexu.common.utils.RespBean;
 import com.kyriexu.dto.AppListItem;
@@ -15,6 +16,9 @@ import org.springframework.lang.Nullable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -59,6 +63,7 @@ public class AppController {
     }
 
     @DeleteMapping("/delApp/{id}")
+    @ValidateCode(base64 = true)
     public RespBean del(@RequestParam(value = "id") @NotNull @Min(value = 1, message = "租户ID不能<=0") Long id) {
         boolean del = appService.del(id);
         return del ? RespBean.ok("删除成功") : RespBean.error("删除失败");
@@ -77,9 +82,15 @@ public class AppController {
         return appService.getAppList(input);
     }
 
+    @PostMapping("/addApp")
+    public RespBean addApp(@RequestBody @Validated App app) {
+        boolean res = appService.add(app);
+        return res ? RespBean.ok("添加成功") : RespBean.error("添加失败");
+    }
 
-    // @PutMapping("/updateApp")
-    // public RespBean update(){
-    //
-    // }
+    @PutMapping("/updateApp")
+    public RespBean update(@RequestBody App app){
+        boolean res = appService.update(app);
+        return res ? RespBean.ok("更新成功"):RespBean.error("更新失败");
+    }
 }

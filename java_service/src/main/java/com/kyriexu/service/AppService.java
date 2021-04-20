@@ -20,4 +20,8 @@ public interface AppService {
     App detail(Long id);
 
     List<App> getAppList(SearchInput input);
+
+    boolean add(App app);
+
+    boolean update(App app);
 }

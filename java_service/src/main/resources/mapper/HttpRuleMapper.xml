@@ -33,7 +33,7 @@
             </if>
             #{httpRule.needHttps},
             #{httpRule.needStripUri},
-            #{httpRule.needWebsocket},
+            #{httpRule.needWebSocket},
             <if test="httpRule.urlRewrite != null">
                 #{httpRule.urlRewrite},
             </if>
@@ -74,8 +74,11 @@
     <select id="getByRuleTypeAndRule"
             resultType="com.kyriexu.model.HttpRule">
         select *
-        from gateway_service_http_rule
-        where rule_type = #{ruleType}
+        from gateway_service_http_rule httpRule,
+             gateway_service_info info
+        where httpRule.service_id = info.id
+          and info.is_delete = 0
+          and rule_type = #{ruleType}
           and rule = #{rule};
     </select>
 </mapper>

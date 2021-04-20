@@ -26,7 +26,7 @@
             <if test="accessControl.serviceId != null">
                 #{accessControl.serviceId},
             </if>
-            #{openAuth},
+            #{accessControl.openAuth},
             <if test="accessControl.blackList != null">
                 #{accessControl.blackList},
             </if>
@@ -36,7 +36,7 @@
             <if test="accessControl.whiteHostName != null">
                 #{accessControl.whiteHostName},
             </if>
-            #{accessControl.clientipFlowLimit},
+            #{accessControl.clientIpFlowLimit},
             #{accessControl.serviceFlowLimit},
         </trim>
     </insert>

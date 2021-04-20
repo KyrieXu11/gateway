@@ -11,16 +11,20 @@ import com.kyriexu.exception.ResultCode;
 import com.kyriexu.model.App;
 import com.kyriexu.model.PageBean;
 import com.kyriexu.service.AppService;
+import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author KyrieXu
@@ -52,6 +56,48 @@ public class AppServiceImpl implements AppService {
     }
 
     @Override
+    public boolean add(App app) {
+        String appId = app.getAppId();
+
+        App ans = appDao.getByAppId(appId);
+        if (ans != null) {
+            throw new BaseException(ResultCode.APP_ALREADY_EXIST);
+        }
+        if (StringUtils.isEmpty(app.getSecret())) {
+            app.setSecret(UUID.randomUUID().toString().substring(0, 3));
+        }
+        try {
+            String sec = Utils.encode("md5", app.getSecret());
+            app.setSecret(sec);
+            app.setCreateAt(new Date());
+            app.setUpdateAt(new Date());
+            app.setDeleted(false);
+            int rows = appDao.add(app);
+            return rows > 0;
+        } catch (NoSuchAlgorithmException e) {
+            logger.error("encode secret failed,cause", e);
+            throw new BaseException(ResultCode.INTERNAL_EXCEPTION);
+        }
+    }
+
+    @SneakyThrows
+    @Override
+    public boolean update(App app) {
+        Long id = app.getId();
+        if (null == id) {
+            throw new BaseException(ResultCode.APP_INFORMATION_ERROR);
+        }
+        String secret = app.getSecret();
+        if (!StringUtils.isEmpty(secret)) {
+            secret = Utils.encode("md5", secret.substring(0, 3));
+            app.setSecret(secret);
+        }
+        app.setUpdateAt(new Date());
+        int row = appDao.update(app);
+        return row > 0;
+    }
+
+    @Override
     public boolean del(Long id) {
         App app = appDao.get(id);
         if (app != null && app.isDeleted()) {
@@ -74,7 +120,7 @@ public class AppServiceImpl implements AppService {
         logger.info("[INTERNAL CALL] url : {}", url);
         ListDto<App> appListDto = new ListDto<>(appList);
         try {
-            List<AppListItem> res = HttpUtils.post(url, appListDto,List.class);
+            List<AppListItem> res = HttpUtils.post(url, appListDto, List.class);
             PageBean<AppListItem> pageBean = new PageBean<>();
             pageBean.setItems(res);
             pageBean.setCurrent(input.getPage());
