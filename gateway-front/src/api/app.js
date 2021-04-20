@@ -24,9 +24,9 @@ export function appStat(query) {
   })
 }
 
-export function appDelete(query) {
+export function appDelete(id, query) {
   return request({
-    url: '/app/delApp',
+    url: '/app/delApp/' + id,
     method: 'delete',
     params: query
   })

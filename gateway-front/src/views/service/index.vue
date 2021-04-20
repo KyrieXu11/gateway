@@ -167,10 +167,10 @@ export default {
       this.listQuery.page_no = 1
       this.getList()
     },
-    handleDelete(row, index) {
+    async handleDelete(row, index) {
       verifyCode({}).then(resp => {
         const { data } = resp
-        this.$prompt('<strong>请输入验证码<strong><br><img alt="code" src="' + data + '">', '提示', {
+        this.$prompt('<strong>请输入验证码<strong><br><img alt="code" src="data:image/png;base64,' + data + '">', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           inputPattern: /^[0-9a-zA-Z]{4}$/,
@@ -183,7 +183,7 @@ export default {
           serviceDelete(query, row.id).then(resp => {
             this.$notify({
               title: 'Success',
-              message: '删除成功',
+              message: resp.msg,
               type: 'success',
               duration: 2000
             })
